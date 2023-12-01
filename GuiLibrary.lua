@@ -137,14 +137,8 @@ if shared.VapeExecuted then
 	gui.DisplayOrder = 999
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 	gui.OnTopOfCoreBlur = true
-	if gethui and (not KRNL_LOADED) then
-		gui.Parent = gethui()
-	elseif not is_sirhurt_closure and syn and syn.protect_gui then
-		syn.protect_gui(gui)
-		gui.Parent = game:GetService("CoreGui")
-	else
-		gui.Parent = game:GetService("CoreGui")
-	end
+	gui.ResetOnSpawn = false
+	gui.Parent = game:GetService("Players").LocalPlayer.PlayerGui
 	GuiLibrary["MainGui"] = gui
 
 	local vapeCachedAssets = {}
@@ -509,7 +503,7 @@ if shared.VapeExecuted then
 
 	GuiLibrary.SaveSettings = function()
 		if not loadedsuccessfully then return end
-		writefile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt", httpService:JSONEncode(GuiLibrary.Profiles))
+		writefile(baseDirectory.."Profiles/"..(bedwars and "6872274481" or shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt", httpService:JSONEncode(GuiLibrary.Profiles))
 		local WindowTable = {}
 		for i,v in pairs(GuiLibrary.ObjectsThatCanBeSaved) do
 			if v.Type == "Window" then
@@ -574,8 +568,8 @@ if shared.VapeExecuted then
 		end
 		GuiLibrary.Settings["MobileButtons"] = {["Type"] = "MobileButtons", ["Buttons"] = mobileButtonSaving}
 		WindowTable["GUIKeybind"] = {["Type"] = "GUIKeybind", ["Value"] = GuiLibrary["GUIKeybind"]}
-		writefile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt", httpService:JSONEncode(GuiLibrary.Settings))
-		writefile(baseDirectory.."Profiles/"..(game.GameId).."GUIPositions.vapeprofile.txt", httpService:JSONEncode(WindowTable))
+		writefile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(bedwars and "6872274481" or shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt", httpService:JSONEncode(GuiLibrary.Settings))
+		writefile(baseDirectory.."Profiles/"..(bedwars and "6872265039" or game.PlaceId).."GUIPositions.vapeprofile.txt", httpService:JSONEncode(WindowTable))
 	end
 
 	GuiLibrary.LoadSettings = function(customprofile)
@@ -583,16 +577,8 @@ if shared.VapeExecuted then
 			writefile("vape/Profiles/"..(game.GameId).."GUIPositions.vapeprofile.txt", readfile("vape/Profiles/GUIPositions.vapeprofile.txt"))
 			if delfile then delfile("vape/Profiles/GUIPositions.vapeprofile.txt") end
 		end
-		if shared.VapePrivate then
-			if isfile("vapeprivate/Profiles/"..(game.GameId).."GUIPositions.vapeprofile.txt") == false and isfile("vape/Profiles/"..(game.GameId).."GUIPositions.vapeprofile.txt") then
-				writefile("vapeprivate/Profiles/"..(game.GameId).."GUIPositions.vapeprofile.txt", readfile("vape/Profiles/"..(game.GameId).."GUIPositions.vapeprofile.txt"))
-			end
-			if isfile("vapeprivate/Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt") == false and isfile("vape/Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt") then
-				writefile("vapeprivate/Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt", readfile("vape/Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt"))
-			end
-		end
 		local success2, result2 = pcall(function()
-			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt"))
+			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(bedwars and "6872274481" or shared.CustomVapeSave or game.PlaceId)..".vapeprofiles.txt"))
 		end)
 		if success2 and type(result2) == "table" then
 			GuiLibrary.Profiles = result2
@@ -609,11 +595,11 @@ if shared.VapeExecuted then
 		end
 		if shared.VapePrivate then
 			if isfile("vapeprivate/Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt") == false and isfile("vape/Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt") then
-				writefile("vapeprivate/Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt", readfile("vape/Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt"))
+				writefile("vapeprivate/Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(bedwars and "6872265039" or game.PlaceId)..".vapeprofile.txt", readfile("vape/Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt"))
 			end
 		end
 		local success3, result3 = pcall(function()
-			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(game.GameId).."GUIPositions.vapeprofile.txt"))
+			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(bedwars and "6872265039" or game.PlaceId).."GUIPositions.vapeprofile.txt"))
 		end)
 		if success3 and type(result3) == "table" then
 			for i,v in pairs(result3) do
@@ -6892,9 +6878,12 @@ if shared.VapeExecuted then
 
 	GuiLibrary["LoadedAnimation"] = function(enabled)
 		if enabled then
-			--no cache but its ran 1 time so idc
-			local bad = not (inputService:GetPlatform() == Enum.Platform.Windows or inputService:GetPlatform() == Enum.Platform.OSX)
-			GuiLibrary.CreateNotification("Finished Loading", bad and GuiLibrary["GUIKeybind"] == "RightShift" and "Press the button in the top right to open GUI" or "Press "..string.upper(GuiLibrary["GUIKeybind"]).." to open GUI", 5)
+			touch = inputService.TouchEnabled
+		    GuiLibrary.CreateNotification(
+				"Loaded",
+				(touch or GuiLibrary.GUIKeybind == "RightShift") and "Press the button on the top right to open the Interface." or "Press "..GuiLibrary.GUIKeybind.." to open the Interface.",
+				7
+			)
 		end
 	end
 
