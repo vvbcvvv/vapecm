@@ -1,23 +1,33 @@
-		if isfolder("vape") then 
-			if ((not isfile("vape/commithash.txt")) or (readfile("vape/commithash.txt") ~= commit or commit == "main")) then
-				for i,v in pairs({"vape/Universal.lua", "vape/MainScript.lua", "vape/GuiLibrary.lua"}) do 
-					if isfile(v) and readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
-					if isfile(v) and ({readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.")})[1] == 1 then
-						delfile(v)
-					end 
-				end
-				if isfolder("vape/CustomModules") then 
-					for i,v in pairs(listfiles("vape/CustomModules")) do 
-						if isfile(v) and readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
-						if isfile(v) and ({readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.")})[1] == 1 then
-							delfile(v)
-						end 
-					end
-				end
-				if isfolder("vape/Libraries") then 
-					for i,v in pairs(listfiles("vape/Libraries")) do 
-						if isfile(v) and readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
-						if isfile(v) and ({readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.")})[1] == 1 then
-							delfile(v)
-						end 
-					end
+local isfile = isfile 
+
+if readfile == nil or writefile == nil then
+    error('Your exploit won\'t handle vape.')
+end
+
+if isfile == nil then 
+   isfile = function(file) return pcall(function() return readfile(file) end) and true or false end 
+end
+
+local lawlwatermark = '-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq'
+
+local function getVapeFile(file)
+    if not isfolder('vape') then 
+        makefolder('vape')
+    end
+    if not isfile('vape/'..file) then 
+        local success, response = pcall(function()
+            return game:HttpGet('https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/'..file) 
+        end)
+        if success and response ~= '404: Not Found' then 
+            response = (file:sub(#file - 4, #file) == '.lua' and lawlwatermark..'\n'..response or response)
+            writefile('vape/'..file, response)
+            return response
+        else
+            error('Vape Unpatched - Failed to download '..file..' | HTTP 404')
+            return task.wait(9e9)
+        end 
+    end
+    return isfile('vape/'..file) and readfile('vape/'..file) or task.wait(9e9)
+end
+
+loadstring(getVapeFile('MainScript.lua'))()
