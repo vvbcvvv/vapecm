@@ -1928,13 +1928,10 @@ local function loadVape()
 			customload(getVapeFile("CustomModules/8444591321.lua"), "6872274481")
 		else
 			local success, response = pcall(function()
-				return isfile("vape/CustomModules/"..game.PlaceId..".lua") and readfile("vape/CustomModules/"..game.PlaceId..".lua") or game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..getcommit()"/CustomModules/"..game.PlaceId..".lua") 
+				return getVapeFile("CustomModules/"..game.PlaceId..".lua")
 			end)
-			if success and response ~= "404: Not Found" then 
+			if success then 
 				customload(response, game.PlaceId)
-				if not isfile("vape/CustomModules/"..game.PlaceId..".lua") then 
-					pcall(writefile, "vape/CustomModules/"..game.PlaceId..".lua", response)
-				end
 			end
 		end
 	end
