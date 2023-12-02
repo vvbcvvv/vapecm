@@ -6608,13 +6608,13 @@ runFunction(function()
 					debug.setconstant(bedwars.SwordController.swingSwordAtMouse, 23, "raycast")
 					debug.setupvalue(bedwars.SwordController.swingSwordAtMouse, 4, bedwars.QueryUtil)
 				end
-				debug.setconstant(bedwars.QueueCard.render, 9, 0.1)
+				debug.setconstant(bedwars.QueueCard.render, 15, 0.1)
 			else
 				if GameFixerHit.Enabled then 
 					debug.setconstant(bedwars.SwordController.swingSwordAtMouse, 23, "Raycast")
 					debug.setupvalue(bedwars.SwordController.swingSwordAtMouse, 4, workspace)
 				end
-				debug.setconstant(bedwars.QueueCard.render, 9, 0.01)
+				debug.setconstant(bedwars.QueueCard.render, 15, 0.01)
 			end
 		end,
 		HoverText = "Fixes game bugs"
@@ -7948,7 +7948,7 @@ runFunction(function()
 					task.spawn(function()
 						repeat task.wait() until bedwarsStore.matchState ~= 0
 						if bedwars.ClientStoreHandler:getState().Game.customMatch == nil then 
-							debug.setconstant(bedwars.QueueCard.render, 9, 0.1)
+							debug.setconstant(bedwars.QueueCard.render, 15, 0.1)
 						end
 					end)
 					local slot = bedwars.ClientStoreHandler:getState().Inventory.observedInventory.hotbarSlot

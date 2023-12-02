@@ -160,11 +160,10 @@ local function getVapeFile(file, nolawl)
 			writefile("vape/"..file, response)
 			return response
 		else
-			error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
-			return task.wait(9e9)
+			return error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
 		end 
 	end
-	return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
+	return isfile("vape/"..file) and readfile("vape/"..file) or error("Vape Unpatched - Failed to read "..file)
 end
 
 local function downloadVapeAsset(path)
