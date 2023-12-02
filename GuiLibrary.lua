@@ -142,15 +142,21 @@ if shared.VapeExecuted then
 	GuiLibrary["MainGui"] = gui
 
 	local vapeCachedAssets = {}
-	local function vapeGithubRequest(scripturl)
-		if not isfile("vape/"..scripturl) then
-			local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/VapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
-			assert(suc, res)
-			assert(res ~= "404: Not Found", res)
-			if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
-			writefile("vape/"..scripturl, res)
+	local function getVapeFile(file)
+		if not isfile('vape/'..file) then 
+			local success, response = pcall(function()
+				return game:HttpGet('https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/'..file) 
+			end)
+			if success and response ~= '404: Not Found' then 
+				response = (file:sub(#file - 4, #file) == '.lua' and lawlwatermark..'\n'..response or response)
+				writefile('vape/'..file, response)
+				return response
+			else
+				error('Vape Unpatched - Failed to download '..file..' | HTTP 404')
+				return task.wait(9e9)
+			end 
 		end
-		return readfile("vape/"..scripturl)
+		return isfile('vape/'..file) and readfile('vape/'..file) or task.wait(9e9)
 	end
 	
 	local function downloadVapeAsset(path)
@@ -170,7 +176,7 @@ if shared.VapeExecuted then
 					repeat task.wait() until isfile(path)
 					textlabel:Destroy()
 				end)
-				local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets")) end)
+				local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets")) end)
 				if suc and req then
 					writefile(path, req)
 				else
@@ -827,7 +833,7 @@ if shared.VapeExecuted then
 			shared.VapeSwitchServers = true
 			shared.VapeOpenGui = (clickgui.Visible)
 			shared.VapePrivate = vapeprivate
-			loadstring(vapeGithubRequest("NewMainScript.lua"))()
+			loadstring(getVapeFile("NewMainScript.lua"))()
 		end
 	end
 
