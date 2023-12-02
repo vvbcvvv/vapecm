@@ -198,59 +198,6 @@ end
 assert(not shared.VapeExecuted, "Vape Already Injected")
 shared.VapeExecuted = true
 
-for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "vape/Libraries", "vape/CustomModules", "vape/Profiles", baseDirectory.."Profiles", "vape/assets"}) do 
-	if not isfolder(v) then makefolder(v) end
-end
-task.spawn(function()
-	local success, assetver = pcall(function() return getVapeFile("assetsversion.txt", true) end)
-	if not isfile("vape/assetsversion.txt") then writefile("vape/assetsversion.txt", "0") end
-	if success and assetver > readfile("vape/assetsversion.txt") then
-		redownloadedAssets = true
-		if isfolder("vape/assets") and not shared.VapeDeveloper then
-			if delfolder then
-				delfolder("vape/assets")
-				makefolder("vape/assets")
-			end
-		end
-		writefile("vape/assetsversion.txt", assetver)
-	end
-end)
-if not isfile("vape/CustomModules/cachechecked.txt") then
-	local isNotCached = false
-	for i,v in pairs({"vape/Universal.lua", "vape/MainScript.lua", "vape/GuiLibrary.lua"}) do 
-		if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
-			isNotCached = true
-		end 
-	end
-	if isfolder("vape/CustomModules") then 
-		for i,v in pairs(listfiles("vape/CustomModules")) do 
-			if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
-				isNotCached = true
-			end 
-		end
-	end
-	if isNotCached and not shared.VapeDeveloper then
-		displayErrorPopup("Vape has detected uncached files, If you have CustomModules click no, else click yes.", {No = function() end, Yes = function()
-			for i,v in pairs({"vape/Universal.lua", "vape/MainScript.lua", "vape/GuiLibrary.lua"}) do 
-				if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
-					delfile(v)
-				end 
-			end
-			for i,v in pairs(listfiles("vape/CustomModules")) do 
-				if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
-					local last = v:split('\\')
-					last = last[#last]
-					local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/CustomModules/"..last) end)
-					if suc and publicrepo and publicrepo ~= "404: Not Found" then
-						writefile("vape/CustomModules/"..last, "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..publicrepo)
-					end
-				end 
-			end
-		end})
-	end
-	writefile("vape/CustomModules/cachechecked.txt", "verified")
-end
-
 GuiLibrary = loadstring(getVapeFile("GuiLibrary.lua"))()
 shared.GuiLibrary = GuiLibrary
 
@@ -1950,25 +1897,46 @@ GeneralSettings.CreateButton2({
 	Function = GuiLibrary.SelfDestruct
 })
 
+local function customload(data, file)
+	local success, err = pcall(function()
+		loadstring(data)()
+	end)
+	if not success then
+		GuiLibrary.SaveSettings = function() end
+		task.spawn(error, "Vape - Failed to load "..file..".lua | "..err)
+		pcall(function()
+			local notification = GuiLibrary.CreateNotification("Failure loading "..file..".lua", err, 25, "assets/WarningNotification.png")
+			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
+			notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
+	    end)
+	end
+end
+
+local function bedwarsmatch() -- Solos & Duels won't work with specific game IDs, so this would work :troll:
+	local data = game:GetService("TeleportService"):GetLocalPlayerTeleportData()
+	if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 then 
+		return true 
+	end
+	return false
+end
+
 local function loadVape()
-	if not shared.VapeIndependent then
-		loadstring(getVapeFile("Universal.lua"))()
-		if isfile("vape/CustomModules/"..game.PlaceId..".lua") then
-			loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
+	if true then
+		customload(getVapeFile("Universal.lua"))
+		local bedwars = bedwarsmatch() 
+		if bedwars then 
+			customload(getVapeFile("CustomModules/8444591321.lua"), "6872274481")
 		else
-			if not shared.VapeDeveloper then
-				local suc, publicrepo = pcall(function() return getVapeFile("CustomModules/"..game.PlaceId.lua) end)
-					loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
+			local success, response = pcall(function()
+				return isfile("vape/CustomModules/"..game.PlaceId..".lua") and readfile("vape/CustomModules/"..game.PlaceId..".lua") or game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/CustomModules/"..game.PlaceId..".lua") 
+			end)
+			if success and response ~= "404: Not Found" then 
+				customload(response, game.PlaceId)
+				if not isfile("vape/CustomModules/"..game.PlaceId..".lua") then 
+					pcall(writefile, "vape/CustomModules/"..game.PlaceId..".lua", response)
 				end
 			end
 		end
-		if shared.VapePrivate then
-			if isfile("vapeprivate/CustomModules/"..game.PlaceId..".lua") then
-				loadstring(readfile("vapeprivate/CustomModules/"..game.PlaceId..".lua"))()
-			end	
-		end
-	else
-		repeat task.wait() until shared.VapeManualLoad
 	end
 	if #ProfilesTextList.ObjectList == 0 then
 		table.insert(ProfilesTextList.ObjectList, "default")
