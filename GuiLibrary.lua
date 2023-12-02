@@ -141,8 +141,9 @@ if shared.VapeExecuted then
 	gui.Parent = game:GetService("Players").LocalPlayer.PlayerGui
 	GuiLibrary["MainGui"] = gui
 
-	local vapeCachedAssets = {}
-	local function getcommit()
+local vapeCachedAssets = {}
+
+local function getcommit()
 	local success, response = pcall(function()
 		return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://api.github.com/repos/skiddinglua/NewVapeUnpatched4Roblox/commits"))
 	end)
@@ -175,34 +176,34 @@ local function getVapeFile(file, nolawl)
 	return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
 end
 	
-	local function downloadVapeAsset(path)
-		if customassetcheck then
-			if not isfile(path) then
-				task.spawn(function()
-					local textlabel = Instance.new("TextLabel")
-					textlabel.Size = UDim2.new(1, 0, 0, 36)
-					textlabel.Text = "Downloading "..path
-					textlabel.BackgroundTransparency = 1
-					textlabel.TextStrokeTransparency = 0
-					textlabel.TextSize = 30
-					textlabel.Font = Enum.Font.SourceSans
-					textlabel.TextColor3 = Color3.new(1, 1, 1)
-					textlabel.Position = UDim2.new(0, 0, 0, -36)
-					textlabel.Parent = GuiLibrary.MainGui
-					repeat task.wait() until isfile(path)
-					textlabel:Destroy()
-				end)
-				local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
-				if suc and req then
-					writefile(path, req)
-				else
-					return ""
-				end
+local function downloadVapeAsset(path)
+	if customassetcheck then
+		if not isfile(path) then
+			task.spawn(function()
+				local textlabel = Instance.new("TextLabel")
+				textlabel.Size = UDim2.new(1, 0, 0, 36)
+				textlabel.Text = "Downloading "..path
+				textlabel.BackgroundTransparency = 1
+				textlabel.TextStrokeTransparency = 0
+				textlabel.TextSize = 30
+				textlabel.Font = Enum.Font.SourceSans
+				textlabel.TextColor3 = Color3.new(1, 1, 1)
+				textlabel.Position = UDim2.new(0, 0, 0, -36)
+				textlabel.Parent = GuiLibrary.MainGui
+				repeat task.wait() until isfile(path)
+				textlabel:Destroy()
+			end)
+			local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
+			if suc and req then
+				writefile(path, req)
+			else
+				return ""
 			end
 		end
-		if not vapeCachedAssets[path] then vapeCachedAssets[path] = getcustomasset(path) end
-		return vapeCachedAssets[path] 
 	end
+	if not vapeCachedAssets[path] then vapeCachedAssets[path] = getcustomasset(path) end
+	return vapeCachedAssets[path] 
+end
 
 	GuiLibrary["UpdateHudEvent"] = Instance.new("BindableEvent")
 	GuiLibrary["SelfDestructEvent"] = Instance.new("BindableEvent")
