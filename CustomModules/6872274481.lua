@@ -9934,7 +9934,7 @@ runFunction(function()
 							bedwars.ClientHandler:Get("ScytheDash"):SendToServer({direction = Vector3.new(9e9, 9e9, 9e9)})
 							bedwars.ClientHandler:Get("ScytheDash"):SendToServer({direction = Vector3.new(lplr.Character.HumanoidRootPart.CFrame.LookVector)})
 							bedwars.ClientHandler:Get("ScytheDash"):SendToServer({direction = Vector3.new(lplr.Character.Humanoid.MoveDirection)})
-							if entityLibrary.character.Head.Transparency ~= 0 then
+							if lplr:GetAttribute("ScytheSpinning") then
 								bedwarsStore.scythe = tick() + 1
 							end
 						end
