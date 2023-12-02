@@ -1,6 +1,6 @@
 if shared.VapeExecuted then
-	local VERSION = "4.10"..(shared.VapePrivate and " PRIVATE" or "").." "..readfile("vape/commithash.txt"):sub(1, 6)
-	local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
+	local VERSION = "4.10 fixed"
+	local baseDirectory = "vape/"
 	local vapeAssetTable = {
 		["vape/assets/AddItem.png"] = "rbxassetid://13350763121",
 		["vape/assets/AddRemoveIcon1.png"] = "rbxassetid://13350764147",
@@ -143,14 +143,17 @@ if shared.VapeExecuted then
 
 	local vapeCachedAssets = {}
 	local function getVapeFile(file, nolawl)
-		if not isfile("vape/"..file) then 
+		if not isfolder("vape") then 
+			makefolder("vape")
+		end
+		local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
+		if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl then 
 			local success, response = pcall(function()
 				return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..file) 
 			end)
-			local lawl = (response:find("lawl") or nolawl) 
-			if success and response ~= "404: Not Found" and lawl then 
-				response = (file:sub(#file - 4, #file) == ".lua" and lawlwatermark..'\n'..response or response)
-				writefile('vape/'..file, response)
+			if success and response ~= "404: Not Found" then 
+				response = (file:sub(#file - 4, #file) == ".lua" and lawlwatermark.."\n"..response or response)
+				writefile("vape/"..file, response)
 				return response
 			else
 				error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
