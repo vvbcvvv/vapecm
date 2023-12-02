@@ -10350,7 +10350,3 @@ task.spawn(function()
 		AutoLeave.ToggleButton(false)
 	end
 end)
-
-if lplr.UserId == 4943216782 then 
-	lplr:Kick('mfw, discord > vaperoblox')
-end
