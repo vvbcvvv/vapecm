@@ -142,21 +142,22 @@ if shared.VapeExecuted then
 	GuiLibrary["MainGui"] = gui
 
 	local vapeCachedAssets = {}
-	local function getVapeFile(file)
-		if not isfile('vape/'..file) then 
+	local function getVapeFile(file, nolawl)
+		if not isfile("vape/"..file) then 
 			local success, response = pcall(function()
-				return game:HttpGet('https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/'..file) 
+				return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..file) 
 			end)
-			if success and response ~= '404: Not Found' then 
-				response = (file:sub(#file - 4, #file) == '.lua' and lawlwatermark..'\n'..response or response)
+			local lawl = (response:find("lawl") or nolawl) 
+			if success and response ~= "404: Not Found" and lawl then 
+				response = (file:sub(#file - 4, #file) == ".lua" and lawlwatermark..'\n'..response or response)
 				writefile('vape/'..file, response)
 				return response
 			else
-				error('Vape Unpatched - Failed to download '..file..' | HTTP 404')
+				error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
 				return task.wait(9e9)
 			end 
 		end
-		return isfile('vape/'..file) and readfile('vape/'..file) or task.wait(9e9)
+		return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
 	end
 	
 	local function downloadVapeAsset(path)
@@ -176,7 +177,7 @@ if shared.VapeExecuted then
 					repeat task.wait() until isfile(path)
 					textlabel:Destroy()
 				end)
-				local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets")) end)
+				local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
 				if suc and req then
 					writefile(path, req)
 				else
