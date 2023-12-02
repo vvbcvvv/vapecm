@@ -164,7 +164,7 @@ local function getVapeFile(file, nolawl)
 			return task.wait(9e9)
 		end 
 	end
-	return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
+	return isfile("vape/"..file) and readfile("vape/"..file) or error("Vape Unpatched - Failed to read "..file)
 end
 
 local function downloadVapeAsset(path)
