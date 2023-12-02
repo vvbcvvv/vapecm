@@ -160,10 +160,11 @@ local function getVapeFile(file, nolawl)
 			writefile("vape/"..file, response)
 			return response
 		else
-			return error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
+			error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
+			return task.wait(9e9)
 		end 
 	end
-	return isfile("vape/"..file) and readfile("vape/"..file) or error("Vape Unpatched - Failed to read "..file)
+	return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
 end
 
 local function downloadVapeAsset(path)
@@ -1956,9 +1957,7 @@ local function loadVape()
 			loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
 		else
 			if not shared.VapeDeveloper then
-				local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/CustomModules/"..game.PlaceId..".lua") end)
-				if suc and publicrepo and publicrepo ~= "404: Not Found" then
-					writefile("vape/CustomModules/"..game.PlaceId..".lua", "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..publicrepo)
+				local suc, publicrepo = pcall(function() return getVapeFile("CustomModules/"..game.PlaceId.lua) end)
 					loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
 				end
 			end
