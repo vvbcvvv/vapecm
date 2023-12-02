@@ -9932,6 +9932,8 @@ runFunction(function()
 						local item = getItemNear("scythe")
 						if item and lplr.Character.HandInvItem.Value == item.tool and bedwars.CombatController then 
 							bedwars.ClientHandler:Get("ScytheDash"):SendToServer({direction = Vector3.new(9e9, 9e9, 9e9)})
+							bedwars.ClientHandler:Get("ScytheDash"):SendToServer({direction = Vector3.new(lplr.Character.HumanoidRootPart.CFrame.LookVector)})
+							bedwars.ClientHandler:Get("ScytheDash"):SendToServer({direction = Vector3.new(lplr.Character.Humanoid.MoveDirection)})
 							if entityLibrary.isAlive and entityLibrary.character.Head.Transparency ~= 0 then
 								bedwarsStore.scythe = tick() + 1
 							end
