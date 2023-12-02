@@ -1921,7 +1921,7 @@ local function bedwarsmatch() -- Solos & Duels won't work with specific game IDs
 end
 
 local function loadVape()
-	if true then -- had another condition requirment here but didn't want to reformat the code so... :omegalol:
+	if true then -- had another condition requirement here but didn't want to reformat the code so... :omegalol:
 		customload(getVapeFile("Universal.lua"))
 		local bedwars = bedwarsmatch() 
 		if bedwars then 
