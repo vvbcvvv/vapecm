@@ -1,43 +1,33 @@
 local isfile = isfile 
 
 if readfile == nil or writefile == nil then
-    error('Your exploit won\'t handle vape.')
+    error("Your exploit won\"t handle vape.")
 end
 
 if isfile == nil then 
    isfile = function(file) return pcall(function() return readfile(file) end) and true or false end 
 end
 
-local lawlwatermark = '-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq'
+local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
 
 local function getVapeFile(file)
-    if not isfolder('vape') then 
-        makefolder('vape')
+    if not isfolder("vape") then 
+        makefolder("vape")
     end
-    if not isfile('vape/'..file) then 
+    if not isfile("vape/"..file) then 
         local success, response = pcall(function()
-            return game:HttpGet('https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/'..file) 
+            return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..file) 
         end)
-        if success and response ~= '404: Not Found' then 
-            response = (file:sub(#file - 4, #file) == '.lua' and lawlwatermark..'\n'..response or response)
-            writefile('vape/'..file, response)
+        if success and response ~= "404: Not Found" then 
+            response = (file:sub(#file - 4, #file) == ".lua" and lawlwatermark.."\n"..response or response)
+            writefile("vape/"..file, response)
             return response
         else
-            error('Vape Unpatched - Failed to download '..file..' | HTTP 404')
+            error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
             return task.wait(9e9)
         end 
     end
-    return isfile('vape/'..file) and readfile('vape/'..file) or task.wait(9e9)
+    return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
 end
 
-loadstring(getVapeFile('MainScript.lua'))()
-
---[[
-My tea's gone cold, I'm wondering why I
-Got out of bed at all
-The morning rain clouds up my window
-And I can't see at all
-And even if I could, it'd all be grey
-But your picture on my wall
-It reminds me that it's not so bad, it's not so bad
-]]--
+loadstring(getVapeFile("MainScript.lua"))()
