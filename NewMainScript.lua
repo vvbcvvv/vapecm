@@ -26,7 +26,7 @@ local function getVapeFile(file)
             return error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
         end 
     end
-    return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
+    return isfile("vape/"..file) and readfile("vape/"..file) or error("Vape Unpatched - Failed to read "..file)
 end
 
 loadstring(getVapeFile("MainScript.lua"))()
