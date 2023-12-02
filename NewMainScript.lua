@@ -41,4 +41,4 @@ local function getVapeFile(file, nolawl)
 	return isfile("vape/"..file) and readfile("vape/"..file) or error("Vape Unpatched - Failed to read "..file)
 end
 
-loadstring(getVapeFile("MainScript.lua"))() 
+loadstring(getVapeFile("MainScript.lua"))()
