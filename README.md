@@ -3,6 +3,7 @@
 discord: https://discord.gg/B5hKEKQ83a
 
 helpers:
+
 0prime - owner (me!)
 
 blankedvoid - main developer (thank you 🙏)
