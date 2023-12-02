@@ -134,21 +134,25 @@ local function displayErrorPopup(text, funclist)
 	setidentity(oldidentity)
 end
 
-local function getVapeFile(file)
-	if not isfile('vape/'..file) then 
+local function getVapeFile(file, nolawl)
+	if not isfolder("vape") then 
+		makefolder("vape")
+	end
+	local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
+	if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl then 
 		local success, response = pcall(function()
 			return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..file) 
 		end)
-		if success and response ~= '404: Not Found' then 
-			response = (file:sub(#file - 4, #file) == '.lua' and lawlwatermark..'\n'..response or response)
-			writefile('vape/'..file, response)
+		if success and response ~= "404: Not Found" then 
+			response = (file:sub(#file - 4, #file) == ".lua" and lawlwatermark.."\n"..response or response)
+			writefile("vape/"..file, response)
 			return response
 		else
-			error('Vape Unpatched - Failed to download '..file..' | HTTP 404')
+			error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
 			return task.wait(9e9)
 		end 
 	end
-	return isfile('vape/'..file) and readfile('vape/'..file) or task.wait(9e9)
+	return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
 end
 
 local function downloadVapeAsset(path)
@@ -168,7 +172,7 @@ local function downloadVapeAsset(path)
 				repeat task.wait() until isfile(path)
 				textlabel:Destroy()
 			end)
-			local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets")) end)
+			local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
 			if suc and req then
 				writefile(path, req)
 			else
