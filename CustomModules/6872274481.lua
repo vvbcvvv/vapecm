@@ -11287,7 +11287,9 @@ task.spawn(function()
 		AutoLeave.ToggleButton(false)
 	end
 end)
+--newvape
 
+--thanks to blank for this
 runFunction(function()
 	pcall(GuiLibrary.RemoveObject, "AtmosphereOptionsButton")
 	local Atmosphere = {Enabled = false}
@@ -11772,6 +11774,7 @@ runFunction(function()
 	})
 end)
 
+--thanks to blank for this
 runFunction(function()
 	local HotbarCustomization = {Enabled = false}
 	local InvSlotCornerRadius = {Value = 8}
