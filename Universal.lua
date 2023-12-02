@@ -48,15 +48,37 @@ local worldtoviewportpoint = function(pos)
 	return gameCamera.WorldToViewportPoint(gameCamera, pos)
 end
 
-local function vapeGithubRequest(scripturl)
-	if not isfile("vape/"..scripturl) then
-		local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
-		assert(suc, res)
-		assert(res ~= "404: Not Found", res)
-		if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
-		writefile("vape/"..scripturl, res)
+local function getcommit()
+	local success, response = pcall(function()
+		return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://api.github.com/repos/skiddinglua/NewVapeUnpatched4Roblox/commits"))
+	end)
+	local res = (success and response[1])
+	if res and response.documentation_url == nil and res.commit then 
+		local slash = res.commit.url:split("/")
+		return slash[#slash]
 	end
-	return readfile("vape/"..scripturl)
+	return "main"
+end
+
+local function getVapeFile(file, nolawl)
+	if not isfolder("vape") then 
+		makefolder("vape")
+	end
+	local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
+	if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl then 
+		local success, response = pcall(function()
+			return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..getcommit().."/"..file) 
+		end)
+		if success and response ~= "404: Not Found" then 
+			response = (file:sub(#file - 4, #file) == ".lua" and lawlwatermark.."\n"..response or response)
+			writefile("vape/"..file, response)
+			return response
+		else
+			error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
+			return task.wait(9e9)
+		end 
+	end
+	return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
 end
 
 local function downloadVapeAsset(path)
@@ -75,7 +97,7 @@ local function downloadVapeAsset(path)
 			repeat task.wait() until isfile(path)
 			textlabel:Destroy()
 		end)
-		local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets")) end)
+		local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
         if suc and req then
 		    writefile(path, req)
         else
@@ -126,7 +148,7 @@ local function getPlayerColor(plr)
 	return tostring(plr.TeamColor) ~= "White" and plr.TeamColor.Color
 end
 
-local entityLibrary = loadstring(vapeGithubRequest("Libraries/entityHandler.lua"))()
+local entityLibrary = loadstring(getVapeFile("Libraries/entityHandler.lua"))()
 shared.vapeentity = entityLibrary
 do
 	entityLibrary.selfDestruct()
@@ -320,7 +342,7 @@ do
 			end
 			WhitelistFunctions.WhitelistTable = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/whitelists/"..commit.."/PlayerWhitelist.json", true))
 		end)
-		shalib = loadstring(vapeGithubRequest("Libraries/sha.lua"))()
+		shalib = loadstring(getVapeFile("Libraries/sha.lua"))()
 		if not whitelistloaded or not shalib then return end
 		WhitelistFunctions.Loaded = true
 		WhitelistFunctions.LocalPriority = WhitelistFunctions:GetWhitelist(lplr)

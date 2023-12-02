@@ -1,6 +1,6 @@
 if shared.VapeExecuted then
-	local VERSION = "4.10 fixed"
-	local baseDirectory = "vape/"
+	local VERSION = "4.10"..(shared.VapePrivate and " PRIVATE" or "").." "..readfile("vape/commithash.txt"):sub(1, 6)
+	local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 	local vapeAssetTable = {
 		["vape/assets/AddItem.png"] = "rbxassetid://13350763121",
 		["vape/assets/AddRemoveIcon1.png"] = "rbxassetid://13350764147",
@@ -141,69 +141,69 @@ if shared.VapeExecuted then
 	gui.Parent = game:GetService("Players").LocalPlayer.PlayerGui
 	GuiLibrary["MainGui"] = gui
 
-local vapeCachedAssets = {}
-
-local function getcommit()
-	local success, response = pcall(function()
-		return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://api.github.com/repos/skiddinglua/NewVapeUnpatched4Roblox/commits"))
-	end)
-	local res = (success and response[1])
-	if res and response.documentation_url == nil and res.commit then 
-		local slash = res.commit.url:split("/")
-		return slash[#slash]
-	end
-	return "main"
-end
-
-local function getVapeFile(file, nolawl)
-	if not isfolder("vape") then 
-		makefolder("vape")
-	end
-	local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
-	if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl then 
-		local success, response = pcall(function()
-			return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..getcommit().."/"..file) 
-		end)
-		if success and response ~= "404: Not Found" then 
-			response = (file:sub(#file - 4, #file) == ".lua" and lawlwatermark.."\n"..response or response)
-			writefile("vape/"..file, response)
-			return response
-		else
-			error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
-			return task.wait(9e9)
-		end 
-	end
-	return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
-end
+	local vapeCachedAssets = {}
 	
-local function downloadVapeAsset(path)
-	if customassetcheck then
-		if not isfile(path) then
-			task.spawn(function()
-				local textlabel = Instance.new("TextLabel")
-				textlabel.Size = UDim2.new(1, 0, 0, 36)
-				textlabel.Text = "Downloading "..path
-				textlabel.BackgroundTransparency = 1
-				textlabel.TextStrokeTransparency = 0
-				textlabel.TextSize = 30
-				textlabel.Font = Enum.Font.SourceSans
-				textlabel.TextColor3 = Color3.new(1, 1, 1)
-				textlabel.Position = UDim2.new(0, 0, 0, -36)
-				textlabel.Parent = GuiLibrary.MainGui
-				repeat task.wait() until isfile(path)
-				textlabel:Destroy()
+	local function getcommit()
+		local success, response = pcall(function()
+			return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://api.github.com/repos/skiddinglua/NewVapeUnpatched4Roblox/commits"))
+		end)
+		local res = (success and response[1])
+		if res and response.documentation_url == nil and res.commit then 
+			local slash = res.commit.url:split("/")
+			return slash[#slash]
+		end
+		return "main"
+	end
+	
+	local function getVapeFile(file, nolawl)
+		if not isfolder("vape") then 
+			makefolder("vape")
+		end
+		local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
+		if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl then 
+			local success, response = pcall(function()
+				return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..getcommit().."/"..file) 
 			end)
-			local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
-			if suc and req then
-				writefile(path, req)
+			if success and response ~= "404: Not Found" then 
+				response = (file:sub(#file - 4, #file) == ".lua" and lawlwatermark.."\n"..response or response)
+				writefile("vape/"..file, response)
+				return response
 			else
-				return ""
+				error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
+				return task.wait(9e9)
+			end 
+		end
+		return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
+	end
+	
+	local function downloadVapeAsset(path)
+		if customassetcheck then
+			if not isfile(path) then
+				task.spawn(function()
+					local textlabel = Instance.new("TextLabel")
+					textlabel.Size = UDim2.new(1, 0, 0, 36)
+					textlabel.Text = "Downloading "..path
+					textlabel.BackgroundTransparency = 1
+					textlabel.TextStrokeTransparency = 0
+					textlabel.TextSize = 30
+					textlabel.Font = Enum.Font.SourceSans
+					textlabel.TextColor3 = Color3.new(1, 1, 1)
+					textlabel.Position = UDim2.new(0, 0, 0, -36)
+					textlabel.Parent = GuiLibrary.MainGui
+					repeat task.wait() until isfile(path)
+					textlabel:Destroy()
+				end)
+				local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
+				if suc and req then
+					writefile(path, req)
+				else
+					return ""
+				end
 			end
 		end
+		if not vapeCachedAssets[path] then vapeCachedAssets[path] = getcustomasset(path) end
+		return vapeCachedAssets[path] 
 	end
-	if not vapeCachedAssets[path] then vapeCachedAssets[path] = getcustomasset(path) end
-	return vapeCachedAssets[path] 
-end
 
 	GuiLibrary["UpdateHudEvent"] = Instance.new("BindableEvent")
 	GuiLibrary["SelfDestructEvent"] = Instance.new("BindableEvent")
