@@ -142,15 +142,25 @@ if shared.VapeExecuted then
 	GuiLibrary["MainGui"] = gui
 
 	local vapeCachedAssets = {}
-	local function vapeGithubRequest(scripturl)
-		if not isfile("vape/"..scripturl) then
-			local suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
-			assert(suc, res)
-			assert(res ~= "404: Not Found", res)
-			if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
-			writefile("vape/"..scripturl, res)
+	local function getVapeFile(file, nolawl)
+		if not isfolder("vape") then 
+			makefolder("vape")
 		end
-		return readfile("vape/"..scripturl)
+		local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
+		if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl or nolawl and readfile("vape/"..file):find(lawlwatermark) == nil then 
+			local success, response = pcall(function()
+				return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..file) 
+			end)
+			if success and response ~= "404: Not Found" then 
+				response = (file:split(".")[#file:split(".")] == "lua" and lawlwatermark.."\n"..response or response)
+				writefile("vape/"..file, response)
+				return response
+			else
+				error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
+				return task.wait(9e9)
+			end 
+		end
+		return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
 	end
 	
 	local function downloadVapeAsset(path)
@@ -170,7 +180,7 @@ if shared.VapeExecuted then
 					repeat task.wait() until isfile(path)
 					textlabel:Destroy()
 				end)
-				local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets")) end)
+				local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
 				if suc and req then
 					writefile(path, req)
 				else
@@ -422,6 +432,12 @@ if shared.VapeExecuted then
 		vertext.Position = UDim2.new(1 / GuiLibrary["MainRescale"].Scale, -(vertextsize.X) - 20, 1 / GuiLibrary["MainRescale"].Scale, -25)
 	end)
 
+	local function checkcontext()
+		local success, handle = false, "skill issue"
+		xpcall(function() inputService.OverrideMouseIconBehavior = inputService.OverrideMouseIconBehavior success = clickgui ~= nil handle = "thread context has LocalUser and RobloxScript" end, function(err) handle = err end)
+		return success, handle
+	end
+
 	local function dragGUI(gui, mod)
 		task.spawn(function()
 			local dragging
@@ -508,7 +524,7 @@ if shared.VapeExecuted then
 
 	GuiLibrary.SaveSettings = function()
 		if not loadedsuccessfully then return end
-		writefile(baseDirectory.."Profiles/"..(bedwars and "6872274481" or game.PlaceId)..".vapeprofiles.txt", httpService:JSONEncode(GuiLibrary.Profiles))
+		writefile(baseDirectory.."Profiles/"..(bedwars and "6872274481" or shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt", httpService:JSONEncode(GuiLibrary.Profiles))
 		local WindowTable = {}
 		for i,v in pairs(GuiLibrary.ObjectsThatCanBeSaved) do
 			if v.Type == "Window" then
@@ -579,7 +595,7 @@ if shared.VapeExecuted then
 
 	GuiLibrary.LoadSettings = function(customprofile)
 		if isfile("vape/Profiles/GUIPositions.vapeprofile.txt") and game.GameId == 2619619496 then
-			writefile("vape/Profiles/"..(bedwars and "6872265039" or game.PlaceId).."GUIPositions.vapeprofile.txt", readfile("vape/Profiles/GUIPositions.vapeprofile.txt"))
+			writefile("vape/Profiles/"..(game.GameId).."GUIPositions.vapeprofile.txt", readfile("vape/Profiles/GUIPositions.vapeprofile.txt"))
 			if delfile then delfile("vape/Profiles/GUIPositions.vapeprofile.txt") end
 		end
 		local success2, result2 = pcall(function()
@@ -674,7 +690,7 @@ if shared.VapeExecuted then
 			end
 		end
 		local success, result = pcall(function()
-			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(bedwars or shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt"))
+			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt"))
 		end)
 		if success and type(result) == "table" then
 			GuiLibrary["LoadSettingsEvent"]:Fire(result)
@@ -832,7 +848,7 @@ if shared.VapeExecuted then
 			shared.VapeSwitchServers = true
 			shared.VapeOpenGui = (clickgui.Visible)
 			shared.VapePrivate = vapeprivate
-			loadstring(vapeGithubRequest("NewMainScript.lua"))()
+			loadstring(getVapeFile("NewMainScript.lua"))()
 		end
 	end
 
@@ -4240,8 +4256,19 @@ if shared.VapeExecuted then
 				windowtitle.Visible = false
 				windowtitle.ZIndex = 3
 				windowtitle.Parent = clickgui
-				frame:GetPropertyChangedSignal("AbsolutePosition"):Connect(function()
+				local function AbsolutePositionUpvalue()
 					windowtitle.Position = UDim2.new(0, frame.Size.X.Offset + frame.AbsolutePosition.X + 2, 0, frame.AbsolutePosition.Y)
+				end
+				local fixedSignal = false
+				frame:GetPropertyChangedSignal("AbsolutePosition"):Connect(function()
+					if not checkcontext() then
+						xpcall(AbsolutePositionUpvalue, function(err) warn(err) end)
+						if firesignal and not fixedSignal then
+							fixedSignal = true
+							firesignal(frame:GetPropertyChangedSignal("AbsolutePosition"))
+						end
+					end
+					AbsolutePositionUpvalue()
 				end)
 				local windowshadow = Instance.new("ImageLabel")
 				windowshadow.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -6905,7 +6932,7 @@ if shared.VapeExecuted then
 		button.BorderSizePixel = 0
 		button.BackgroundTransparency = 0.5
 		button.Parent = GuiLibrary.MainGui
-		button.MouseButton1Click:Connect(function()
+		local function VapeButtonUpvalue()
 			clickgui.Visible = not clickgui.Visible
 			legitgui.Visible = not clickgui.Visible
 			inputService.OverrideMouseIconBehavior = (clickgui.Visible and Enum.OverrideMouseIconBehavior.ForceShow or game:GetService("VRService").VREnabled and Enum.OverrideMouseIconBehavior.ForceHide or Enum.OverrideMouseIconBehavior.None)
@@ -6921,12 +6948,23 @@ if shared.VapeExecuted then
 					if v:IsA("Frame") then v.BackgroundTransparency = legitgui.Visible and 0.8 or 1 end
 				end
 			end
+		end
+		local fixedSignal = false
+		button.MouseButton1Click:Connect(function()
+			if not checkcontext() then
+				xpcall(VapeButtonUpvalue, function(err) return warn(err) end)
+				if firesignal and not fixedSignal then
+					fixedSignal = true
+					firesignal(button.MouseButton1Click)
+				end
+			end
+			VapeButtonUpvalue()
 		end)
 		shared.VapeButton = button
 	end
 
-	GuiLibrary["KeyInputHandler"] = inputService.InputBegan:Connect(function(input1)
-		if inputService:GetFocusedTextBox() == nil then
+	local function KeyInputHandlerUpvalue(input1)
+		if not inputService:GetFocusedTextBox() then
 			if input1.KeyCode == Enum.KeyCode[GuiLibrary["GUIKeybind"]] and GuiLibrary["KeybindCaptured"] == false then
 				clickgui.Visible = not clickgui.Visible
 				legitgui.Visible = not clickgui.Visible
@@ -6972,6 +7010,153 @@ if shared.VapeExecuted then
 					end
 				end
 			end
+		end
+	end
+
+	local virtualInput
+	if cloneref then
+		virtualInput = cloneref(game:GetService("VirtualInputManager"))
+	else
+		virtualInput = game:GetService("VirtualInputManager")
+		warn"pasted and detected" -- no parenthesis <3
+	end
+
+	local function toEnum(key)
+        return Enum.KeyCode[key]
+    end
+
+    local keycodes = {
+        [0x08] = toEnum("Backspace"),
+        [0x09] = toEnum("Tab"),
+        [0x0C] = toEnum("Clear"),
+        [0x0D] = toEnum("Return"),
+        [0x10] = toEnum("LeftShift"),
+        [0x11] = toEnum("LeftControl"),
+        [0x12] = toEnum("LeftAlt"),
+        [0xA5] = toEnum("RightAlt"),
+        [0x13] = toEnum("Pause"),
+        [0x14] = toEnum("CapsLock"),
+        [0x1B] = toEnum("Escape"),
+        [0x20] = toEnum("Space"),
+        [0x21] = toEnum("PageUp"),
+        [0x22] = toEnum("PageDown"),
+        [0x23] = toEnum("End"),
+        [0x24] = toEnum("Home"),
+        [0x25] = toEnum("Left"),
+        [0x26] = toEnum("Up"),
+        [0x27] = toEnum("Right"),
+        [0x28] = toEnum("Down"),
+        [0x2A] = toEnum("Print"),
+        [0x2D] = toEnum("Insert"),
+        [0x2E] = toEnum("Delete"),
+        [0x2F] = toEnum("Help"),
+        [0x30] = toEnum("Zero"),
+        [0x31] = toEnum("One"),
+        [0x32] = toEnum("Two"),
+        [0x33] = toEnum("Three"),
+        [0x34] = toEnum("Four"),
+        [0x35] = toEnum("Five"),
+        [0x36] = toEnum("Six"),
+        [0x37] = toEnum("Seven"),
+        [0x38] = toEnum("Eight"),
+        [0x39] = toEnum("Nine"),
+        [0x41] = toEnum("A"),
+        [0x42] = toEnum("B"),
+        [0x43] = toEnum("C"),
+        [0x44] = toEnum("D"),
+        [0x45] = toEnum("E"),
+        [0x46] = toEnum("F"),
+        [0x47] = toEnum("G"),
+        [0x48] = toEnum("H"),
+        [0x49] = toEnum("I"),
+        [0x4A] = toEnum("J"),
+        [0x4B] = toEnum("K"),
+        [0x4C] = toEnum("L"),
+        [0x4D] = toEnum("M"),
+        [0x4E] = toEnum("N"),
+        [0x4F] = toEnum("O"),
+        [0x50] = toEnum("P"),
+        [0x51] = toEnum("Q"),
+        [0x52] = toEnum("R"),
+        [0x53] = toEnum("S"),
+        [0x54] = toEnum("T"),
+        [0x55] = toEnum("U"),
+        [0x56] = toEnum("V"),
+        [0x57] = toEnum("W"),
+        [0x58] = toEnum("X"),
+        [0x59] = toEnum("Y"),
+        [0x5A] = toEnum("Z"),
+        [0x5B] = toEnum("LeftSuper"),
+        [0x5C] = toEnum("RightSuper"),
+        [0x60] = toEnum("KeypadZero"),
+        [0x61] = toEnum("KeypadOne"),
+        [0x62] = toEnum("KeypadTwo"),
+        [0x63] = toEnum("KeypadThree"),
+        [0x64] = toEnum("KeypadFour"),
+        [0x65] = toEnum("KeypadFive"),
+        [0x66] = toEnum("KeypadSix"),
+        [0x67] = toEnum("KeypadSeven"),
+        [0x68] = toEnum("KeypadEight"),
+        [0x69] = toEnum("KeypadNine"),
+        [0x6A] = toEnum("Asterisk"),
+        [0x6B] = toEnum("Plus"),
+        [0x6D] = toEnum("Minus"),
+        [0x6E] = toEnum("Period"),
+        [0x6F] = toEnum("Slash"),
+        [0x70] = toEnum("F1"),
+        [0x71] = toEnum("F2"),
+        [0x72] = toEnum("F3"),
+        [0x73] = toEnum("F4"),
+        [0x74] = toEnum("F5"),
+        [0x75] = toEnum("F6"),
+        [0x76] = toEnum("F7"),
+        [0x77] = toEnum("F8"),
+        [0x78] = toEnum("F9"),
+        [0x79] = toEnum("F10"),
+        [0x7A] = toEnum("F11"),
+        [0x7B] = toEnum("F12"),
+        [0x7C] = toEnum("F13"),
+        [0x7D] = toEnum("F14"),
+        [0x7E] = toEnum("F15"),
+        [0x90] = toEnum("NumLock"),
+        [0x91] = toEnum("ScrollLock"),
+        [0xA0] = toEnum("LeftShift"),
+        [0xA1] = toEnum("RightShift"),
+        [0xA2] = toEnum("LeftControl"),
+        [0xA3] = toEnum("RightControl"),
+        [0xFE] = toEnum("Clear"),
+        [0xBB] = toEnum("Equals"),
+        [0xDB] = toEnum("LeftBracket"),
+        [0xDD] = toEnum("RightBracket")
+    }
+
+    local function get_keycode(key)
+        local x = keycodes[key]
+        if x then
+            return x
+        end
+        return Enum.KeyCode.Unknown
+    end
+
+	if keypress and keyrelease and not keyclick then
+		function keyclick(key)
+			keypress(key)
+			keyrelease(key)
+		end
+		getgenv().keyclick = keyclick
+	end
+
+	GuiLibrary["KeyInputHandler"] = inputService.InputBegan:Connect(function(input1)
+		if not checkcontext() then
+			xpcall(KeyInputHandlerUpvalue, function(err) return warn(err) end, input1)
+			if keyclick then
+				local key = table.find(keycodes, input1.KeyCode)
+				if key then
+					keyclick(key)
+				end
+			end
+		else
+			KeyInputHandlerUpvalue(input1)
 		end
 	end)
 
