@@ -1,6 +1,6 @@
 repeat task.wait() until game:IsLoaded()
 local GuiLibrary
-local baseDirectory = "vape/"
+local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 local vapeInjected = true
 local oldRainbow = false
 local errorPopupShown = false
@@ -85,7 +85,9 @@ local vapeAssetTable = {
 	["vape/assets/VapeLogo2.png"] = "rbxassetid://13350876307",
 	["vape/assets/VapeLogo4.png"] = "rbxassetid://13350877564"
 }
-if inputService:GetPlatform() ~= Enum.Platform.Windows then 
+local platform = inputService:GetPlatform()
+
+if platform ~= Enum.Platform.Windows then 
 	--mobile exploit fix
 	getgenv().getsynasset = nil
 	getgenv().getcustomasset = nil
@@ -160,7 +162,7 @@ local function getVapeFile(file, nolawl)
 			writefile("vape/"..file, response)
 			return response
 		else
-			error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
+			task.spawn(error, "Vape Unpatched - Failed to download "..file.." | HTTP 404")
 			return task.wait(9e9)
 		end 
 	end
@@ -197,6 +199,13 @@ end
 
 assert(not shared.VapeExecuted, "Vape Already Injected")
 shared.VapeExecuted = true
+
+local exploitfullyloaded = false 
+repeat exploitfullyloaded = pcall(function() return game.HttpGet end) task.wait() until exploitfullyloaded -- we love electron
+
+for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "vape/Libraries", "vape/CustomModules", "vape/Profiles", baseDirectory.."Profiles", "vape/assets"}) do 
+	if not isfolder(v) then makefolder(v) end
+end
 
 GuiLibrary = loadstring(getVapeFile("GuiLibrary.lua"))()
 shared.GuiLibrary = GuiLibrary
@@ -258,6 +267,11 @@ local World = GuiLibrary.CreateWindow({
 	Icon = "vape/assets/WorldIcon.png", 
 	IconSize = 16
 })
+local Matchmaking = GuiLibrary.CreateWindow({
+	Name = "Matchmaking", 
+	Icon = "vape/assets/SliderArrow1.png", 
+	IconSize = 16
+})
 local Friends = GuiLibrary.CreateWindow2({
 	Name = "Friends", 
 	Icon = "vape/assets/FriendsIcon.png", 
@@ -304,6 +318,12 @@ GUI.CreateButton({
 	Icon = "vape/assets/WorldIcon.png", 
 	IconSize = 16
 })
+GUI.CreateButton({
+	Name = "Matchmaking", 
+	Function = function(callback) Matchmaking.SetVisible(callback) end, 
+	Icon = "vape/assets/SliderArrow1.png", 
+	IconSize = 16
+})
 GUI.CreateDivider("MISC")
 GUI.CreateButton({
 	Name = "Friends", 
@@ -317,6 +337,7 @@ GUI.CreateButton({
 	Name = "Profiles", 
 	Function = function(callback) Profiles.SetVisible(callback) end, 
 })
+
 
 local FriendsTextListTable = {
 	Name = "FriendsList", 
@@ -673,13 +694,13 @@ OnlineProfilesButton.MouseButton1Click:Connect(function()
 		local onlineprofiles = {}
 		local saveplaceid = tostring(shared.CustomSaveVape or game.PlaceId)
         local success, result = pcall(function()
-            return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/VapeProfiles/main/Profiles/"..saveplaceid.."/profilelist.txt", true))
+            return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeProfiles/main/Profiles/"..saveplaceid.."/profilelist.txt", true))
         end)
 		for i,v in pairs(success and result or {}) do 
 			onlineprofiles[i] = v
 		end
 		for i2,v2 in pairs(onlineprofiles) do
-			local profileurl = "https://raw.githubusercontent.com/skiddinglua/VapeProfiles/main/Profiles/"..saveplaceid.."/"..v2.OnlineProfileName
+			local profileurl = "https://raw.githubusercontent.com/7GrandDadPGN/VapeProfiles/main/Profiles/"..saveplaceid.."/"..v2.OnlineProfileName
 			local profilebox = Instance.new("Frame")
 			profilebox.BackgroundColor3 = Color3.fromRGB(31, 30, 31)
 			profilebox.Parent = OnlineProfilesList
@@ -942,7 +963,7 @@ local function TextGUIUpdate()
 		VapeTextExtra.Text = formattedText
         VapeText.Size = UDim2.fromOffset(154, (formattedText ~= "" and textService:GetTextSize(formattedText, VapeText.TextSize, VapeText.Font, Vector2.new(1000000, 1000000)) or Vector2.zero).Y)
 
-		local offsets = TextGUIOffsets[inputService:GetPlatform()] or {
+		local offsets = TextGUIOffsets[platform] or {
 			5,
 			1,
 			23,
@@ -1298,13 +1319,20 @@ local function newHealthColor(percent)
 	end
 	return Color3.fromRGB(255, 255, 0):lerp(Color3.fromRGB(249, 57, 55), (0.5 - percent) / 0.5)
 end
-
 local TargetInfo = GuiLibrary.CreateCustomWindow({
 	Name = "Target Info",
-	Icon = "vape/assets/TargetInfoIcon1.png",
+	Icon = "vape/assets/TargetIcon3.png",
 	IconSize = 16
 })
+local TargetInfoToggle = GuiLibrary.ObjectsThatCanBeSaved.GUIWindow.Api.CreateCustomToggle({
+	Name = "Target Info",
+	Icon = "vape/assets/TargetInfoIcon2.png", 
+	Function = function(boolean)
+		TargetInfo.SetVisible(boolean)
+	end
+})
 local TargetInfoBackground = {Enabled = false}
+local TargetInfoBackgroundColor = {Hue = 0, Sat = 0, Value = 0}
 local TargetInfoMainFrame = Instance.new("Frame")
 TargetInfoMainFrame.BackgroundColor3 = Color3.fromRGB(26, 25, 26)
 TargetInfoMainFrame.BorderSizePixel = 0
@@ -1452,12 +1480,7 @@ task.spawn(function()
 		task.wait()
 	until not vapeInjected
 end)
-GUI.CreateCustomToggle({
-	Name = "Target Info", 
-	Icon = "vape/assets/TargetInfoIcon2.png", 
-	Function = function(callback) TargetInfo.SetVisible(callback) end,
-	Priority = 1
-})
+
 local GeneralSettings = GUI.CreateDivider2("General Settings")
 local ModuleSettings = GUI.CreateDivider2("Module Settings")
 local GUISettings = GUI.CreateDivider2("GUI Settings")
@@ -1751,19 +1774,10 @@ local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(functio
     if (not teleportedServers) and (not shared.VapeIndependent) then
 		teleportedServers = true
 		local teleportScript = [[
-			shared.VapeSwitchServers = true 
-			if shared.VapeDeveloper then 
-				loadstring(readfile("vape/NewMainScript.lua"))() 
-			else 
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/NewMainScript.lua", true))() 
-			end
+			pcall(function()
+				loadfile("vape/NewMainScript.lua")()
+			end)
 		]]
-		if shared.VapeDeveloper then
-			teleportScript = 'shared.VapeDeveloper = true\n'..teleportScript
-		end
-		if shared.VapePrivate then
-			teleportScript = 'shared.VapePrivate = true\n'..teleportScript
-		end
 		if shared.VapeCustomProfile then 
 			teleportScript = "shared.VapeCustomProfile = '"..shared.VapeCustomProfile.."'\n"..teleportScript
 		end
@@ -1786,7 +1800,9 @@ GuiLibrary.SelfDestruct = function()
 
 	for i,v in pairs(GuiLibrary.ObjectsThatCanBeSaved) do
 		if (v.Type == "Button" or v.Type == "OptionsButton" or v.Type == "LegitModule") and v.Api.Enabled then
-			v.Api.ToggleButton(false)
+			task.spawn(function() 
+				v.Api.ToggleButton(false)
+			end)
 		end
 	end
 
@@ -1903,7 +1919,7 @@ local function customload(data, file)
 	end)
 	if not success then
 		GuiLibrary.SaveSettings = function() end
-		task.spawn(error, "Vape - Failed to load "..file..".lua | "..err)
+		task.spawn(error, "Vape Unpatched - Failed to load "..file..".lua | "..err)
 		pcall(function()
 			local notification = GuiLibrary.CreateNotification("Failure loading "..file..".lua", err, 25, "assets/WarningNotification.png")
 			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
@@ -1912,26 +1928,19 @@ local function customload(data, file)
 	end
 end
 
-local function bedwarsmatch() -- Solos & Duels won't work with specific game IDs, so this would work :troll:
-	local data = game:GetService("TeleportService"):GetLocalPlayerTeleportData()
-	if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 then 
-		return true 
-	end
-	return false
-end
-
 local function loadVape()
-	if true then -- had another condition requirement here but didn't want to reformat the code so... :omegalol:
-		customload(getVapeFile("Universal.lua"))
-		local bedwars = bedwarsmatch() 
+	customload(getVapeFile("Universal.lua"))
 		if bedwars then 
 			customload(getVapeFile("CustomModules/8444591321.lua"), "6872274481")
 		else
 			local success, response = pcall(function()
-				return getVapeFile("CustomModules/"..game.PlaceId..".lua")
+				return isfile("vape/CustomModules/"..game.PlaceId..".lua") and readfile("vape/CustomModules/"..game.PlaceId..".lua") or game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/CustomModules/"..game.PlaceId..".lua") 
 			end)
-			if success then 
+			if success and response ~= "404: Not Found" then 
 				customload(response, game.PlaceId)
+				if not isfile("vape/CustomModules/"..game.PlaceId..".lua") then 
+					pcall(writefile, "vape/CustomModules/"..game.PlaceId..".lua", response)
+				end
 			end
 		end
 	end
