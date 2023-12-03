@@ -439,20 +439,6 @@ do
 	end
 end
 
-
-local function getcommit()
-	local success, response = pcall(function()
-		return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://api.github.com/repos/skiddinglua/NewVapeUnpatched4Roblox/commits"))
-	end)
-	local res = (success and response[1])
-	if res and response.documentation_url == nil and res.commit then 
-		local slash = res.commit.url:split("/")
-		return slash[#slash]
-	end
-	return "main"
-end
-
-
 GuiLibrary.SelfDestructEvent.Event:Connect(function()
 	vapeInjected = false
 	entityLibrary.selfDestruct()

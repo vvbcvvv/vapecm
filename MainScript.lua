@@ -85,9 +85,7 @@ local vapeAssetTable = {
 	["vape/assets/VapeLogo2.png"] = "rbxassetid://13350876307",
 	["vape/assets/VapeLogo4.png"] = "rbxassetid://13350877564"
 }
-local platform = inputService:GetPlatform()
-
-if platform ~= Enum.Platform.Windows then 
+if inputService:GetPlatform() ~= Enum.Platform.Windows then 
 	--mobile exploit fix
 	getgenv().getsynasset = nil
 	getgenv().getcustomasset = nil
@@ -136,28 +134,53 @@ local function displayErrorPopup(text, funclist)
 	setidentity(oldidentity)
 end
 
-local function getVapeFile(file, nolawl)
-    if not isfolder("vape") then 
-        makefolder("vape")
-    end
-    local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
-    if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl or nolawl and readfile("vape/"..file):find(lawlwatermark) == nil then 
-        local success, response = pcall(function()
-            return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..file, true) 
-        end)
-        if success and response ~= "404: Not Found" then 
-            response = (file:split(".")[#file:split(".")] == "lua" and lawlwatermark.."\n"..response or response)
-            writefile("vape/"..file, response)
-            return response
-        else
-            return error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
-        end 
-    end
-    return isfile("vape/"..file) and readfile("vape/"..file) or error("Vape Unpatched - Failed to read "..file.." | HTTP 404")
+local lawlwatermark = '-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq\n'
+local function vapeGithubRequest(scripturl)
+	if not isfile("vape/"..scripturl) then
+		local suc, res
+		task.delay(15, function()
+			if not res and not errorPopupShown then 
+				errorPopupShown = true
+				displayErrorPopup("The connection to github is taking a while, Please be patient.")
+			end
+		end)
+		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
+		if not suc or res == "404: Not Found" then
+			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
+			error(res)
+		end
+		if scripturl:find(".lua") then res = lawlwatermark..res end
+		writefile("vape/"..scripturl, res)
+	end
+	return readfile("vape/"..scripturl)
 end
 
 local function downloadVapeAsset(path)
-	return vapeAssetTable[path] 
+	if customassetcheck then
+		if not isfile(path) then
+			task.spawn(function()
+				local textlabel = Instance.new("TextLabel")
+				textlabel.Size = UDim2.new(1, 0, 0, 36)
+				textlabel.Text = "Downloading "..path
+				textlabel.BackgroundTransparency = 1
+				textlabel.TextStrokeTransparency = 0
+				textlabel.TextSize = 30
+				textlabel.Font = Enum.Font.SourceSans
+				textlabel.TextColor3 = Color3.new(1, 1, 1)
+				textlabel.Position = UDim2.new(0, 0, 0, -36)
+				textlabel.Parent = GuiLibrary.MainGui
+				repeat task.wait() until isfile(path)
+				textlabel:Destroy()
+			end)
+			local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets")) end)
+			if suc and req then
+				writefile(path, req)
+			else
+				return ""
+			end
+		end
+	end
+	return getcustomasset(path) 
 end
 
 assert(not shared.VapeExecuted, "Vape Already Injected")
@@ -166,8 +189,57 @@ shared.VapeExecuted = true
 for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "vape/Libraries", "vape/CustomModules", "vape/Profiles", baseDirectory.."Profiles", "vape/assets"}) do 
 	if not isfolder(v) then makefolder(v) end
 end
+task.spawn(function()
+	local success, assetver = pcall(function() return vapeGithubRequest("assetsversion.txt") end)
+	if not isfile("vape/assetsversion.txt") then writefile("vape/assetsversion.txt", "0") end
+	if success and assetver > readfile("vape/assetsversion.txt") then
+		redownloadedAssets = true
+		if isfolder("vape/assets") and not shared.VapeDeveloper then
+			if delfolder then
+				delfolder("vape/assets")
+				makefolder("vape/assets")
+			end
+		end
+		writefile("vape/assetsversion.txt", assetver)
+	end
+end)
+if not isfile("vape/CustomModules/cachechecked.txt") then
+	local isNotCached = false
+	for i,v in pairs({"vape/Universal.lua", "vape/MainScript.lua", "vape/GuiLibrary.lua"}) do 
+		if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
+			isNotCached = true
+		end 
+	end
+	if isfolder("vape/CustomModules") then 
+		for i,v in pairs(listfiles("vape/CustomModules")) do 
+			if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
+				isNotCached = true
+			end 
+		end
+	end
+	if isNotCached and not shared.VapeDeveloper then
+		displayErrorPopup("Vape has detected uncached files, If you have CustomModules click no, else click yes.", {No = function() end, Yes = function()
+			for i,v in pairs({"vape/Universal.lua", "vape/MainScript.lua", "vape/GuiLibrary.lua"}) do 
+				if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
+					delfile(v)
+				end 
+			end
+			for i,v in pairs(listfiles("vape/CustomModules")) do 
+				if isfile(v) and not readfile(v):find("--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.") then
+					local last = v:split('\\')
+					last = last[#last]
+					local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/CustomModules/"..last) end)
+					if suc and publicrepo and publicrepo ~= "404: Not Found" then
+						writefile("vape/CustomModules/"..last, lawlwatermark..publicrepo)
+					end
+				end 
+			end
+		end})
+	end
+	writefile("vape/CustomModules/cachechecked.txt", "verified")
+end
 
-GuiLibrary = loadstring(getVapeFile("GuiLibrary.lua"))()
+GuiLibrary = loadstring(vapeGithubRequest("GuiLibrary.lua"))()
 shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
@@ -286,7 +358,6 @@ GUI.CreateButton({
 	Name = "Profiles", 
 	Function = function(callback) Profiles.SetVisible(callback) end, 
 })
-
 
 local FriendsTextListTable = {
 	Name = "FriendsList", 
@@ -643,13 +714,13 @@ OnlineProfilesButton.MouseButton1Click:Connect(function()
 		local onlineprofiles = {}
 		local saveplaceid = tostring(shared.CustomSaveVape or game.PlaceId)
         local success, result = pcall(function()
-            return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/VapeProfiles/main/Profiles/"..saveplaceid.."/profilelist.txt", true))
+            return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeProfiles/main/Profiles/"..saveplaceid.."/profilelist.txt", true))
         end)
 		for i,v in pairs(success and result or {}) do 
 			onlineprofiles[i] = v
 		end
 		for i2,v2 in pairs(onlineprofiles) do
-			local profileurl = "https://raw.githubusercontent.com/skiddinglua/VapeProfiles/main/Profiles/"..saveplaceid.."/"..v2.OnlineProfileName
+			local profileurl = "https://raw.githubusercontent.com/7GrandDadPGN/VapeProfiles/main/Profiles/"..saveplaceid.."/"..v2.OnlineProfileName
 			local profilebox = Instance.new("Frame")
 			profilebox.BackgroundColor3 = Color3.fromRGB(31, 30, 31)
 			profilebox.Parent = OnlineProfilesList
@@ -912,7 +983,7 @@ local function TextGUIUpdate()
 		VapeTextExtra.Text = formattedText
         VapeText.Size = UDim2.fromOffset(154, (formattedText ~= "" and textService:GetTextSize(formattedText, VapeText.TextSize, VapeText.Font, Vector2.new(1000000, 1000000)) or Vector2.zero).Y)
 
-		local offsets = TextGUIOffsets[platform] or {
+		local offsets = TextGUIOffsets[inputService:GetPlatform()] or {
 			5,
 			1,
 			23,
@@ -1268,20 +1339,13 @@ local function newHealthColor(percent)
 	end
 	return Color3.fromRGB(255, 255, 0):lerp(Color3.fromRGB(249, 57, 55), (0.5 - percent) / 0.5)
 end
+
 local TargetInfo = GuiLibrary.CreateCustomWindow({
 	Name = "Target Info",
-	Icon = "vape/assets/TargetIcon3.png",
+	Icon = "vape/assets/TargetInfoIcon1.png",
 	IconSize = 16
 })
-local TargetInfoToggle = GuiLibrary.ObjectsThatCanBeSaved.GUIWindow.Api.CreateCustomToggle({
-	Name = "Target Info",
-	Icon = "vape/assets/TargetInfoIcon2.png", 
-	Function = function(boolean)
-		TargetInfo.SetVisible(boolean)
-	end
-})
 local TargetInfoBackground = {Enabled = false}
-local TargetInfoBackgroundColor = {Hue = 0, Sat = 0, Value = 0}
 local TargetInfoMainFrame = Instance.new("Frame")
 TargetInfoMainFrame.BackgroundColor3 = Color3.fromRGB(26, 25, 26)
 TargetInfoMainFrame.BorderSizePixel = 0
@@ -1429,7 +1493,12 @@ task.spawn(function()
 		task.wait()
 	until not vapeInjected
 end)
-
+GUI.CreateCustomToggle({
+	Name = "Target Info", 
+	Icon = "vape/assets/TargetInfoIcon2.png", 
+	Function = function(callback) TargetInfo.SetVisible(callback) end,
+	Priority = 1
+})
 local GeneralSettings = GUI.CreateDivider2("General Settings")
 local ModuleSettings = GUI.CreateDivider2("Module Settings")
 local GUISettings = GUI.CreateDivider2("GUI Settings")
@@ -1723,10 +1792,19 @@ local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(functio
     if (not teleportedServers) and (not shared.VapeIndependent) then
 		teleportedServers = true
 		local teleportScript = [[
-			pcall(function()
-				loadfile("vape/NewMainScript.lua")()
-			end)
+			shared.VapeSwitchServers = true 
+			if shared.VapeDeveloper then 
+				loadstring(readfile("vape/NewMainScript.lua"))() 
+			else 
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/NewMainScript.lua", true))() 
+			end
 		]]
+		if shared.VapeDeveloper then
+			teleportScript = 'shared.VapeDeveloper = true\n'..teleportScript
+		end
+		if shared.VapePrivate then
+			teleportScript = 'shared.VapePrivate = true\n'..teleportScript
+		end
 		if shared.VapeCustomProfile then 
 			teleportScript = "shared.VapeCustomProfile = '"..shared.VapeCustomProfile.."'\n"..teleportScript
 		end
@@ -1749,9 +1827,7 @@ GuiLibrary.SelfDestruct = function()
 
 	for i,v in pairs(GuiLibrary.ObjectsThatCanBeSaved) do
 		if (v.Type == "Button" or v.Type == "OptionsButton" or v.Type == "LegitModule") and v.Api.Enabled then
-			task.spawn(function() 
-				v.Api.ToggleButton(false)
-			end)
+			v.Api.ToggleButton(false)
 		end
 	end
 
@@ -1798,7 +1874,7 @@ GeneralSettings.CreateButton2({
 		shared.VapeSwitchServers = true
 		shared.VapeOpenGui = true
 		shared.VapePrivate = vapePrivateCheck
-		loadstring(getVapeFile("NewMainScript.lua"))()
+		loadstring(vapeGithubRequest("NewMainScript.lua"))()
 	end
 })
 GUISettings.CreateButton2({
@@ -1862,35 +1938,47 @@ GeneralSettings.CreateButton2({
 	Function = GuiLibrary.SelfDestruct
 })
 
-local function customload(data, file)
+local function loadSafe(data, name)
 	local success, err = pcall(function()
-		loadstring(data)()
+		local chunk = loadstring(data)
+		if chunk == nil then
+			return error('unable to load chunk (syntax error)')
+		end
+		return chunk()
 	end)
 	if not success then
 		GuiLibrary.SaveSettings = function() end
-		task.spawn(error, "Vape Unpatched - Failed to load "..file..".lua | "..err .. debug.traceback('\nTraceback: '))
 		pcall(function()
-			local notification = GuiLibrary.CreateNotification("Failure loading "..file..".lua", err, 25, "assets/WarningNotification.png")
+			local notification = GuiLibrary.CreateNotification(`Failed to load {file:gsub('vape/CustomModules/')}`, err, 25, "assets/WarningNotification.png")
 			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 			notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 	    end)
+		error(`newvape | failed to load {name:gsub('vape/'):gusb('CustomModules/')}\n{debug.traceback('Traceback: ')}`)
+		-- by closing the thread you prevent profiles being lost
 	end
 end
 
 local function loadVape()
-	if true then -- had a condition here but was too lazy to reformat code so yes
-		customload(getVapeFile("Universal.lua"))
-		if bedwars then 
-			shared.CustomSaveVape = 6872274481
-			customload(getVapeFile("CustomModules/6872274481.lua"), "6872274481")
+	if not shared.VapeIndependent then
+		loadSafe(vapeGithubRequest("Universal.lua"), "Universal.lua")
+		if isfile("vape/CustomModules/"..game.PlaceId..".lua") then
+			loadSafe(readfile("vape/CustomModules/"..game.PlaceId..".lua"), "vape/CustomModules/"..game.PlaceId..".lua")
 		else
-			local success, response = pcall(function()
-				return getVapeFile("CustomModules/"..game.PlaceId..".lua")
-			end)
-			if success and response then 
-				customload(response, game.PlaceId)
+			if not shared.VapeDeveloper then
+				local suc, publicrepo = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/CustomModules/"..game.PlaceId..".lua") end)
+				if suc and publicrepo and publicrepo ~= "404: Not Found" then
+					writefile("vape/CustomModules/"..game.PlaceId..".lua", lawlwatermark..publicrepo)
+					loadSafe(readfile("vape/CustomModules/"..game.PlaceId..".lua"), "vape/CustomModules/"..game.PlaceId..".lua")
+				end
 			end
 		end
+		if shared.VapePrivate then
+			if isfile("vapeprivate/CustomModules/"..game.PlaceId..".lua") then
+				loadSafe(readfile("vapeprivate/CustomModules/"..game.PlaceId..".lua"), "vapeprivate/CustomModules/"..game.PlaceId..".lua")
+			end	
+		end
+	else
+		repeat task.wait() until shared.VapeManualLoad
 	end
 	if #ProfilesTextList.ObjectList == 0 then
 		table.insert(ProfilesTextList.ObjectList, "default")
