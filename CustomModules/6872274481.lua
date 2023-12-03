@@ -23,7 +23,7 @@
 		Atmosphere - blxnk
 		HotbarMods - blxnk
 		AntiNoClip - blxnk
-		HotbarCustomization - blxnk
+		HotbarMods - blxnk
 
 ]===]
 
