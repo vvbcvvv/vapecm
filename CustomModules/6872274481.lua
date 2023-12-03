@@ -13213,10 +13213,10 @@ runFunction(function()
 											clone.CFrame = vapeOriginalRoot.CFrame
 											continue
 										end
-										if GuiLibrary.ObjectsThatCanBeSaved.LongJumpOptionsButton.Enabled or (NewDisabler.Enabled and NewDisablerSlowdown.Enabled and (bedwarsStore.attackReachUpdate > tick())) then
+										--[=[if GuiLibrary.ObjectsThatCanBeSaved.LongJumpOptionsButton.Enabled or (NewDisabler.Enabled and NewDisablerSlowdown.Enabled and (bedwarsStore.attackReachUpdate > tick())) then
 											vapeOriginalRoot.CFrame = clone.CFrame
 											continue
-										end
+										end]=]
 										if (cloned.Humanoid.FloorMaterial ~= Enum.Material.Air or bedwarsStore.disabledFloat) and (teleportDistance >= BypassNumbers.SlowdownDistance) then
 											teleportDistance = 0
 											noSpeed = true
