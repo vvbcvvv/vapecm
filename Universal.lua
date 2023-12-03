@@ -5926,7 +5926,7 @@ end)
 
 
 
-task.spawn(function()
+--[[task.spawn(function()
 	local oldcommit = (isfile("vape/lawlcommit.txt") and readfile("vape/lawlcommit.txt"))
 	repeat
 		local files = {}
@@ -5952,4 +5952,4 @@ task.spawn(function()
 		end
 		task.wait(100)
 	until not vapeInjected
-end)
+end)]]
