@@ -24,6 +24,7 @@
 		HotbarMods - blxnk
 		AntiNoClip - blxnk
 		HotbarMods - blxnk
+		HealthbarMods - blxnk
 
 ]===]
 
@@ -14697,4 +14698,218 @@ runFunction(function()
 			HotbarHideSlotIcons.Object.Visible = false 
 		end
 	end)
+end)
+
+runFunction(function()
+	local function getfontenums()
+		local fonts = {}
+		for i,v in next, (Enum.Font:GetEnumItems()) do 
+			table.insert(fonts, v.Name) 
+		end
+		return fonts
+	end
+	local function getrandomvalue(tab)
+		return tab[math.random(1, #tab)] or ""
+	end
+	local HealthbarMods = {Enabled = false}
+	local HealthbarRound = {Enabled = false}
+	local HealthbarColorToggle = {Enabled = false}
+	local HealthbarTextToggle = {Enabled = false}
+	local HealthbarFontToggle = {Enabled = false}
+	local HealthbarTextColorToggle = {Enabled = false}
+	local HealthbarBackgroundToggle = {Enabled = false}
+	local HealthbarText = {ObjectList = {}}
+	local HealthbarFont = {value = 'LuckiestGuy'}
+	local HealthbarColor = {Hue = 0, Sat = 0, Value = 0}
+	local HealthbarBackground = {Hue = 0, Sat = 0, Value = 0}
+	local HealthbarTextColor = {Hue = 0, Sat = 0, Value = 0}
+	local healthbarobjects = {}
+	local oldhealthbar
+	local textconnection
+	local function healthbarFunction()
+		if not HealthbarMods.Enabled then 
+			return 
+		end
+		local healthbar = ({pcall(function() return lplr.PlayerGui.hotbar['1'].HotbarHealthbarContainer.HealthbarProgressWrapper['1'] end)})[2]
+		if healthbar and type(healthbar) == 'userdata' then 
+			oldhealthbar = healthbar
+			healthbar.BackgroundColor3 = HealthbarColorToggle.Enabled and Color3.fromHSV(HealthbarColor.Hue, HealthbarColor.Sat, HealthbarColor.Value) or healthbar.BackgroundColor3
+			for i,v in next, (healthbar.Parent:GetChildren()) do 
+				if v:IsA('Frame') and v:FindFirstChildWhichIsA('UICorner') == nil and HealthbarRound.Enabled then 
+					table.insert(healthbarobjects, Instance.new('UICorner', v))
+				end
+			end
+			local healthbarbackground = ({pcall(function() return healthbar.Parent.Parent end)})[2]
+			if healthbarbackground and type(healthbarbackground) == 'userdata' then
+				if healthbar.Parent.Parent:FindFirstChildWhichIsA('UICorner') == nil and HealthbarRound.Enabled then 
+					table.insert(healthbarobjects, Instance.new('UICorner', healthbar.Parent.Parent))
+				end 
+				if HealthbarBackgroundToggle.Enabled then
+					healthbarbackground.BackgroundColor3 = Color3.fromHSV(HealthbarBackground.Hue, HealthbarBackground.Sat, HealthbarBackground.Value)
+				end
+			end
+			local healthbartext = ({pcall(function() return healthbar.Parent.Parent['1'] end)})[2]
+			if healthbartext and type(healthbartext) == 'userdata' then 
+				local randomtext = getrandomvalue(HealthbarText.ObjectList)
+				if HealthbarTextColorToggle.Enabled then
+					healthbartext.TextColor3 = Color3.fromHSV(HealthbarTextColor.Hue, HealthbarTextColor.Sat, HealthbarTextColor.Value)
+				end
+				if HealthbarFontToggle.Enabled then 
+					healthbartext.Font = Enum.Font[HealthbarFont.Value]
+				end
+				if randomtext ~= '' and HealthbarTextToggle.Enabled then 
+					healthbartext.Text = randomtext:gsub('<health>', entityLibrary.isAlive and tostring(math.floor(lplr.Character:GetAttribute('Health') or 0)) or '0')
+				else
+					pcall(function() healthbartext.Text = tostring(lplr.Character:GetAttribute('Health')) end)
+				end
+				if not textconnection then 
+					textconnection = healthbartext:GetPropertyChangedSignal('Text'):Connect(function()
+						local randomtext = getrandomvalue(HealthbarText.ObjectList)
+						if randomtext ~= '' then 
+							healthbartext.Text = randomtext:gsub('<health>', isAlive() and tostring(math.floor(lplr.Character:GetAttribute('Health') or 0)) or '0')
+						else
+							pcall(function() healthbartext.Text = tostring(math.floor(lplr.Character:GetAttribute('Health'))) end)
+						end
+					end)
+				end
+			end
+		end
+	end
+	HealthbarMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = 'HealthbarMods',
+		HoverText = 'Customize the color of your healthbar.\nAdd '<health>' to your custom text dropdown (if custom text enabled)to insert your health.',
+		Function = function(callback)
+			if callback then 
+				task.spawn(function()
+					table.insert(HealthbarMods.Connections, lplr.PlayerGui.DescendantAdded:Connect(function(v)
+						if v.Name == 'HotbarHealthbarContainer' and v.Parent and v.Parent.Parent and v.Parent.Parent.Name == 'hotbar' then
+							healthbarFunction()
+						end
+					end))
+					healthbarFunction()
+				end)
+			else
+				pcall(function() textconnection:Disconnect() end)
+				pcall(function() oldhealthbar.Parent.Parent.BackgroundColor3 = Color3.fromRGB(41, 51, 65) end)
+				pcall(function() oldhealthbar.BackgroundColor3 = Color3.fromRGB(203, 54, 36) end)
+				pcall(function() oldhealthbar.Parent.Parent['1'].Text = tostring(lplr.Character:GetAttribute('Health')) end)
+				pcall(function() oldhealthbar.Parent.Parent['1'].TextColor3 = Color3.fromRGB(255, 255, 255) end)
+				pcall(function() oldhealthbar.Parent.Parent['1'].Font = Enum.Font.LuckiestGuy end)
+				oldhealthbar = nil
+				textconnection = nil
+				for i,v in next, (healthbarobjects) do 
+					pcall(function() v:Destroy() end)
+				end
+				table.clear(healthbarobjects)
+			end
+		end
+	})
+	HealthbarColorToggle = HealthbarMods.CreateToggle({
+		Name = 'Main Color',
+		Default = true,
+		Function = function(callback)
+			pcall(function() HealthbarColor.Object.Visible = callback end)
+			if HealthbarMods.Enabled then
+				HealthbarMods.ToggleButton(false)
+				HealthbarMods.ToggleButton(false)
+			end
+		end 
+	})
+	HealthbarColor = HealthbarMods.CreateColorSlider({
+		Name = 'Main Color',
+		Function = function()
+			task.spawn(healthbarFunction)
+		end
+	})
+	HealthbarBackgroundToggle = HealthbarMods.CreateToggle({
+		Name = 'Background Color',
+		Function = function(callback)
+			pcall(function() HealthbarBackground.Object.Visible = callback end)
+			if HealthbarMods.Enabled then
+				HealthbarMods.ToggleButton(false)
+				HealthbarMods.ToggleButton(false)
+			end
+		end 
+	})
+	HealthbarBackground = HealthbarMods.CreateColorSlider({
+		Name = 'Background Color',
+		Function = function() 
+			task.spawn(healthbarFunction)
+		end
+	})
+	HealthbarTextToggle = HealthbarMods.CreateToggle({
+		Name = 'Text',
+		Function = function(callback)
+			pcall(function() HealthbarText.Object.Visible = callback end)
+			if HealthbarMods.Enabled then
+				HealthbarMods.ToggleButton(false)
+				HealthbarMods.ToggleButton(false)
+			end
+		end 
+	})
+	HealthbarText = HealthbarMods.CreateTextList({
+		Name = 'Text',
+		TempText = 'Healthbar Text',
+		AddFunction = function()
+			if HealthbarMods.Enabled then
+				HealthbarMods.ToggleButton(false)
+				HealthbarMods.ToggleButton(false)
+			end
+		end,
+		RemoveFunction = function()
+			if HealthbarMods.Enabled then
+				HealthbarMods.ToggleButton(false)
+				HealthbarMods.ToggleButton(false)
+			end
+		end
+	})
+	HealthbarTextColorToggle = HealthbarMods.CreateToggle({
+		Name = 'Text Color',
+		Function = function(callback)
+			pcall(function() HealthbarTextColor.Object.Visible = callback end)
+			if HealthbarMods.Enabled then
+				HealthbarMods.ToggleButton(false)
+				HealthbarMods.ToggleButton(false)
+			end
+		end 
+	})
+	HealthbarTextColor = HealthbarMods.CreateColorSlider({
+		Name = 'Text Color',
+		Function = function() 
+			task.spawn(healthbarFunction)
+		end
+	})
+	HealthbarFontToggle = HealthbarMods.CreateToggle({
+		Name = 'Text Font',
+		Function = function(callback)
+			pcall(function() HealthbarFont.Object.Visible = callback end)
+			if HealthbarMods.Enabled then
+				HealthbarMods.ToggleButton(false)
+				HealthbarMods.ToggleButton(false)
+			end
+		end 
+	})
+	HealthbarFont = HealthbarMods.CreateDropdown({
+		Name = 'Text Font',
+		List = getfontenums(),
+		Function = function(callback)
+			if HealthbarMods.Enabled then
+				HealthbarMods.ToggleButton(false)
+				HealthbarMods.ToggleButton(false)
+			end
+		end
+	})
+	HealthbarRound = HealthbarMods.CreateToggle({
+		Name = 'Round',
+		Function = function() 
+			if HealthbarMods.Enabled then
+				HealthbarMods.ToggleButton(false)
+				HealthbarMods.ToggleButton(false)
+			end
+		end
+	})
+	HealthbarBackground.Object.Visible = false
+	HealthbarText.Object.Visible = false
+	HealthbarTextColor.Object.Visible = false
+	HealthbarFont.Object.Visible = false
 end)
