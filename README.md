@@ -10,6 +10,6 @@ blankedvoid - main developer (thank you 🙏)
 
 scrxpted - developer (nothing yet 😭)
 
-luckiiiiiiiiiiiiiii - developer (disablers, etc)
+luckiiiiiiiiiiiiiii - developer (fixing broken code and helping with replacing links)
 
 inumgaming - contributer (some modules, etc)
