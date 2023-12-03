@@ -174,7 +174,7 @@ local function downloadVapeAsset(path)
 				repeat task.wait() until isfile(path)
 				textlabel:Destroy()
 			end)
-			local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets")) end)
+			local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
 			if suc and req then
 				writefile(path, req)
 			else
@@ -1916,10 +1916,10 @@ end
 
 local function loadVape()
 	if true then -- had a condition here but was too lazy to reformat code so yes
-		customload(vapeGithubRequest("Universal.lua"))
+		customload(getVapeFile("Universal.lua"))
 		local bedwars = bedwarsmatch() 
 		if bedwars then 
-			customload(vapeGithubRequest("CustomModules/8444591321.lua"), "6872274481")
+			customload(getVapeFile("CustomModules/8444591321.lua"), "6872274481")
 		else
 			local success, response = pcall(function()
 				return isfile("vape/CustomModules/"..game.PlaceId..".lua") and readfile("vape/CustomModules/"..game.PlaceId..".lua") or game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/CustomModules/"..game.PlaceId..".lua") 
