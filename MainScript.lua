@@ -1929,9 +1929,11 @@ local function customload(data, file)
 end
 
 local function loadVape()
-	customload(getVapeFile("Universal.lua"))
+	if true then -- had a condition here but was too lazy to reformat code so yes
+		customload(vapeGithubRequest("Universal.lua"))
+		local bedwars = bedwarsmatch() 
 		if bedwars then 
-			customload(getVapeFile("CustomModules/8444591321.lua"), "6872274481")
+			customload(vapeGithubRequest("CustomModules/8444591321.lua"), "6872274481")
 		else
 			local success, response = pcall(function()
 				return isfile("vape/CustomModules/"..game.PlaceId..".lua") and readfile("vape/CustomModules/"..game.PlaceId..".lua") or game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/CustomModules/"..game.PlaceId..".lua") 
