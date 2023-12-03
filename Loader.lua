@@ -3,12 +3,13 @@ local function getVapeFile(file, nolawl)
 		makefolder("vape")
 	end
 	local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
+    local extension = file:split(".")[#file:split(".")]
 	if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl then 
 		local success, response = pcall(function()
 			return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..file) 
 		end)
 		if success and response ~= "404: Not Found" then 
-			response = (file:sub(#file - 4, #file) == ".lua" and lawlwatermark.."\n"..response or response)
+			response = (extension == "lua" and lawlwatermark.."\n"..response or response)
 			writefile("vape/"..file, response)
 			return response
 		else
