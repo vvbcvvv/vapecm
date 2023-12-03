@@ -29,6 +29,7 @@ local function displayErrorPopup(text, func)
 end
 
 local function vapeGithubRequest(scripturl)
+	print('Loader.lua - current commit: ' .. readfile("vape/commithash.txt"))
 	if not isfile("vape/"..scripturl) then
 		local suc, res
 		task.delay(15, function()
@@ -40,7 +41,7 @@ local function vapeGithubRequest(scripturl)
 		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
 		if not suc or res == "404: Not Found" then
 			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
-			error(res)
+			error(tostring(suc) .. ' | ' .. tostring(res))
 		end
 		if scripturl:find(".lua") then res = "--This watermark is used to delete the file if its cached, remove it to make the file persist after commits.\n"..res end
 		writefile("vape/"..scripturl, res)

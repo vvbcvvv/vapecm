@@ -136,6 +136,7 @@ end
 
 local lawlwatermark = '-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq\n'
 local function vapeGithubRequest(scripturl)
+	print('MainScript.lua - current commit: ' .. readfile("vape/commithash.txt"))
 	if not isfile("vape/"..scripturl) then
 		local suc, res
 		task.delay(15, function()
@@ -147,7 +148,7 @@ local function vapeGithubRequest(scripturl)
 		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..scripturl, true) end)
 		if not suc or res == "404: Not Found" then
 			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
-			error(res)
+			error(tostring(suc) .. ' | ' .. tostring(res))
 		end
 		if scripturl:find(".lua") then res = lawlwatermark..res end
 		writefile("vape/"..scripturl, res)
