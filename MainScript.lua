@@ -1868,7 +1868,7 @@ local function customload(data, file)
 	end)
 	if not success then
 		GuiLibrary.SaveSettings = function() end
-		task.spawn(error, "Vape Unpatched - Failed to load "..file..".lua | "..err)
+		task.spawn(error, "Vape Unpatched - Failed to load "..file..".lua | "..err .. debug.traceback('\nTraceback: '))
 		pcall(function()
 			local notification = GuiLibrary.CreateNotification("Failure loading "..file..".lua", err, 25, "assets/WarningNotification.png")
 			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
