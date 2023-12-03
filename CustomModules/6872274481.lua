@@ -1493,6 +1493,7 @@ runFunction(function()
 		MissileController = KnitClient.Controllers.GuidedProjectileController,
 		PickupMetalRemote = dumpRemote(debug.getconstants(debug.getproto(debug.getproto(KnitClient.Controllers.MetalDetectorController.KnitStart, 1), 2))),
 		PickupRemote = dumpRemote(debug.getconstants(KnitClient.Controllers.ItemDropController.checkForPickup)),
+		PingController = require(lplr.PlayerScripts.TS.controllers.game.ping['ping-controller']).PingController,
 		ProjectileMeta = require(replicatedStorageService.TS.projectile['projectile-meta']).ProjectileMeta,
 		ProjectileRemote = dumpRemote(debug.getconstants(debug.getupvalue(KnitClient.Controllers.ProjectileController.launchProjectileWithValues, 2))),
 		QueryUtil = require(replicatedStorageService['rbxts_include']['node_modules']['@easy-games']['game-core'].out).GameQueryUtil,
