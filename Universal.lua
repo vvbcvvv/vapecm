@@ -1,4 +1,3 @@
--- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq
 local GuiLibrary = shared.GuiLibrary
 local playersService = game:GetService("Players")
 local textService = game:GetService("TextService")
