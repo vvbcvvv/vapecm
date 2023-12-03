@@ -243,7 +243,6 @@ GuiLibrary = loadstring(vapeGithubRequest("GuiLibrary.lua"))()
 shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
-	if inputService.TouchEnabled then return end
 	repeat
 		GuiLibrary.SaveSettings()
         task.wait(10)
@@ -1939,13 +1938,13 @@ GeneralSettings.CreateButton2({
 })
 
 local function loadSafe(data, name)
-	local success, err = pcall(function()
+	local success, err = pcall(function(data)
 		local chunk = loadstring(data)
 		if chunk == nil then
 			return error('unable to load chunk (syntax error)')
 		end
 		return chunk()
-	end)
+	end, data)
 	if not success then
 		GuiLibrary.SaveSettings = function() end
 		pcall(function()
@@ -1953,8 +1952,9 @@ local function loadSafe(data, name)
 			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 			notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 	    end)
-		error(`newvape | failed to load {name:gsub('vape/', ''):gusb('CustomModules/', '')}\n{debug.traceback('Traceback: ')}`)
+		error(`newvape | failed to load {name:gsub('vape/', ''):gsub('CustomModules/', '')}\n{debug.traceback('Traceback: ')}`)
 		-- by closing the thread you prevent profiles being lost
+		task.delay(25, GuiLibrary.SelfDestruct)
 	end
 end
 
