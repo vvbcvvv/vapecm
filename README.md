@@ -12,4 +12,4 @@ scrxpted - developer (fixing broken code)
 
 luckiiiiiiiiiiiiiii - developer (disabler and fixed links)
 
-inumgaming - contributer (some modules, etc)
+inumgaming - contributor (some modules, etc)
