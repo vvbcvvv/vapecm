@@ -5946,6 +5946,7 @@ task.spawn(function()
 		local files = {}
 		newcommit = getcommit()
 		if newcommit ~= oldcommit then 
+		        pcall(writefile, "vape/lawlcommit.txt")
 			for i,v in ({"GuiLibrary.lua", "Universal.lua", "MainScript.lua"}) do 
 				if isfile("vape/"..v) then 
 					delfile("vape/"..v) 
