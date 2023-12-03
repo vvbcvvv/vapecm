@@ -21,6 +21,7 @@
 		FpsBoostPlus - scrxpted
 
 		Atmosphere - blxnk
+		HotbarMods - blxnk
 		AntiNoClip - blxnk
 		HotbarCustomization - blxnk
 
@@ -14543,114 +14544,157 @@ runFunction(function()
 	})
 end)
 
---thanks to blank for this
 runFunction(function()
-	local HotbarCustomization = {Enabled = false}
-	local InvSlotCornerRadius = {Value = 8}
-	local InventoryRounding = {Enabled = true}
-	local HideSlotNumbers = {Enabled = false}
-	local SlotBackgroundColor = {Enabled = false}
-	local SlotBackgroundColorSlider = {Hue = 0.44, Sat = 0.31, Value = 0.28}
-	local SlotNumberBackgroundColorToggle = {Enabled = false}
-	local SlotNumberBackgroundColor = {Hue = 0.44, Sat = 0.31, Value = 0.28}
-	local hotbarwaitfunc
-	local hotbarstuff = {
-		SlotCorners = {},
-		HiddenSlotNumbers = {},
-		SlotOldColor = nil
-	}
-	local inventoryicons
-	local function HotbarFunction()
-		hotbarwaitfunc = pcall(function() return lplr.PlayerGui.hotbar and lplr.PlayerGui.hotbar['1']['5'] end)
-		   if not hotbarwaitfunc then 
-		   repeat task.wait() hotbarwaitfunc = pcall(function() return lplr.PlayerGui.hotbar and lplr.PlayerGui.hotbar['1']['5'] end) until hotbarwaitfunc 
-		 end
-
-		inventoryicons = lplr.PlayerGui.hotbar['1']['5']
-		for i,v in next, (inventoryicons:GetChildren()) do
-			if v:IsA('Frame') then
-				if InventoryRounding.Enabled then
-				hotbarstuff.SlotOldColor = v:FindFirstChildWhichIsA('ImageButton').BackgroundColor3
-				local rounding = Instance.new('UICorner')
-				rounding.Parent = v:FindFirstChildWhichIsA('ImageButton')
-				rounding.CornerRadius = UDim.new(0, InvSlotCornerRadius.Value)
-				table.insert(hotbarstuff.SlotCorners, rounding)
+	local HotbarMods = {Enabled = false}
+	local HotbarRounding = {Enabled = false}
+	local HotbarHighlight = {Enabled = false}
+	local HotbarColorToggle = {Enabled = false}
+	local HotbarHideSlotIcons = {Enabled = false}
+	local HotbarSlotNumberColorToggle = {Enabled = false}
+	local HotbarRoundRadius = {Value = 8}
+	local HotbarColor = {Hue = 0, Sat = 0, Value = 0}
+	local HotbarHighlightColor = {Hue = 0, Sat = 0, Value = 0}
+	local HotbarSlotNumberColor = {Hue = 0, Sat = 0, Value = 0}
+	local hotbarsloticons = {}
+	local hotbarobjects = {}
+	local hotbarcoloricons = {}
+	local function hotbarFunction()
+		local inventoryicons = ({pcall(function() return lplr.PlayerGui.hotbar['1']['5'] end)})[2]
+		if inventoryicons and type(inventoryicons) == 'userdata' then
+			for i,v in next, (inventoryicons:GetChildren()) do 
+				local sloticon = ({pcall(function() return v:FindFirstChildWhichIsA('ImageButton'):FindFirstChildWhichIsA('TextLabel') end)})[2]
+				if type(sloticon) ~= 'userdata' then 
+					continue
 				end
-				if SlotBackgroundColor.Enabled then
-					pcall(function() v:FindFirstChildWhichIsA('ImageButton').BackgroundColor3 = Color3.fromHSV(SlotBackgroundColorSlider.Hue, SlotBackgroundColorSlider.Sat, SlotBackgroundColorSlider.Value) end)
+				if HotbarColorToggle.Enabled then 
+					sloticon.Parent.BackgroundColor3 = Color3.fromHSV(HotbarColor.Hue, HotbarColor.Sat, HotbarColor.Value)
+					table.insert(hotbarcoloricons, sloticon.Parent)
 				end
-				if HideSlotNumbers.Enabled then
-					pcall(function() 
-					local slotText = v:FindFirstChildWhichIsA('ImageButton'):FindFirstChildWhichIsA('TextLabel')
-					slotText.Parent = game 
-					hotbarstuff.HiddenSlotNumbers[slotText] = v:FindFirstChildWhichIsA('ImageButton')
-					end)
+				if HotbarRounding.Enabled then 
+					local uicorner = Instance.new('UICorner')
+					uicorner.Parent = sloticon.Parent
+					uicorner.CornerRadius = UDim.new(0, HotbarRoundRadius.Value)
+					table.insert(hotbarobjects, uicorner)
 				end
-			end
+				if HotbarHighlight.Enabled then
+					local highlight = Instance.new('UIStroke')
+					highlight.Color = Color3.fromHSV(HotbarHighlightColor.Hue, HotbarHighlightColor.Sat, HotbarHighlightColor.Value)
+					highlight.Thickness = 1.6 
+					highlight.Parent = sloticon.Parent
+					table.insert(hotbarobjects, highlight)
+				end
+				if HotbarHideSlotIcons.Enabled then 
+					sloticon.Visible = false 
+				end
+				table.insert(hotbarsloticons, sloticon)
+			end 
 		end
 	end
-	HotbarCustomization = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-		Name = 'HotbarCustomization',
-		HoverText = 'Customize the ugly default hotbar to your liking. Credits to voidware  ',
-		Approved = true,
+	HotbarMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = 'HotbarMods',
+		HoverText = 'Add customization to your hotbar.',
 		Function = function(callback)
-			if callback then
-				task.spawn(HotbarFunction)
-				table.insert(HotbarCustomization.Connections, lplr.CharacterAdded:Connect(HotbarFunction))
+			if callback then 
+				task.spawn(function()
+					table.insert(HotbarMods.Connections, lplr.PlayerGui.DescendantAdded:Connect(function(v)
+						if v.Name == 'HotbarHealthbarContainer' and v.Parent and v.Parent.Parent and v.Parent.Parent.Name == 'hotbar' then
+							hotbarFunction()
+						end
+					end))
+					hotbarFunction()
+				end)
 			else
-				for i,v in next, (hotbarstuff.SlotCorners) do
+				for i,v in hotbarsloticons do 
+					pcall(function() v.Visible = true end)
+				end
+				for i,v in hotbarcoloricons do 
+					pcall(function() v.BackgroundColor3 = Color3.fromRGB(29, 36, 46) end)
+				end
+				for i,v in hotbarobjects do
 					pcall(function() v:Destroy() end)
 				end
-				for i,v in next, (inventoryicons:GetChildren()) do
-					pcall(function() v:FindFirstChildWhichIsA('ImageButton').BackgroundColor3 = hotbarstuff.SlotOldColor end)
-				end
-				for i,v in next, (hotbarstuff.HiddenSlotNumbers) do
-					pcall(function() i.Parent = v end)
+				table.clear(hotbarobjects)
+				table.clear(hotbarsloticons)
+				table.clear(hotbarcoloricons)
+			end
+		end
+	})
+	HotbarColorToggle = HotbarMods.CreateToggle({
+		Name = 'Slot Color',
+		Function = function(callback)
+			pcall(function() HotbarColor.Object.Visible = callback end)
+			if HotbarMods.Enabled then 
+				HotbarMods.ToggleButton(false)
+				HotbarMods.ToggleButton(false)
+			end
+		end
+	})
+	HotbarColor = HotbarMods.CreateColorSlider({
+		Name = 'Slot Color',
+		Function = function(h, s, v)
+			for i,v in next, (hotbarcoloricons) do
+				if HotbarColorToggle.Enabled then
+				   pcall(function() v.BackgroundColor3 = Color3.fromHSV(HotbarColor.Hue, HotbarColor.Sat, HotbarColor.Value) end) -- for some reason the 'h, s, v' didn't work :(
 				end
 			end
 		end
 	})
-	InventoryRounding = HotbarCustomization.CreateToggle({
-		Name = 'Round Slots',
+	HotbarRounding = HotbarMods.CreateToggle({
+		Name = 'Rounding',
 		Function = function(callback)
-			pcall(function() InvSlotCornerRadius.Object.Visible = callback end)
-			if callback and HotbarCustomization.Enabled then
-				HotbarCustomization.ToggleButton(false) HotbarCustomization.ToggleButton(false)
-			elseif HotbarCustomization.Enabled then
-			  for i,v in next, (hotbarstuff.SlotCorners) do
-				pcall(function() v:Destroy() end)
+			pcall(function() HotbarRoundRadius.Object.Visible = callback end)
+			if HotbarMods.Enabled then 
+				HotbarMods.ToggleButton(false)
+				HotbarMods.ToggleButton(false)
 			end
 		end
-	end
-  })
-  HideSlotNumbers = HotbarCustomization.CreateToggle({
-	Name = 'Hide Slot Numbers',
-	HoverText = 'hide the ugly slot numbers.',
-	Function = function() if HotbarCustomization.Enabled then HotbarCustomization.ToggleButton(false) HotbarCustomization.ToggleButton(false) end end
-  })
-  InvSlotCornerRadius = HotbarCustomization.CreateSlider({
-	Name = 'Corner Radius',
-	Function = function(val) if HotbarCustomization.Enabled and InventoryRounding.Enabled then for i,v in next, (hotbarstuff.SlotCorners) do pcall(function() v.CornerRadius = UDim.new(0, val) end) end end end,
-	Min = 8,
-	Max = 20
-})
-  SlotBackgroundColor = HotbarCustomization.CreateToggle({
-	 Name = 'Slot Background Color',
-	 Function = function(callback) pcall(function() SlotBackgroundColorSlider.Object.Visible = callback end) 
-	 if HotbarCustomization.Enabled then
-		HotbarCustomization.ToggleButton(false) HotbarCustomization.ToggleButton(false)
-	 end 
-	 end
-  })
-  SlotBackgroundColorSlider = HotbarCustomization.CreateColorSlider({
-	Name = 'Color',
-	Function = function(h, s, v) if HotbarCustomization.Enabled and SlotBackgroundColor.Enabled and inventoryicons then
-		for i,v in next, (inventoryicons:GetChildren()) do
-			pcall(function() v:FindFirstChildWhichIsA('ImageButton').BackgroundColor3 = Color3.fromHSV(SlotBackgroundColorSlider.Hue, SlotBackgroundColorSlider.Sat, SlotBackgroundColorSlider.Value) end)
+	})
+	HotbarRoundRadius = HotbarMods.CreateSlider({
+		Name = 'Corner Radius',
+		Min = 1,
+		Max = 20,
+		Function = function(callback)
+			for i,v in next, (hotbarobjects) do 
+				pcall(function() v.CornerRadius = UDim.new(0, callback) end)
+			end
 		end
-	end
-	end
-})
-   InvSlotCornerRadius.Object.Visible = InventoryRounding.Enabled
-   SlotBackgroundColorSlider.Object.Visible = SlotBackgroundColor.Enabled
+	})
+	HotbarHighlight = HotbarMods.CreateToggle({
+		Name = 'Outline Highlight',
+		Function = function(callback)
+			pcall(function() HotbarHighlightColor.Object.Visible = callback end)
+			if HotbarMods.Enabled then 
+				HotbarMods.ToggleButton(false)
+				HotbarMods.ToggleButton(false)
+			end
+		end
+	})
+	HotbarHighlightColor = HotbarMods.CreateColorSlider({
+		Name = 'Highlight Color',
+		Function = function(h, s, v)
+			for i,v in next, (hotbarobjects) do 
+				if v:IsA('UIStroke') and HotbarHighlight.Enabled then 
+					pcall(function() v.Color = Color3.fromHSV(HotbarHighlightColor.Hue, HotbarHighlightColor.Sat, HotbarHighlightColor.Value) end)
+				end
+			end
+		end
+	})
+	HotbarHideSlotIcons = HotbarMods.CreateToggle({
+		Name = 'No Slot Numbers',
+		Function = function()
+			if HotbarMods.Enabled then 
+				HotbarMods.ToggleButton(false)
+				HotbarMods.ToggleButton(false)
+			end
+		end
+	})
+	HotbarColor.Object.Visible = false
+	HotbarRoundRadius.Object.Visible = false
+	HotbarHighlightColor.Object.Visible = false
+	task.spawn(function()
+		repeat task.wait() until shared.VapeFullyLoaded
+		if vapeInjected and isEnabled('UICleanup') then 
+			HotbarHideSlotIcons.Object.Visible = false 
+		end
+	end)
 end)
