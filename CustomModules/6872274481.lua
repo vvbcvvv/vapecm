@@ -14709,7 +14709,7 @@ runFunction(function()
 		return fonts
 	end
 	local function getrandomvalue(tab)
-		return tab[math.random(1, #tab)] or ""
+		return tab[math.random(1, #tab)] or ''
 	end
 	local HealthbarMods = {Enabled = false}
 	local HealthbarRound = {Enabled = false}
@@ -14777,7 +14777,7 @@ runFunction(function()
 	end
 	HealthbarMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = 'HealthbarMods',
-		HoverText = 'Customize the color of your healthbar.\nAdd '<health>' to your custom text dropdown (if custom text enabled)to insert your health.',
+		HoverText = 'Customize the color of your healthbar.\nAdd "<health>" to your custom text dropdown (if custom text enabled)to insert your health.',
 		Function = function(callback)
 			if callback then 
 				task.spawn(function()
