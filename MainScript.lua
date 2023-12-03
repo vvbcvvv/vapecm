@@ -1917,7 +1917,6 @@ end
 local function loadVape()
 	if true then -- had a condition here but was too lazy to reformat code so yes
 		customload(getVapeFile("Universal.lua"))
-		local bedwars = bedwarsmatch() 
 		if bedwars then 
 			customload(getVapeFile("CustomModules/8444591321.lua"), "6872274481")
 		else
