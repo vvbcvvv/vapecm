@@ -5171,12 +5171,12 @@ runFunction(function()
 	})
 	AutoLeaveGroupId = AutoLeave.CreateTextBox({
 		Name = "Group Id",
-		TempText = "0 (group id)",
+		TempText = ("0 (group id)"),
 		Function = function() end
 	})
 	AutoLeaveRank = AutoLeave.CreateTextBox({
 		Name = "Rank Id",
-		TempText = "1 (rank id)",
+		TempText = ("1 (rank id)"),
 		Function = function() end
 	})
 end)
@@ -5854,7 +5854,7 @@ runFunction(function()
 	PingLabel.BackgroundTransparency = 0.5
 	PingLabel.TextSize = 15
 	PingLabel.Font = Enum.Font.Gotham
-	PingLabel.Text = "0 ms"
+	PingLabel.Text = ("0 ms")
 	PingLabel.TextColor3 = Color3.new(1, 1, 1)
 	PingLabel.BackgroundColor3 = Color3.new()
 	PingLabel.Parent = Ping.GetCustomChildren()
