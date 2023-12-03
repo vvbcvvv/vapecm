@@ -10456,8 +10456,6 @@ runFunction(function()
 											end
 										end)
 									end)
-								elseif isnetworkowner(v) then
-									v.CFrame = entityLibrary.character.HumanoidRootPart.CFrame - Vector3.new(0, 2, 0)
 								end
 							end
 						end
@@ -12241,6 +12239,93 @@ task.spawn(function()
 		table.insert(pinglist, getPing())
 	until not vapeInjected
 end)
+
+
+local allowedTeleports = 0
+local allowedTeleportTick = tick()
+
+local xzFix = Vector3.new(1, 0, 1)
+local function fixVec(vec)
+	return vec * xzFix
+end
+
+local function notlasso()
+	for i, v in next, collectionService:GetTagged('LassoHooked') do 
+		if v == lplr.Character then 
+			return false
+		end
+	end
+	return true
+end
+
+table.insert(vapeConnections, bedwars.ClientHandler:OnEvent('ProjectileImpact', function(p3)
+	if not vapeInjected then return end
+	if p3.projectile == 'telepearl' and p3.shooterPlayer == lplr then 
+		allowedTeleports += 1
+	elseif p3.projectile == 'swap_ball' then
+		if p3.hitEntity then
+			if p3.shooterPlayer == lplr then
+				allowedTeleports += 1
+			end
+			local plr = playersService:GetPlayerFromCharacter(p3.hitEntity)
+			if plr == lplr then allowedTeleports += 1 end
+		end
+	end
+end))
+
+table.insert(vapeConnections, replicatedStorageService['events-@easy-games/game-core:shared/game-core-networking@getEvents.Events'].abilityUsed.OnClientEvent:Connect(function(char, ability)
+	if ability == 'recall' or ability == 'hatter_teleport' or ability == 'spirit_assassin_teleport' or ability == 'hannah_execute' then 
+		local player = playersService:GetPlayerFromCharacter(char)
+		if player == lplr then
+			if ability == 'recall' then
+				allowedTeleportTick = tick() + 12
+			else
+				allowedTeleports += 1
+			end
+		end
+	end
+end))
+
+table.insert(vapeConnections, vapeEvents.TweenTeleport.Event:Connect(function(data)
+	if data.player == lplr then 
+		allowedTeleports += 1
+	end
+end))
+
+table.insert(vapeConnections, vapeEvents.HannahTeleport.Event:Connect(function(data)
+	allowedTeleports += 1
+end))
+
+table.insert(vapeConnections, lplr:GetAttributeChangedSignal('LastTeleported'):Connect(function()
+	if not vapeInjected then return end
+	if notlasso() then
+		local allowed = false
+		for i = 1, 7 do
+			task.wait(0.1)
+			if (bedwarsStore.matchStateChanged > tick()) or (math.abs(lplr:GetAttribute('SpawnTime') - lplr:GetAttribute('LastTeleported')) < 3) or (allowedTeleportTick > tick()) then allowed = true break end
+		end
+		if not allowed then
+			if (allowedTeleports > 0) then return end
+			local pingspike = didpingspike2(200)
+			if pingspike then
+				warningNotification('Anticheat', 'Lagspike detected\n'..pingspike, 5)
+			end
+			warningNotification('Anticheat', 'Lagback detected', 5)
+			networkownerswitch = tick() + 3
+		end
+		if allowedTeleports > 0 then
+			allowedTeleports -= 1
+		end
+	end
+end))
+
+isnetworkowner = function(part)
+	if part and ((part == oldcloneroot) or (part == vapeOriginalRoot) or (entityLibrary.isAlive and part == entityLibrary.character.HumanoidRootPart)) then
+		return networkownerswitch <= tick()
+	else
+		return false
+	end
+end
 
 local fakesword = {
 	sword = {
