@@ -196,14 +196,8 @@ local isfile = isfile or function(file)
 end
 local networkownerswitch = tick()
 local IsA = game.IsA
-local isnetworkowner = isnetworkowner and function(part)
-	local suc, res = pcall(function(part)
-		if IsA(part, 'BasePart') then
-			return isnetworkowner(part)
-		end
-	end)
-	return suc and res
-end or function(part)
+local oldisnetworkowner = isnetworkowner
+local subisnetworkowner = function(part)
 	local suc, res = pcall(function() return gethiddenproperty(part, 'NetworkOwnershipRule') end)
 	if suc and res == Enum.NetworkOwnership.Manual then 
 		sethiddenproperty(part, 'NetworkOwnershipRule', Enum.NetworkOwnership.Automatic)
@@ -211,6 +205,16 @@ end or function(part)
 	end
 	return networkownerswitch <= tick()
 end
+local isnetworkowner = function(part)
+	local suc, res = pcall(function(part)
+		if IsA(part, 'BasePart') then
+			return isnetworkowner(part)
+		else
+			return subisnetworkowner(part)
+		end
+	end)
+	return suc and res
+end or subisnetworkowner
 local getcustomasset = getsynasset or getcustomasset or function(location) return 'rbxasset://'..location end
 local queueonteleport = syn and syn.queue_on_teleport or queue_on_teleport or function() end
 local synapsev3 = syn and syn.toast_notification and 'V3' or ''
