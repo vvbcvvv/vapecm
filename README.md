@@ -6,7 +6,7 @@
 
 0prime - owner (me!)
 
-blankedvoid - main developer (#1)
+blankedvoid - main developer (#1, also could break code sometimes)
 
 scrxpted - developer (fixing broken code)
 
