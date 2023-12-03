@@ -9387,88 +9387,6 @@ runFunction(function()
 end)
 
 runFunction(function()
-	local AutoForge = {Enabled = false}
-	local AutoForgeWeapon = {Value = "Sword"}
-	local AutoForgeBow = {Enabled = false}
-	local AutoForgeArmor = {Enabled = false}
-	local AutoForgeSword = {Enabled = false}
-	local AutoForgeBuyAfter = {Enabled = false}
-	local AutoForgeNotification = {Enabled = true}
-
-	local function buyForge(i)
-		if not bedwarsStore.forgeUpgrades[i] or bedwarsStore.forgeUpgrades[i] < 6 then
-			local cost = bedwars.ForgeUtil:getUpgradeCost(1, bedwarsStore.forgeUpgrades[i] or 0)
-			if bedwarsStore.forgeMasteryPoints >= cost then 
-				if AutoForgeNotification.Enabled then
-					local forgeType = "none"
-					for name,v in pairs(bedwars.ForgeConstants) do
-						if v == i then forgeType = name:lower() end
-					end
-					warningNotification("AutoForge", "Purchasing "..forgeType..".", bedwars.ForgeUtil.FORGE_DURATION_SEC)
-				end
-				bedwars.ClientHandler:Get("ForgePurchaseUpgrade"):SendToServer(i)
-				task.wait(bedwars.ForgeUtil.FORGE_DURATION_SEC + 0.2)
-			end
-		end
-	end
-
-	AutoForge = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = "AutoForge",
-		Function = function(callback)
-			if callback then 
-				task.spawn(function()
-					repeat
-						task.wait()
-						if bedwarsStore.matchState == 1 and entityLibrary.isAlive then
-							if entityLibrary.character.HumanoidRootPart.Velocity.Magnitude > 0.01 then continue end
-							if AutoForgeArmor.Enabled then buyForge(bedwars.ForgeConstants.ARMOR) end
-							if entityLibrary.character.HumanoidRootPart.Velocity.Magnitude > 0.01 then continue end
-							if AutoForgeBow.Enabled then buyForge(bedwars.ForgeConstants.RANGED) end
-							if entityLibrary.character.HumanoidRootPart.Velocity.Magnitude > 0.01 then continue end
-							if AutoForgeSword.Enabled then
-								if AutoForgeBuyAfter.Enabled then
-									if not bedwarsStore.forgeUpgrades[bedwars.ForgeConstants.ARMOR] or bedwarsStore.forgeUpgrades[bedwars.ForgeConstants.ARMOR] < 6 then continue end
-								end
-								local weapon = bedwars.ForgeConstants[AutoForgeWeapon.Value:upper()]
-								if weapon then buyForge(weapon) end
-							end
-						end
-					until (not AutoForge.Enabled)
-				end)
-			end
-		end
-	})
-	AutoForgeWeapon = AutoForge.CreateDropdown({
-		Name = "Weapon",
-		Function = function() end,
-		List = {"Sword", "Dagger", "Scythe", "Great_Hammer"}
-	})
-	AutoForgeArmor = AutoForge.CreateToggle({
-		Name = "Armor",
-		Function = function() end,
-		Default = true
-	})
-	AutoForgeSword = AutoForge.CreateToggle({
-		Name = "Weapon",
-		Function = function() end
-	})
-	AutoForgeBow = AutoForge.CreateToggle({
-		Name = "Bow",
-		Function = function() end
-	})
-	AutoForgeBuyAfter = AutoForge.CreateToggle({
-		Name = "Buy After",
-		Function = function() end,
-		HoverText = "buy a weapon after armor is maxed"
-	})
-	AutoForgeNotification = AutoForge.CreateToggle({
-		Name = "Notification",
-		Function = function() end,
-		Default = true
-	})
-end)
-
-runFunction(function()
 	local alreadyreportedlist = {}
 	local AutoReportV2 = {Enabled = false}
 	local AutoReportV2Notify = {Enabled = false}
@@ -10943,32 +10861,6 @@ runFunction(function()
 			end
 		end
 	})
-end)
-
-runFunction(function()
-    local Disabler = {Enabled = false}
-    Disabler = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-        Name = "FirewallBypass",
-        Function = function(callback)
-            if callback then 
-				task.spawn(function()
-					repeat
-						task.wait()
-						local item = getItemNear("scythe")
-						if entityLibrary.isAlive and item and lplr.Character.HandInvItem.Value == item.tool and bedwars.CombatController then 
-							bedwars.ClientHandler:Get("ScytheDash"):SendToServer({direction = Vector3.new(9e9, 9e9, 9e9)})
-							bedwars.ClientHandler:Get("ScytheDash"):SendToServer({direction = Vector3.new(lplr.Character.HumanoidRootPart.CFrame.LookVector)})
-							bedwars.ClientHandler:Get("ScytheDash"):SendToServer({direction = Vector3.new(lplr.Character.Humanoid.MoveDirection)})
-							if lplr:GetAttribute("ScytheSpinning") then
-								bedwarsStore.scythe = tick() + 1
-							end
-						end
-					until (not Disabler.Enabled)
-				end)
-            end
-        end,
-		HoverText = "Float disabler with scythe"
-    })
 end)
 
 runFunction(function()
