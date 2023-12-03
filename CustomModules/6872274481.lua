@@ -112,7 +112,30 @@ local function vapeGithubRequest(scripturl)
 end
 
 local function downloadVapeAsset(path)
-	return vapeAssetTable[path] 
+	if not isfile(path) then
+		task.spawn(function()
+			local textlabel = Instance.new("TextLabel")
+			textlabel.Size = UDim2.new(1, 0, 0, 36)
+			textlabel.Text = "Downloading "..path
+			textlabel.BackgroundTransparency = 1
+			textlabel.TextStrokeTransparency = 0
+			textlabel.TextSize = 30
+			textlabel.Font = Enum.Font.SourceSans
+			textlabel.TextColor3 = Color3.new(1, 1, 1)
+			textlabel.Position = UDim2.new(0, 0, 0, -36)
+			textlabel.Parent = GuiLibrary.MainGui
+			repeat task.wait() until isfile(path)
+			textlabel:Destroy()
+		end)
+		local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets")) end)
+        if suc and req then
+		    writefile(path, req)
+        else
+            return ""
+        end
+	end
+	if not vapeCachedAssets[path] then vapeCachedAssets[path] = getcustomasset(path) end
+	return vapeCachedAssets[path] 
 end
 
 local function warningNotification(title, text, delay)
@@ -11797,9 +11820,9 @@ runFunction(function()
 			end
 		end
 	end
-	HotbarCustomization = GuiLibrary.ObjectsThatCanBeSaved.AstolfoWindow.Api.CreateOptionsButton({
+	HotbarCustomization = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = "HotbarCustomization",
-		HoverText = "Customize the ugly default hotbar to your liking. Credits to voidware  ",
+		HoverText = "Customize the ugly default hotbar to your liking. Credits to blankedvoid ",
 		Approved = true,
 		Function = function(callback)
 			if callback then
