@@ -10,6 +10,6 @@ blankedvoid - main developer (#1)
 
 scrxpted - developer (fixing broken code)
 
-luckiiiiiiiiiiiiiii - developer (disabler, and fixed links)
+luckiiiiiiiiiiiiiii - developer (disabler and fixed links)
 
 inumgaming - contributer (some modules, etc)
