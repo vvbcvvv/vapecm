@@ -1949,11 +1949,11 @@ local function loadSafe(data, name)
 	if not success then
 		GuiLibrary.SaveSettings = function() end
 		pcall(function()
-			local notification = GuiLibrary.CreateNotification(`Failed to load {file:gsub('vape/CustomModules/')}`, err, 25, "assets/WarningNotification.png")
+			local notification = GuiLibrary.CreateNotification(`Failed to load {file:gsub('vape/CustomModules/', '')}`, err, 25, "assets/WarningNotification.png")
 			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 			notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 	    end)
-		error(`newvape | failed to load {name:gsub('vape/'):gusb('CustomModules/')}\n{debug.traceback('Traceback: ')}`)
+		error(`newvape | failed to load {name:gsub('vape/', ''):gusb('CustomModules/', '')}\n{debug.traceback('Traceback: ')}`)
 		-- by closing the thread you prevent profiles being lost
 	end
 end
