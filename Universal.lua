@@ -1,3 +1,4 @@
+-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq
 local GuiLibrary = shared.GuiLibrary
 local playersService = game:GetService("Players")
 local textService = game:GetService("TextService")
@@ -82,7 +83,30 @@ local function getVapeFile(file, nolawl)
 end
 
 local function downloadVapeAsset(path)
-	return vapeAssetTable[path] 
+	if not isfile(path) then
+		task.spawn(function()
+			local textlabel = Instance.new("TextLabel")
+			textlabel.Size = UDim2.new(1, 0, 0, 36)
+			textlabel.Text = "Downloading "..path
+			textlabel.BackgroundTransparency = 1
+			textlabel.TextStrokeTransparency = 0
+			textlabel.TextSize = 30
+			textlabel.Font = Enum.Font.SourceSans
+			textlabel.TextColor3 = Color3.new(1, 1, 1)
+			textlabel.Position = UDim2.new(0, 0, 0, -36)
+			textlabel.Parent = GuiLibrary.MainGui
+			repeat task.wait() until isfile(path)
+			textlabel:Destroy()
+		end)
+		local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
+        if suc and req then
+		    writefile(path, req)
+        else
+            return ""
+        end
+	end
+	if not vapeCachedAssets[path] then vapeCachedAssets[path] = getcustomasset(path) end
+	return vapeCachedAssets[path] 
 end
 
 local function warningNotification(title, text, delay)
@@ -415,6 +439,20 @@ do
 		end
 	end
 end
+
+
+local function getcommit()
+	local success, response = pcall(function()
+		return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://api.github.com/repos/skiddinglua/NewVapeUnpatched4Roblox/commits"))
+	end)
+	local res = (success and response[1])
+	if res and response.documentation_url == nil and res.commit then 
+		local slash = res.commit.url:split("/")
+		return slash[#slash]
+	end
+	return "main"
+end
+
 
 GuiLibrary.SelfDestructEvent.Event:Connect(function()
 	vapeInjected = false
@@ -5899,4 +5937,33 @@ runFunction(function()
 	createKeystroke(Enum.KeyCode.A, UDim2.new(0, 0, 0, 42), UDim2.new(0, 7, 0, 5))
 	createKeystroke(Enum.KeyCode.D, UDim2.new(0, 76, 0, 42), UDim2.new(0, 8, 0, 5))
 	createKeystroke(Enum.KeyCode.Space, UDim2.new(0, 0, 0, 83), UDim2.new(0, 25, 0, -10))
+end)
+
+
+
+task.spawn(function()
+	local oldcommit = (isfile("vape/lawlcommit.txt") and readfile("vape/lawlcommit.txt"))
+	repeat
+		local files = {}
+		newcommit = getcommit()
+		if newcommit ~= oldcommit then 
+			for i,v in ({"GuiLibrary.lua", "Universal.lua", "MainScript.lua"}) do 
+				if isfile("vape/"..v) then 
+					delfile("vape/"..v) 
+					table.insert(files, v)
+				end
+			end
+		end
+		if isfolder("vape/CustomModules") then 
+			for i,v in listfiles("vape/CustomModules") do 
+				delfile(v)
+				table.insert(files, "CustomModules/"..v)
+			end
+		end
+		for i,v in files do 
+			task.spawn(getVapeFile, v)
+			task.wait(1.5)
+		end
+		task.wait(100)
+	until not vapeInjected
 end)
