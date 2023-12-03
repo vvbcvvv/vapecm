@@ -14417,7 +14417,7 @@ end)
 
 runFunction(function()
 	local VClip = {Enabled = false}
-	VClip = GuiLibrary['ObjectsThatCanBeSaved']['WorldWindow']['Api']['CreateOptionsButton']({
+	VClip = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
 		Name = 'AntiNoclip',
 		HoverText = 'Prevents you from noclipping into the ground when landing from\nInfiniteFly etc. (Prevents being lagbacked using infinitefly)',
 		Function = function(callback)
@@ -14491,7 +14491,7 @@ runFunction(function()
 			end
 		end
 	end
-	HotbarCustomization = GuiLibrary.ObjectsThatCanBeSaved.AstolfoWindow.Api.CreateOptionsButton({
+	HotbarCustomization = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = 'HotbarCustomization',
 		HoverText = 'Customize the ugly default hotbar to your liking. Credits to voidware  ',
 		Approved = true,
