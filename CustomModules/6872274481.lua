@@ -518,24 +518,24 @@ local function getSpeed()
 	if lplr.Character then 
 		local SpeedDamageBoost = lplr.Character:GetAttribute('SpeedBoost')
 		if SpeedDamageBoost and SpeedDamageBoost > 1 then 
-			speed += (8 * (SpeedDamageBoost - 1))
+			speed = speed + (8 * (SpeedDamageBoost - 1))
 		end
 		if bedwarsStore.grapple > tick() then
-			speed += 90
+			speed = speed + 90
 		end
 		if bedwarsStore.scythe > tick() then 
-			speed += 5
+			speed = speed + 5
 		end
 		if lplr.Character:GetAttribute('GrimReaperChannel') then 
-			speed += 20
+			speed = speed + 20
 		end
 		local armor = bedwarsStore.localInventory.inventory.armor[3]
 		if type(armor) ~= 'table' then armor = {itemType = ''} end
 		if armor.itemType == 'speed_boots' then 
-			speed += 12
+			speed = speed + 12
 		end
 		if bedwarsStore.zephyrOrb ~= 0 then 
-			speed += 12
+			speed = speed + 12
 		end
 	end
 	return speed
@@ -603,7 +603,7 @@ end
 
 local function getOpenApps()
 	local count = 0
-	for i,v in pairs(bedwars.AppController:getOpenApps()) do if (not tostring(v):find('Billboard')) and (not tostring(v):find('GameNametag')) then count += 1 end end
+	for i,v in pairs(bedwars.AppController:getOpenApps()) do if (not tostring(v):find('Billboard')) and (not tostring(v):find('GameNametag')) then count = count + 1 end end
 	return count
 end
 
@@ -7845,10 +7845,10 @@ runFunction(function()
 			nametagstrs[plr.Player] = WhitelistFunctions:GetTag(plr.Player)..(NameTagsDisplayName.Enabled and plr.Player.DisplayName or plr.Player.Name)
 			if NameTagsHealth.Enabled then
 				local color = Color3.fromHSV(math.clamp(plr.Humanoid.Health / plr.Humanoid.MaxHealth, 0, 1) / 2.5, 0.89, 1)
-				nametagstrs[plr.Player] = nametagstrs[plr.Player]..' <font color='rgb('..tostring(math.floor(color.R * 255))..','..tostring(math.floor(color.G * 255))..','..tostring(math.floor(color.B * 255))..')'>'..math.round(plr.Humanoid.Health)..'</font>'
+				nametagstrs[plr.Player] = nametagstrs[plr.Player]..' <font color="rgb('..tostring(math.floor(color.R * 255))..','..tostring(math.floor(color.G * 255))..','..tostring(math.floor(color.B * 255))..')">'..math.round(plr.Humanoid.Health)..'</font>'
 			end
 			if NameTagsDistance.Enabled then 
-				nametagstrs[plr.Player] = '<font color='rgb(85, 255, 85)'>[</font><font color='rgb(255, 255, 255)'>%s</font><font color='rgb(85, 255, 85)'>]</font> '..nametagstrs[plr.Player]
+				nametagstrs[plr.Player] = '<font color="rgb(85, 255, 85)">[</font><font color="rgb(255, 255, 255)">%s</font><font color="rgb(85, 255, 85)">]</font> '..nametagstrs[plr.Player]
 			end
 			local nametagSize = textService:GetTextSize(removeTags(nametagstrs[plr.Player]), thing.TextSize, thing.Font, Vector2.new(100000, 100000))
 			thing.Size = UDim2.new(0, nametagSize.X + 4, 0, nametagSize.Y)
@@ -7940,10 +7940,10 @@ runFunction(function()
 				nametagstrs[ent.Player] = WhitelistFunctions:GetTag(ent.Player)..(NameTagsDisplayName.Enabled and ent.Player.DisplayName or ent.Player.Name)
 				if NameTagsHealth.Enabled then
 					local color = Color3.fromHSV(math.clamp(ent.Humanoid.Health / ent.Humanoid.MaxHealth, 0, 1) / 2.5, 0.89, 1)
-					nametagstrs[ent.Player] = nametagstrs[ent.Player]..' <font color='rgb('..tostring(math.floor(color.R * 255))..','..tostring(math.floor(color.G * 255))..','..tostring(math.floor(color.B * 255))..')'>'..math.round(ent.Humanoid.Health)..'</font>'
+					nametagstrs[ent.Player] = nametagstrs[ent.Player]..' <font color="rgb('..tostring(math.floor(color.R * 255))..','..tostring(math.floor(color.G * 255))..','..tostring(math.floor(color.B * 255))..')">'..math.round(ent.Humanoid.Health)..'</font>'
 				end
 				if NameTagsDistance.Enabled then 
-					nametagstrs[ent.Player] = '<font color='rgb(85, 255, 85)'>[</font><font color='rgb(255, 255, 255)'>%s</font><font color='rgb(85, 255, 85)'>]</font> '..nametagstrs[ent.Player]
+					nametagstrs[ent.Player] = '<font color="rgb(85, 255, 85)">[</font><font color="rgb(255, 255, 255)">%s</font><font color="rgb(85, 255, 85)">]</font> '..nametagstrs[ent.Player]
 				end
 				if NameTagsShowInventory.Enabled then 
 					local inventory = bedwarsStore.inventories[ent.Player] or {armor = {}}
@@ -13263,7 +13263,7 @@ runFunction(function()
 						GiveItem:CallServer(enderchest, item)
 						count -= 1
 					end)
-					count += 1
+					count = count + 1
 				end
 				if yield then
 					repeat task.wait() until count <= 0
