@@ -1892,7 +1892,8 @@ local function loadVape()
 	if true then -- had a condition here but was too lazy to reformat code so yes
 		customload(getVapeFile("Universal.lua"))
 		if bedwars then 
-			customload(getVapeFile("CustomModules/8444591321.lua"), "6872274481")
+			shared.CustomSaveVape = 6872274481
+			customload(getVapeFile("CustomModules/6872274481.lua"), "6872274481")
 		else
 			local success, response = pcall(function()
 				return getVapeFile("CustomModules/"..game.PlaceId..".lua")
