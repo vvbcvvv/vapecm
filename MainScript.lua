@@ -174,7 +174,7 @@ local function downloadVapeAsset(path)
 				repeat task.wait() until isfile(path)
 				textlabel:Destroy()
 			end)
-			local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
+			local suc, req = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/assets/"..path:gsub("vape/assets/", "")) end)
 			if suc and req then
 				writefile(path, req)
 			else
