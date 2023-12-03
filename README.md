@@ -6,10 +6,10 @@
 
 0prime - owner (me!)
 
-blankedvoid - main developer (thank you 🙏)
+blankedvoid - main developer (#1)
 
-scrxpted - developer (nothing yet 😭)
+scrxpted - developer (fixing broken code)
 
-luckiiiiiiiiiiiiiii - developer (fixing broken code and helping with replacing links)
+luckiiiiiiiiiiiiiii - developer (disabler, and fixed links)
 
 inumgaming - contributer (some modules, etc)
