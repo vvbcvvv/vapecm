@@ -141,7 +141,7 @@ local function getVapeFile(file, nolawl)
 		makefolder("vape")
 	end
 	local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
-	if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl then 
+	if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl or nolawl then 
 		local success, response = pcall(function()
 			return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..file) 
 		end)
@@ -158,9 +158,31 @@ local function getVapeFile(file, nolawl)
 end
 
 local function downloadVapeAsset(path)
-	if not vapeCachedAssets[path] then 
-		vapeCachedAssets[path] = getcustomasset(path) 
+	if customassetcheck then
+		if not isfile(path) then
+			task.spawn(function()
+				local textlabel = Instance.new("TextLabel")
+				textlabel.Size = UDim2.new(1, 0, 0, 36)
+				textlabel.Text = "Downloading "..path
+				textlabel.BackgroundTransparency = 1
+				textlabel.TextStrokeTransparency = 0
+				textlabel.TextSize = 30
+				textlabel.Font = Enum.Font.SourceSans
+				textlabel.TextColor3 = Color3.new(1, 1, 1)
+				textlabel.Position = UDim2.new(0, 0, 0, -36)
+				textlabel.Parent = GuiLibrary.MainGui
+				repeat task.wait() until isfile(path)
+				textlabel:Destroy()
+			end)
+			local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets")) end)
+			if suc and req then
+				writefile(path, req)
+			else
+				return ""
+			end
+		end
 	end
+	if not vapeCachedAssets[path] then vapeCachedAssets[path] = getcustomasset(path) end
 	return vapeCachedAssets[path] 
 end
 
