@@ -17,12 +17,19 @@ do
 		return self
 	end
 	
-	function MemoryManager:append(object)
+	function MemoryManager.insert(self, object) -- inner function (do not call)
+		local old = get_thread_identity()
+		set_thread_identity(8)
 		if type(object) == 'RBXScriptConnection' then
 			if not table.find(self.connections, object) then
 				table.insert(self.connections, object)
 			end
 		end
+		set_thread_identity(old)
+	end
+
+	function MemoryManager:append(object)
+		pcall(MemoryManager.insert, self, object)
 		return object
 	end
 
