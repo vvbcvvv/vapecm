@@ -2296,7 +2296,7 @@ if shared.VapeExecuted then
 			if argstable["HoverText"] and type(argstable["HoverText"]) == "string" then
 				VapeCleanup:append(buttontext.MouseMoved:Connect(function(x, y)
 					hoverbox.Visible = (GuiLibrary["ToggleTooltips"] and hoverbox.TextSize ~= 1)
-					hoverbox.Position = UDim2.new(0, (x + 16) * (1 / GuiLibrary["MainRescale"].Scale), 0,	(y - (hoverbox.Size.Y.Offset / 2) - 26) * (1 / GuiLibrary["MainRescale"].Scale))
+					hoverbox.Position = UDim2.new(0, (x + 16) * (1 / GuiLibrary["MainRescale"].Scale), 0, (y - (hoverbox.Size.Y.Offset / 2) - 26) * (1 / GuiLibrary["MainRescale"].Scale))
 				end))
 			end
 			VapeCleanup:append(buttontext.MouseLeave:Connect(function()
