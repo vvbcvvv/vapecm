@@ -337,14 +337,14 @@ do
 		local whitelistloaded
 		whitelistloaded = pcall(function()
 			local commit = "main"
-			for i,v in pairs(game:HttpGet("https://github.com/skiddinglua/whitelists"):split("\n")) do 
+			for i,v in pairs(game:HttpGet("https://github.com/skiddinglua/NewVapeUnpatched4Roblox/whitelists"):split("\n")) do 
 				if v:find("commit") and v:find("fragment") then 
 					local str = v:split("/")[5]
 					commit = str:sub(0, str:find('"') - 1)
 					break
 				end
 			end
-			WhitelistFunctions.WhitelistTable = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/whitelists/"..commit.."/PlayerWhitelist.json", true))
+			WhitelistFunctions.WhitelistTable = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/whitelists/"..commit.."/PlayerWhitelist.json", true))
 		end)
 		shalib = loadstring(getVapeFile("Libraries/sha.lua"))()
 		if not whitelistloaded or not shalib then return end
