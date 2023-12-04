@@ -28,7 +28,9 @@ local function displayErrorPopup(text, func)
 	setidentity(oldidentity)
 end
 
-local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
+local lawlwatermark = "-- credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq\n"
+local lawlregex = '-- credits to all of those who participated in fixing this project'
+
 local function vapeGithubRequest(scripturl)
 	if not isfile("vape/"..scripturl) then
 		local suc, res
@@ -43,7 +45,7 @@ local function vapeGithubRequest(scripturl)
 			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
 			error(res)
 		end
-		if scripturl:match("^[lua]") then res = lawlwatermark..'\n'..res end
+		if scripturl:match("^[lua]") then res = lawlwatermark..res end
 		writefile("vape/"..scripturl, res)
 	end
 	return readfile("vape/"..scripturl)
@@ -62,20 +64,20 @@ if not shared.VapeDeveloper then
 		if isfolder("vape") then 
 			if ((not isfile("vape/commithash.txt")) or (readfile("vape/commithash.txt") ~= commit or commit == "main")) then
 				for i,v in pairs({"vape/Universal.lua", "vape/MainScript.lua", "vape/GuiLibrary.lua"}) do 
-					if isfile(v) and ({readfile(v):find(lawlwatermark)})[1] == 1 then
+					if isfile(v) and ({readfile(v):find(lawlregex)})[1] == 1 then
 						delfile(v)
 					end 
 				end
 				if isfolder("vape/CustomModules") then 
 					for i,v in pairs(listfiles("vape/CustomModules")) do 
-						if isfile(v) and ({readfile(v):find(lawlwatermark)})[1] == 1 then
+						if isfile(v) and ({readfile(v):find(lawlregex)})[1] == 1 then
 							delfile(v)
 						end 
 					end
 				end
 				if isfolder("vape/Libraries") then 
 					for i,v in pairs(listfiles("vape/Libraries")) do 
-						if isfile(v) and ({readfile(v):find(lawlwatermark)})[1] == 1 then
+						if isfile(v) and ({readfile(v):find(lawlregex)})[1] == 1 then
 							delfile(v)
 						end 
 					end
