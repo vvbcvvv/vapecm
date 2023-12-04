@@ -5,7 +5,9 @@ if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 then
 end
 
 do
-	local MemoryManager = {}
+	local MemoryManager = {
+		connections = {}
+	}
 	MemoryManager.__index = MemoryManager
 	local type = type
 
@@ -19,11 +21,6 @@ do
 		if type(object) == 'RBXScriptConnection' then
 			if not table.find(self.connections, object) then
 				table.insert(self.connections, object)
-			end
-			if self ~= VapeCleanup then
-				if not table.find(VapeCleanup.connections, object) then
-					table.insert(VapeCleanup.connections, object)
-				end
 			end
 		end
 		return object
