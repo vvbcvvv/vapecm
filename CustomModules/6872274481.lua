@@ -14913,3 +14913,96 @@ runFunction(function()
 	HealthbarTextColor.Object.Visible = false
 	HealthbarFont.Object.Visible = false
 end)
+
+--zyla
+local AntiCrash = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
+    Name = "AntiCrash",
+    Function = function(callback) 
+        if callback then
+            ScriptSettings.AntiCrash = true
+            while wait(1.5) do
+                if not ScriptSettings.AntiCrash == true then return end
+                if game:GetService("Workspace"):GetRealPhysicsFPS() < ScriptSettings.AntiCrash_MinFps then
+                    game:Shutdown()
+                    boxnotify("FPS Are under minimum. Closed game.")
+                end  
+                if math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue())) > ScriptSettings.AntiCrash_MaxPing then
+                    game:Shutdown()
+            boxnotify("Crash Warning: Closed Game.")
+                end
+            end       
+        else
+            ScriptSettings.AntiCrash = false
+        end
+    end,
+    Default = false,
+    HoverText = "Automatically shutdowns game when fps or ping too low/high, sliders done by Zyals"
+})
+AntiCrash.CreateSlider({
+    ["Name"] = "MinFps",
+    ["Min"] = 0,
+    ["Max"] = 100,
+    ["Function"] = function(val)
+        ScriptSettings.AntiCrash_MinFps = val
+    end,
+    ["HoverText"] = "Minimum fps before closing roblox",
+    ["Default"] = 10
+})
+AntiCrash.CreateSlider({
+    ["Name"] = "MaxPing",
+    ["Min"] = 1000,
+    ["Max"] = 100000,
+    ["Function"] = function(val)
+        ScriptSettings.AntiCrash_MaxPing = val
+    end,
+    ["HoverText"] = "Minimum fps before closing roblox",
+    ["Default"] = 10
+})
+
+runFunction(function()
+	NameHider = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "NameHider",
+		Function = function(callback)
+			if callback then
+				while game:IsLoaded() == false do wait() end
+				local fakeplr = {["Name"] = "ROBLOX", ["UserId"] = "1"}
+				local otherfakeplayers = {["Name"] = "ROBLOX", ["UserId"] = "1"}
+				local lplr = game:GetService("Players").LocalPlayer
+
+				local function plrthing(obj, property)
+					for i,v in pairs(game:GetService("Players"):GetChildren()) do
+						if v ~= lplr then
+							obj[property] = obj[property]:gsub(v.Name, otherfakeplayers["Name"])
+							obj[property] = obj[property]:gsub(v.DisplayName, otherfakeplayers["Name"])
+							obj[property] = obj[property]:gsub(v.UserId, otherfakeplayers["UserId"])
+						else
+							obj[property] = obj[property]:gsub(v.Name, fakeplr["Name"])
+							obj[property] = obj[property]:gsub(v.DisplayName, fakeplr["Name"])
+							obj[property] = obj[property]:gsub(v.UserId, fakeplr["UserId"])
+						end
+					end
+				end
+
+				local function newobj(v)
+					if v:IsA("TextLabel") or v:IsA("TextButton") then
+						plrthing(v, "Text")
+						v:GetPropertyChangedSignal("Text"):connect(function()
+							plrthing(v, "Text")
+						end)
+					end
+					if v:IsA("ImageLabel") then
+						plrthing(v, "Image")
+						v:GetPropertyChangedSignal("Image"):connect(function()
+							plrthing(v, "Image")
+						end)
+					end
+				end
+
+				for i,v in pairs(game:GetDescendants()) do
+					newobj(v)
+				end
+				game.DescendantAdded:connect(newobj)
+			end
+		end
+	})
+end)
