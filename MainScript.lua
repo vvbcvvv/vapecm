@@ -1918,11 +1918,11 @@ end
 
 local function loadVape()
 	if true then -- removed shared.VapeIndepentant thingy
-		if isBedwars then 
+		customload(getVapeFile("Universal.lua"), 'Universal')
+		if isBedwars then
 			shared.CustomSaveVape = 6872274481
 			customload(getVapeFile("CustomModules/6872274481.lua"), "6872274481")
 		else
-			customload(getVapeFile("Universal.lua"))
 			local success, response = pcall(getVapeFile, "CustomModules/"..game.PlaceId..".lua")
 			if success and response then 
 				customload(response, game.PlaceId)
