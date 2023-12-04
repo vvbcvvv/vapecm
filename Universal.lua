@@ -65,24 +65,27 @@ local function getcommit()
 	return "main"
 end
 
-local function getVapeFile(file, nolawl)
-	if not isfolder("vape") then 
-		makefolder("vape")
-	end
-	local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
-	if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl then 
-		local success, response = pcall(function()
-			return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..getcommit().."/"..file) 
+local lawlwatermark = "-- credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq\n"
+local lawlregex = '-- credits to all of those who participated in fixing this project'
+
+local function vapeGithubRequest(scripturl)
+	if not isfile("vape/"..scripturl) then
+		local suc, res
+		task.delay(15, function()
+			if not res and not errorPopupShown then 
+				errorPopupShown = true
+				displayErrorPopup("The connection to github is taking a while, Please be patient.")
+			end
 		end)
-		if success and response ~= "404: Not Found" then 
-			response = (file:sub(#file - 4, #file) == ".lua" and lawlwatermark.."\n"..response or response)
-			writefile("vape/"..file, response)
-			return response
-		else
-			return error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
-		end 
+		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
+		if not suc or res == "404: Not Found" then
+			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
+			error(res)
+		end
+		if scripturl:match("^[lua]") then res = lawlwatermark..res end
+		writefile("vape/"..scripturl, res)
 	end
-	return isfile("vape/"..file) and readfile("vape/"..file) or error("Vape Unpatched - Failed to read "..file)
+	return readfile("vape/"..scripturl)
 end
 
 local function downloadVapeAsset(path)
