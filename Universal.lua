@@ -48,14 +48,19 @@ local worldtoviewportpoint = function(pos)
 	return gameCamera.WorldToViewportPoint(gameCamera, pos)
 end
 
+cached_commit
 local function getcommit()
+	if cached_commit then
+		return cached_commit
+	end
 	local success, response = pcall(function()
 		return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://api.github.com/repos/skiddinglua/NewVapeUnpatched4Roblox/commits"))
 	end)
 	local res = (success and response[1])
 	if res and response.documentation_url == nil and res.commit then 
 		local slash = res.commit.url:split("/")
-		return slash[#slash]
+		cached_commit = slash[#slash]
+		return cached_commit
 	end
 	return "main"
 end
@@ -74,11 +79,10 @@ local function getVapeFile(file, nolawl)
 			writefile("vape/"..file, response)
 			return response
 		else
-			error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
-			return task.wait(9e9)
+			return error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
 		end 
 	end
-	return isfile("vape/"..file) and readfile("vape/"..file) or task.wait(9e9)
+	return isfile("vape/"..file) and readfile("vape/"..file) or error("Vape Unpatched - Failed to read "..file)
 end
 
 local function downloadVapeAsset(path)
@@ -2596,11 +2600,11 @@ runFunction(function()
 					v.Parent = game
 				end
 			end
-			char.ChildAdded:Connect(function(v)
+			VapeCleanup:append(char.ChildAdded:Connect(function(v)
 				if ((v:IsA("Accessory") and v:GetAttribute("InvItem") == nil and v:GetAttribute("ArmorSlot") == nil) or v:IsA("ShirtGraphic") or v:IsA("Shirt") or v:IsA("Pants") or v:IsA("BodyColors")) and v:GetAttribute("Disguise") == nil then 
 					repeat task.wait() v.Parent = game until v.Parent == game
 				end
-			end)
+			end))
 			for i,v in pairs(Disguiseclone:WaitForChild("Animate"):GetChildren()) do 
 				v:SetAttribute("Disguise", true)
 				if not char:FindFirstChild("Animate") then return end
@@ -5280,12 +5284,12 @@ runFunction(function()
 						playedanim.Looped = true
 						playedanim:Play()
 						playedanim:AdjustSpeed(AnimationPlayerSpeed.Value / 10)
-						playedanim.Stopped:Connect(function()
+						VapeCleanup:append(playedanim.Stopped:Connect(function()
 							if AnimationPlayer.Enabled then
 								AnimationPlayer.ToggleButton(false)
 								AnimationPlayer.ToggleButton(false)
 							end
-						end)
+						end))
 					else
 						warningNotification("AnimationPlayer", "failed to load anim : "..(res or "invalid animation id"), 5)
 					end
@@ -5465,14 +5469,14 @@ runFunction(function()
 									end
 									if currenttween then currenttween:Cancel() end
 									tween = tweenService:Create(chairlegs, TweenInfo.new(0.15), {Size = Vector3.zero})
-									tween.Completed:Connect(function(state)
+									table.insert(GamingChair.Connections, tween.Completed:Connect(function(state)
 										if state == Enum.PlaybackState.Completed then 
 											chairfan.Transparency = 0
 											chairlegs.Transparency = 1
 											tween = tweenService:Create(chairfan, TweenInfo.new(0.15), {Size = Vector3.new(1.534, 0.328, 1.537) / Vector3.new(791.138, 168.824, 792.027)})
 											tween:Play()
 										end
-									end)
+									end))
 									tween:Play()
 								else
 									if flyingsound.IsPlaying then 
@@ -5483,14 +5487,14 @@ runFunction(function()
 									end
 									if currenttween then currenttween:Cancel() end
 									tween = tweenService:Create(chairfan, TweenInfo.new(0.15), {Size = Vector3.zero})
-									tween.Completed:Connect(function(state)
+									table.insert(GamingChair.Connections, tween.Completed:Connect(function(state)
 										if state == Enum.PlaybackState.Completed then 
 											chairfan.Transparency = 1
 											chairlegs.Transparency = 0
 											tween = tweenService:Create(chairlegs, TweenInfo.new(0.15), {Size = Vector3.new(1.8, 1.2, 1.8) / Vector3.new(10.432, 8.105, 9.488)})
 											tween:Play()
 										end
-									end)
+									end))
 									tween:Play()
 								end
 								oldflying = flying

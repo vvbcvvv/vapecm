@@ -1,4 +1,45 @@
 repeat task.wait() until game:IsLoaded()
+local data = game:GetService("TeleportService"):GetLocalPlayerTeleportData()
+if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 then 
+    getgenv().isBedwars = true
+end
+
+do
+	local MemoryManager = {}
+	MemoryManager.__index = MemoryManager
+	local type = type
+
+	function MemoryManager.new()
+		local self = setmetatable({}, MemoryManager)
+		self.connections = {}
+		return self
+	end
+	
+	function MemoryManager:append(object)
+		if type(object) == 'RBXScriptConnection' then
+			if not table.find(self.connections, object) then
+				table.insert(self.connections, object)
+			end
+			if self ~= VapeCleanup then
+				if not table.find(VapeCleanup.connections, object) then
+					table.insert(VapeCleanup.connections, object)
+				end
+			end
+		end
+		return object
+	end
+
+	function MemoryManager:wipe()
+		for _, object in next, self.connections do
+			object:Disconnect()
+			self.connections[_] = nil
+		end
+	end
+
+	getgenv().MemoryManager = MemoryManager
+	getgenv().VapeCleanup = MemoryManager.new()
+end
+
 local GuiLibrary
 local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 local vapeInjected = true
@@ -186,10 +227,10 @@ task.spawn(function()
 	image.Size = UDim2.fromOffset(100, 100)
 	image.ImageTransparency = 0.999
 	image.Parent = GuiLibrary.MainGui
-    image:GetPropertyChangedSignal("IsLoaded"):Connect(function()
+    VapeCleanup:append(image:GetPropertyChangedSignal("IsLoaded"):Connect(function()
         image:Destroy()
         image = nil
-    end)
+    end))
 	task.spawn(function()
 		task.wait(15)
 		if image and image.ContentImageSize == Vector2.zero and (not errorPopupShown) and (not redownloadedAssets) and (not isfile("vape/assets/check3.txt")) then 
@@ -384,9 +425,9 @@ ProfilesTextList = Profiles.CreateTextList({
 		if GuiLibrary.Profiles[profileName] == nil then
 			GuiLibrary.Profiles[profileName] = {Keybind = ""}
 		end
-		profileObject.MouseButton1Click:Connect(function()
+		VapeCleanup:append(profileObject.MouseButton1Click:Connect(function()
 			GuiLibrary.SwitchProfile(profileName)
-		end)
+		end))
 		local newsize = UDim2.new(0, 20, 0, 21)
 		local bindbkg = Instance.new("TextButton")
 		bindbkg.Text = ""
@@ -429,7 +470,7 @@ ProfilesTextList = Profiles.CreateTextList({
 		local bindround = Instance.new("UICorner")
 		bindround.CornerRadius = UDim.new(0, 4)
 		bindround.Parent = bindbkg
-		bindbkg.MouseButton1Click:Connect(function()
+		VapeCleanup:append(bindbkg.MouseButton1Click:Connect(function()
 			if not GuiLibrary.KeybindCaptured then
 				GuiLibrary.KeybindCaptured = true
 				task.spawn(function()
@@ -461,15 +502,15 @@ ProfilesTextList = Profiles.CreateTextList({
 					bindtext2.Visible = false
 				end)
 			end
-		end)
-		bindbkg.MouseEnter:Connect(function() 
+		end))
+		VapeCleanup:append(bindbkg.MouseEnter:Connect(function() 
 			bindimg.Image = downloadVapeAsset("vape/assets/PencilIcon.png") 
 			bindimg.Visible = true
 			bindtext.Visible = false
 			bindbkg.Size = UDim2.new(0, 20, 0, 21)
 			bindbkg.Position = UDim2.new(1, -50, 0, 6)
-		end)
-		bindbkg.MouseLeave:Connect(function() 
+		end))
+		VapeCleanup:append(bindbkg.MouseLeave:Connect(function() 
 			bindimg.Image = downloadVapeAsset("vape/assets/KeybindIcon.png")
 			if GuiLibrary.Profiles[profileName].Keybind ~= "" then
 				bindimg.Visible = false
@@ -477,13 +518,13 @@ ProfilesTextList = Profiles.CreateTextList({
 				bindbkg.Size = newsize
 				bindbkg.Position = UDim2.new(1, -(30 + newsize.X.Offset), 0, 6)
 			end
-		end)
-		profileObject.MouseEnter:Connect(function()
+		end))
+		VapeCleanup:append(profileObject.MouseEnter:Connect(function()
 			bindbkg.Visible = true
-		end)
-		profileObject.MouseLeave:Connect(function()
+		end))
+		VapeCleanup:append(profileObject.MouseLeave:Connect(function()
 			bindbkg.Visible = GuiLibrary.Profiles[profileName] and GuiLibrary.Profiles[profileName].Keybind ~= ""
-		end)
+		end))
 		if GuiLibrary.Profiles[profileName].Keybind ~= "" then
 			bindtext.Text = GuiLibrary.Profiles[profileName].Keybind
 			local textsize = textService:GetTextSize(GuiLibrary.Profiles[profileName].Keybind, 16, bindtext.Font, Vector2.new(99999, 99999))
@@ -553,12 +594,12 @@ OnlineProfilesExitButton.Parent = OnlineProfilesFrame
 local OnlineProfilesExitButtonround = Instance.new("UICorner")
 OnlineProfilesExitButtonround.CornerRadius = UDim.new(0, 16)
 OnlineProfilesExitButtonround.Parent = OnlineProfilesExitButton
-OnlineProfilesExitButton.MouseEnter:Connect(function()
+VapeCleanup:append(OnlineProfilesExitButton.MouseEnter:Connect(function()
 	game:GetService("TweenService"):Create(OnlineProfilesExitButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {BackgroundColor3 = Color3.fromRGB(60, 60, 60), ImageColor3 = Color3.fromRGB(255, 255, 255)}):Play()
-end)
-OnlineProfilesExitButton.MouseLeave:Connect(function()
+end))
+VapeCleanup:append(OnlineProfilesExitButton.MouseLeave:Connect(function()
 	game:GetService("TweenService"):Create(OnlineProfilesExitButton, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {BackgroundColor3 = Color3.fromRGB(26, 25, 26), ImageColor3 = Color3.fromRGB(121, 121, 121)}):Play()
-end)
+end))
 local OnlineProfilesFrameShadow = Instance.new("ImageLabel")
 OnlineProfilesFrameShadow.AnchorPoint = Vector2.new(0.5, 0.5)
 OnlineProfilesFrameShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -636,7 +677,7 @@ OnlineProfilesListGrid.Parent = OnlineProfilesList
 local OnlineProfilesFrameCorner = Instance.new("UICorner")
 OnlineProfilesFrameCorner.CornerRadius = UDim.new(0, 4)
 OnlineProfilesFrameCorner.Parent = OnlineProfilesFrame
-OnlineProfilesButton.MouseButton1Click:Connect(function()
+VapeCleanup:append(OnlineProfilesButton.MouseButton1Click:Connect(function()
 	GuiLibrary.MainGui.ScaledGui.OnlineProfiles.Visible = true
 	GuiLibrary.MainGui.ScaledGui.ClickGui.Visible = false
 	if not profilesLoaded then
@@ -683,23 +724,23 @@ OnlineProfilesButton.MouseButton1Click:Connect(function()
 			profiledownloadbkg.ZIndex = 1
 			profiledownloadbkg.Visible = false
 			profiledownloadbkg.Parent = profilebox
-			profilebox.MouseEnter:Connect(function()
+			VapeCleanup:append(profilebox.MouseEnter:Connect(function()
 				profiletext.TextColor3 = Color3.fromRGB(200, 200, 200)
 				profiledownload.Visible = true 
 				profiledownloadbkg.Visible = true
-			end)
-			profilebox.MouseLeave:Connect(function()
+			end))
+			VapeCleanup:append(profilebox.MouseLeave:Connect(function()
 				profiletext.TextColor3 = Color3.fromRGB(137, 136, 137)
 				profiledownload.Visible = false
 				profiledownloadbkg.Visible = false
-			end)
-			profiledownload.MouseEnter:Connect(function()
+			end))
+			VapeCleanup:append(profiledownload.MouseEnter:Connect(function()
 				profiledownload.BackgroundColor3 = Color3.fromRGB(5, 134, 105)
-			end)
-			profiledownload.MouseLeave:Connect(function()
+			end))
+			VapeCleanup:append(profiledownload.MouseLeave:Connect(function()
 				profiledownload.BackgroundColor3 = Color3.fromRGB(31, 30, 31)
-			end)
-			profiledownload.MouseButton1Click:Connect(function()
+			end))
+			VapeCleanup:append(profiledownload.MouseButton1Click:Connect(function()
 				writefile(baseDirectory.."Profiles/"..v2.ProfileName..saveplaceid..".vapeprofile.txt", game:HttpGet(profileurl, true))
 				GuiLibrary.Profiles[v2.ProfileName] = {Keybind = "", Selected = false}
 				local profiles = {}
@@ -708,7 +749,7 @@ OnlineProfilesButton.MouseButton1Click:Connect(function()
 				end
 				table.sort(profiles, function(a, b) return b == "default" and true or a:lower() < b:lower() end)
 				ProfilesTextList.RefreshValues(profiles)
-			end)
+			end))
 			local profileround = Instance.new("UICorner")
 			profileround.CornerRadius = UDim.new(0, 4)
 			profileround.Parent = profilebox
@@ -721,11 +762,11 @@ OnlineProfilesButton.MouseButton1Click:Connect(function()
 		end
 		profilesloaded = true
 	end
-end)
-OnlineProfilesExitButton.MouseButton1Click:Connect(function()
+end))
+VapeCleanup:append(OnlineProfilesExitButton.MouseButton1Click:Connect(function()
 	GuiLibrary.MainGui.ScaledGui.OnlineProfiles.Visible = false
 	GuiLibrary.MainGui.ScaledGui.ClickGui.Visible = true
-end)
+end))
 GUI.CreateDivider()
 
 local TextGUI = GuiLibrary.CreateCustomWindow({
@@ -835,9 +876,9 @@ VapeCustomTextShadow.TextTransparency = 0.5
 VapeCustomTextShadow.TextColor3 = Color3.new()
 VapeCustomTextShadow.Position = UDim2.new(0, 1, 0, 1)
 VapeCustomTextShadow.Parent = VapeCustomText
-VapeCustomText:GetPropertyChangedSignal("TextXAlignment"):Connect(function()
+VapeCleanup:append(VapeCustomText:GetPropertyChangedSignal("TextXAlignment"):Connect(function()
 	VapeCustomTextShadow.TextXAlignment = VapeCustomText.TextXAlignment
-end)
+end))
 local VapeBackground = Instance.new("Frame")
 VapeBackground.BackgroundTransparency = 1
 VapeBackground.BorderSizePixel = 0
@@ -1008,14 +1049,14 @@ local function TextGUIUpdate()
 	end
 end
 
-TextGUI.GetCustomChildren().Parent:GetPropertyChangedSignal("Position"):Connect(TextGUIUpdate)
-GuiLibrary.UpdateHudEvent.Event:Connect(TextGUIUpdate)
-VapeScale:GetPropertyChangedSignal("Scale"):Connect(function()
+VapeCleanup:append(TextGUI.GetCustomChildren().Parent:GetPropertyChangedSignal("Position"):Connect(TextGUIUpdate))
+VapeCleanup:append(GuiLibrary.UpdateHudEvent.Event:Connect(TextGUIUpdate))
+VapeCleanup:append(VapeScale:GetPropertyChangedSignal("Scale"):Connect(function()
 	local childrenobj = TextGUI.GetCustomChildren()
 	local check = (childrenobj.Parent.Position.X.Offset + childrenobj.Parent.Size.X.Offset / 2) >= (gameCamera.ViewportSize.X / 2)
 	childrenobj.Position = UDim2.new((check and -(VapeScale.Scale - 1) or 0), (check and 0 or -6 * (VapeScale.Scale - 1)), 1, -6 * (VapeScale.Scale - 1))
 	TextGUIUpdate()
-end)
+end))
 TextGUIMode = TextGUI.CreateDropdown({
 	Name = "Mode",
 	List = {"Normal", "Drawing"},
@@ -1315,9 +1356,9 @@ TargetInfoNameShadow.TextTransparency = 0.5
 TargetInfoNameShadow.TextColor3 = Color3.new()
 TargetInfoNameShadow.ZIndex = 1
 TargetInfoNameShadow.Position = UDim2.new(0, 1, 0, 1)
-TargetInfoName:GetPropertyChangedSignal("Text"):Connect(function()
+VapeCleanup:append(TargetInfoName:GetPropertyChangedSignal("Text"):Connect(function()
 	TargetInfoNameShadow.Text = TargetInfoName.Text
-end)
+end))
 TargetInfoNameShadow.Parent = TargetInfoName
 local TargetInfoHealthBackground = Instance.new("Frame")
 TargetInfoHealthBackground.BackgroundColor3 = Color3.fromRGB(54, 54, 54)
@@ -1397,9 +1438,9 @@ local TargetInfoDisplayNames = TargetInfo.CreateToggle({
 	Default = true
 })
 local TargetInfoHealthTween
-TargetInfo.GetCustomChildren().Parent:GetPropertyChangedSignal("Size"):Connect(function()
+VapeCleanup:append(TargetInfo.GetCustomChildren().Parent:GetPropertyChangedSignal("Size"):Connect(function()
 	TargetInfoMainInfo.Position = UDim2.fromOffset(0, TargetInfo.GetCustomChildren().Parent.Size ~= UDim2.fromOffset(220, 0) and -5 or 40)
-end)
+end))
 shared.VapeTargetInfo = {
 	UpdateInfo = function(tab, targetsize) 
 		if TargetInfo.GetCustomChildren().Parent then
@@ -1685,11 +1726,11 @@ local GUIRescaleToggle = GUISettings.CreateToggle({
 	Default = true,
 	HoverText = "Rescales the GUI"
 })
-gameCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+VapeCleanup:append(gameCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
 	if GUIRescaleToggle.Enabled then
 		GuiLibrary.MainRescale.Scale = math.clamp(gameCamera.ViewportSize.X / 1920, 0.5, 1)
 	end
-end)
+end))
 GUISettings.CreateToggle({
 	Name = "Notifications", 
 	Function = function(callback) 
@@ -1719,7 +1760,7 @@ GUISettings.CreateSlider({
 })
 
 local GUIbind = GUI.CreateGUIBind()
-local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(function(State)
+local teleportConnection = VapeCleanup:append(playersService.LocalPlayer.OnTeleport:Connect(function(State)
     if (not teleportedServers) and (not shared.VapeIndependent) then
 		teleportedServers = true
 		local teleportScript = [[
@@ -1733,7 +1774,7 @@ local teleportConnection = playersService.LocalPlayer.OnTeleport:Connect(functio
 		GuiLibrary.SaveSettings()
 		queueonteleport(teleportScript)
     end
-end)
+end))
 
 GuiLibrary.SelfDestruct = function()
 	task.spawn(function()
@@ -1782,7 +1823,8 @@ GuiLibrary.SelfDestruct = function()
 	end
 	teleportConnection:Disconnect()
 	GuiLibrary.MainGui:Destroy()
-	game:GetService("RunService"):SetRobloxGuiFocused(false)	
+	game:GetService("RunService"):SetRobloxGuiFocused(false)
+	VapeCleanup:wipe()
 end
 
 GeneralSettings.CreateButton2({
@@ -1878,17 +1920,19 @@ local function customload(data, file)
 end
 
 local function loadVape()
-	if true then -- had a condition here but was too lazy to reformat code so yes
-		customload(getVapeFile("Universal.lua"))
-		if bedwars then 
+	if true then -- removed shared.VapeIndepentant thingy
+		if isBedwars then 
 			shared.CustomSaveVape = 6872274481
 			customload(getVapeFile("CustomModules/6872274481.lua"), "6872274481")
 		else
-			local success, response = pcall(function()
-				return getVapeFile("CustomModules/"..game.PlaceId..".lua")
-			end)
+			customload(getVapeFile("Universal.lua"))
+			local success, response = pcall(getVapeFile, "CustomModules/"..game.PlaceId..".lua")
 			if success and response then 
 				customload(response, game.PlaceId)
+			else
+				local notification = GuiLibrary.CreateNotification('Vape', 'CustomModule not found', 10, "assets/WarningNotification.png")
+				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
+				notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 			end
 		end
 	end
