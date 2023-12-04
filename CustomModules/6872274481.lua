@@ -14713,7 +14713,7 @@ runFunction(function()
 		return fonts
 	end
 	local function getrandomvalue(tab)
-		return tab[math.random(1, #tab)] or ''
+		return #tab > 0 and tab[math.random(1, #tab)] or ''
 	end
 	local HealthbarMods = {Enabled = false}
 	local HealthbarRound = {Enabled = false}
