@@ -1909,12 +1909,21 @@ GeneralSettings.CreateButton2({
 })
 
 local function customload(data, file)
-	local success, err = pcall(function()
-		loadstring(data)()
-	end)
-	if not success then
+	print(`Loading {file}.lua`)
+	local success, err = pcall(function(data)
+		local chunk = loadstring(data)
+		if chunk then
+			print(`Compiled {file}.lua`)
+			return chunk()
+		else
+			return error(`unable to load {file}.lua (syntax error)`)
+		end
+	end, data)
+	if success then
+		print(`Executed {file}.lua`)
+	else
 		GuiLibrary.SaveSettings = function() end
-		task.spawn(error, "Vape Unpatched - Failed to load "..file..".lua | "..err .. debug.traceback('\nTraceback: '))
+		task.spawn(error, "newvape uED - Failed to load "..file..".lua | "..err .. debug.traceback('\nTraceback: '))
 		pcall(function()
 			local notification = GuiLibrary.CreateNotification("Failure loading "..file..".lua", err, 25, "assets/WarningNotification.png")
 			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
@@ -1934,7 +1943,7 @@ local function loadVape()
 			if success and response then 
 				customload(response, game.PlaceId)
 			else
-				local notification = GuiLibrary.CreateNotification('Vape', 'CustomModule not found', 10, "assets/WarningNotification.png")
+				local notification = GuiLibrary.CreateNotification('Vape', 'CustomModule ('..game.PlaceId..') not found', 10, "assets/WarningNotification.png")
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 				notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 			end
