@@ -1712,7 +1712,6 @@ runFunction(function()
 	end
 
 	task.spawn(function()
-		repeat task.wait() until WhitelistFunctions.Loaded
 		for i, v in next, (WhitelistFunctions.WhitelistTable.WhitelistedUsers) do
 			if v.tags then
 				for i2, v2 in next, (v.tags) do
@@ -5597,7 +5596,6 @@ runFunction(function()
 	})
 	killauranovape.Object.Visible = false
 	task.spawn(function()
-		repeat task.wait() until WhitelistFunctions.Loaded
 		killauranovape.Object.Visible = WhitelistFunctions.LocalPriority ~= 0
 	end)
 end)
