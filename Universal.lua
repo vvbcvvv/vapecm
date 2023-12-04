@@ -48,7 +48,7 @@ local worldtoviewportpoint = function(pos)
 	return gameCamera.WorldToViewportPoint(gameCamera, pos)
 end
 
-cached_commit
+local cached_commit
 local function getcommit()
 	if cached_commit then
 		return cached_commit
