@@ -26,6 +26,10 @@
 		HotbarMods - blxnk
 		HealthbarMods - blxnk
 
+		NameHider - zyla
+		AntiCrash - zyla
+
+
 ]===]
 
 local GuiLibrary = shared.GuiLibrary
