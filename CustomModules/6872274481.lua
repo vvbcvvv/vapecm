@@ -14915,7 +14915,7 @@ runFunction(function()
 end)
 
 --zyla
-local AntiCrash = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({ -- PASTED AND D
+--[[local AntiCrash = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({ -- PASTED AND D
     Name = "AntiCrash",
     Function = function() end,
     Default = false,
@@ -14989,4 +14989,4 @@ runFunction(function()
 			end
 		end
 	})
-end)
+end)]]
