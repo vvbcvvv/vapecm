@@ -22,7 +22,7 @@
 
 		Atmosphere - blxnk
 		HotbarMods - blxnk
-		AntiNoClip - blxnk
+		AntiNoclip - blxnk
 		HotbarMods - blxnk
 		HealthbarMods - blxnk
 
@@ -14516,18 +14516,19 @@ Atmosphere = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButt
 end)
 
 runFunction(function()
-	local VClip = {Enabled = false}
-	VClip = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
+	local AntiNoclip = {Enabled = false}
+	AntiNoclip = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
 		Name = 'AntiNoclip',
 		HoverText = 'Prevents you from noclipping into the ground when landing from\nInfiniteFly etc. (Prevents being lagbacked using infinitefly)',
 		Function = function(callback)
 			if callback then
 				task.spawn(function()
 					repeat task.wait() until entityLibrary.isAlive
-					repeat task.wait()
+					repeat 
+						task.wait()
 						if lplr.Character and lplr.Character:FindFirstChild('Humanoid') and lplr.Character.Humanoid.Health > 0 then
 							if lplr.Character.Humanoid.FloorMaterial ~= Enum.Material.Air then
-								local block, pos = getPlacedBlock(lplr.character.HumanoidRootPart.Position + Vector3.new(0, -3, 0))
+								local block, pos = getPlacedBlock(lplr.Character.HumanoidRootPart.Position + Vector3.new(0, -3, 0))
 								pos = pos * 3
 								if block and pos then
 									if (pos.Y + 8) >= lplr.Character.PrimaryPart.Position.Y then
@@ -14538,7 +14539,7 @@ runFunction(function()
 								end
 							end
 						end	
-					until not VClip.Enabled
+					until not AntiNoclip.Enabled
 				end)
 			end
 		end
