@@ -1,8 +1,8 @@
 # the #1 vape mod for bedwars
 
-**Socials**
-**[Discord](https://discord.gg/B5hKEKQ83a)**
-**[YouTube](https://www.youtube.com/@0prime)**
+**Socials**<br>
+**[Discord](https://discord.gg/B5hKEKQ83a)**<br>
+**[YouTube](https://www.youtube.com/@0prime)**<br>
 
 
 ## Loadstring
