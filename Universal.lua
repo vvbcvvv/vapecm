@@ -48,33 +48,6 @@ local worldtoviewportpoint = function(pos)
 	return gameCamera.WorldToViewportPoint(gameCamera, pos)
 end
 
-local function downloadVapeAsset(path)
-	if not isfile(path) then
-		task.spawn(function()
-			local textlabel = Instance.new("TextLabel")
-			textlabel.Size = UDim2.new(1, 0, 0, 36)
-			textlabel.Text = "Downloading "..path
-			textlabel.BackgroundTransparency = 1
-			textlabel.TextStrokeTransparency = 0
-			textlabel.TextSize = 30
-			textlabel.Font = Enum.Font.SourceSans
-			textlabel.TextColor3 = Color3.new(1, 1, 1)
-			textlabel.Position = UDim2.new(0, 0, 0, -36)
-			textlabel.Parent = GuiLibrary.MainGui
-			repeat task.wait() until isfile(path)
-			textlabel:Destroy()
-		end)
-		local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets"), true) end)
-        if suc and req then
-		    writefile(path, req)
-        else
-            return ""
-        end
-	end
-	if not vapeCachedAssets[path] then vapeCachedAssets[path] = getcustomasset(path) end
-	return vapeCachedAssets[path] 
-end
-
 local function warningNotification(title, text, delay)
 	local suc, res = pcall(function()
 		local frame = GuiLibrary.CreateNotification(title, text, delay, "assets/WarningNotification.png")
