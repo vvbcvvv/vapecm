@@ -1,46 +1,32 @@
 # the #1 vape mod for bedwars
 
-**Check out our [discord-link](https://discord.gg/B5hKEKQ83a "Discord")\!**
+**Check out our [discord](https://discord.gg/B5hKEKQ83a)\!**
 
 
-# Loadstring
+## Loadstring
 
 ```lua
     loadstring(game:HttpGet('https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/Loader.lua', true))()
 ```
 
 
-# Credits:
+## People:
 
-**Owners**
-
-<b>0prime (me)</b>
-
-
-**Developers**
-
++ <b>0prime (me)</b>
+    + Owner
 + <b>blankedvoid</b>
     + Main Developer
 + <b>scrxpted</b>
+    + Developer
     + Makes and fixes 80% of the issues
 + <b>luckii</b>
     + :\)
++ <b>inumgaming</b>
+    + Contributor
 
-
-**Contributers**
-
-<b>inumgaming</b>
-
-
-**Cool People**
-
-<b>no one, we don't care about you</b>
-
-
-# Features
+## Features
 + Invisibility
-    + Hides your character below the map by an offset
-    + NOT GODMODE
+    + Hides your character below the map (you are still visible if they look towards the void)
 + Teleport
     + Teleports you to Players, Beds, or your desired location
     + Modes: Telepearl, Redirect, Jade Hammer, Dao
