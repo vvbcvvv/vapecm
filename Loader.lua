@@ -69,12 +69,13 @@ if not commit then
 end
 
 local function vapeGithubRequest(scripturl)
-	local replace = isfile("vape/"..scripturl) and readHash(readfile("vape/"..scripturl)) ~= commit or not isfile("vape/"..scripturl)
+	local oldCommit = isfile("vape/"..scripturl) and readHash(readfile("vape/"..scripturl))
+	local replace = oldCommit ~= commit or not isfile("vape/"..scripturl)
 	if replace then
 		task.spawn(function()
 			local textlabel = Instance.new("TextLabel")
 			textlabel.Size = UDim2.new(1, 0, 0, 36)
-			textlabel.Text = `{isfile("vape/"..scripturl) and 'Updating' or 'Downloading'} vape/{scripturl}`
+			textlabel.Text = `{oldCommit and 'Updating' or 'Downloading'} vape/{scripturl}{oldCommit and `\nfrom {oldCommit:sub(0, 7)} to {commit:sub(0, 7)}` or ''}`
 			textlabel.BackgroundTransparency = 1
 			textlabel.TextStrokeTransparency = 0
 			textlabel.TextSize = 30

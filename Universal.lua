@@ -48,23 +48,6 @@ local worldtoviewportpoint = function(pos)
 	return gameCamera.WorldToViewportPoint(gameCamera, pos)
 end
 
-local cached_commit
-local function getcommit()
-	if cached_commit then
-		return cached_commit
-	end
-	local success, response = pcall(function()
-		return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://api.github.com/repos/skiddinglua/NewVapeUnpatched4Roblox/commits"))
-	end)
-	local res = (success and response[1])
-	if res and response.documentation_url == nil and res.commit then 
-		local slash = res.commit.url:split("/")
-		cached_commit = slash[#slash]
-		return cached_commit
-	end
-	return "main"
-end
-
 local function downloadVapeAsset(path)
 	if not isfile(path) then
 		task.spawn(function()
