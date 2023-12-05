@@ -14684,7 +14684,7 @@ runFunction(function()
 	HotbarHighlightColor.Object.Visible = false
 	task.spawn(function()
 		repeat task.wait() until shared.VapeFullyLoaded
-		if vapeInjected and isEnabled('UICleanup') then 
+		if vapeInjected and GuiLibrary.ObjectsThatCanBeSaved.UICleanupOptionsButton.Api.Enabled then 
 			HotbarHideSlotIcons.Object.Visible = false 
 		end
 	end)
