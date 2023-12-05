@@ -46,8 +46,6 @@
     + blxnk do this.
 + HotbarMods
     + blxnk do this.
-+ AntiNoClip
-    + blxnk do this.
 + HealthbarMods
     + blxnk do this.
 + Network
