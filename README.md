@@ -1,8 +1,8 @@
 # the #1 vape mod for bedwars
 
 **Socials**
-**![Discord](https://discord.com/assets/images/favicon.ico "Discord")[Discord](https://discord.gg/B5hKEKQ83a)**
-**![YouTube](https://www.youtube.com/img/favicon_32.png "YouTube")[YouTube](https://www.youtube.com/@0prime)**
+**[Discord](https://discord.gg/B5hKEKQ83a)**
+**[YouTube](https://www.youtube.com/@0prime)**
 
 
 ## Loadstring
@@ -14,14 +14,14 @@
 
 ## People:
 
-+ <b>0prime (me) ![Discord](https://discord.com/assets/images/favicon.ico "skiddinglua")\[[Discord](https://discord.com/users/1095127276099752078)\]</b>
++ <b>0prime (me) \[[Discord](https://discord.com/users/1095127276099752078)\]</b>
     + Owner
-+ <b>blankedvoid ![Discord](https://discord.com/assets/images/favicon.ico "blankedvoid")\[[Discord](https://discord.com/users/841083857050665000)\]</b>
++ <b>blankedvoid \[[Discord](https://discord.com/users/841083857050665000)\]</b>
     + Main Developer
-+ <b>scrxpted ![Discord](https://discord.com/assets/images/favicon.ico "scrxpted")\[[Discord](https://discord.com/users/759071932276146216)\]</b>
++ <b>scrxpted \[[Discord](https://discord.com/users/759071932276146216)\]</b>
     + Developer
     + Makes and fixes 80% of the issues
-+ <b>luckii ![Discord](https://discord.com/assets/images/favicon.ico "luckiiiiiiiiiiiiiii")\[[Discord](https://discord.com/users/900857825788583956)\]</b>
++ <b>luckii \[[Discord](https://discord.com/users/900857825788583956)\]</b>
     + :\)
 + <b>inumgaming \[?\]</b>
     + Contributor
