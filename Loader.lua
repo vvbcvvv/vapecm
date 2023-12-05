@@ -68,6 +68,25 @@ if not commit then
 	error("Failed to connect to github, please try using a VPN.")
 end
 
+local function randomString()
+	local randomlength = math.random(10,100)
+	local array = {}
+
+	for i = 1, randomlength do
+		array[i] = string.char(math.random(32, 126))
+	end
+
+	return table.concat(array)
+end
+
+local loader_gui = Instance.new("ScreenGui")
+loader_gui.Name = randomString()
+loader_gui.DisplayOrder = 999
+loader_gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+loader_gui.OnTopOfCoreBlur = true
+loader_gui.ResetOnSpawn = false
+loader_gui.Parent = game:GetService("Players").LocalPlayer.PlayerGui
+
 local function vapeGithubRequest(scripturl)
 	local oldCommit = isfile("vape/"..scripturl) and readHash(readfile("vape/"..scripturl))
 	local replace = oldCommit ~= commit or not isfile("vape/"..scripturl)
@@ -82,7 +101,7 @@ local function vapeGithubRequest(scripturl)
 			textlabel.Font = Enum.Font.SourceSans
 			textlabel.TextColor3 = Color3.new(1, 1, 1)
 			textlabel.Position = UDim2.new(0, 0, 0, -36)
-			textlabel.Parent = GuiLibrary.MainGui
+			textlabel.Parent = loader_gui
 			repeat task.wait() until isfile("vape/"..scripturl)
 			textlabel:Destroy()
 		end)
