@@ -26,7 +26,7 @@
 + <b>inumgaming \[?\]</b>
     + Contributor
 
-+ <b>Me \[?\]</b>
++ <b>Me \[[Discord](https://discord.com/users/1128579930586877962)\]</b>
     + Contributor
 
 ## Features
