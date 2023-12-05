@@ -37,7 +37,7 @@ local vapeWatermark = [===[--[=[
 	newvape uED (user edition)
 	Discord: https://discord.gg/Qx4cNHBvJq
 ]=]
-"]===]
+]===]
 
 local function readHash(data)
 	local hash = data:sub(22, 61)
