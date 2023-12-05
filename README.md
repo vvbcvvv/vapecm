@@ -1,6 +1,8 @@
 # the #1 vape mod for bedwars
 
-**Check out our [discord](https://discord.gg/B5hKEKQ83a)\!**
+**Socials**
+**[Discord](https://discord.gg/B5hKEKQ83a)**
+**[YouTube](https://www.youtube.com/@0prime)**
 
 
 ## Loadstring
@@ -12,16 +14,16 @@
 
 ## People:
 
-+ <b>0prime (me)</b>
++ <b>0prime (me) ![Discord](https://discord.com/assets/images/favicon.ico "skiddinglua")\[[Discord](https://discord.com/users/1095127276099752078)\]</b>
     + Owner
-+ <b>blankedvoid</b>
++ <b>blankedvoid ![Discord](https://discord.com/assets/images/favicon.ico "blankedvoid")\[[Discord](https://discord.com/users/841083857050665000)\]</b>
     + Main Developer
-+ <b>scrxpted</b>
++ <b>scrxpted ![Discord](https://discord.com/assets/images/favicon.ico "scrxpted")\[[Discord](https://discord.com/users/759071932276146216)\]</b>
     + Developer
     + Makes and fixes 80% of the issues
-+ <b>luckii</b>
++ <b>luckii ![Discord](https://discord.com/assets/images/favicon.ico "luckiiiiiiiiiiiiiii")\[[Discord](https://discord.com/users/900857825788583956)\]</b>
     + :\)
-+ <b>inumgaming</b>
++ <b>inumgaming \[?\]</b>
     + Contributor
 
 ## Features
