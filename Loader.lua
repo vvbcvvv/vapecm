@@ -71,6 +71,20 @@ end
 local function vapeGithubRequest(scripturl)
 	local replace = isfile("vape/"..scripturl) and readHash(readfile("vape/"..scripturl)) ~= commit or not isfile("vape/"..scripturl)
 	if replace then
+		task.spawn(function()
+			local textlabel = Instance.new("TextLabel")
+			textlabel.Size = UDim2.new(1, 0, 0, 36)
+			textlabel.Text = `{isfile("vape/"..scripturl) and 'Updating' or 'Downloading'} vape/{scripturl}`
+			textlabel.BackgroundTransparency = 1
+			textlabel.TextStrokeTransparency = 0
+			textlabel.TextSize = 30
+			textlabel.Font = Enum.Font.SourceSans
+			textlabel.TextColor3 = Color3.new(1, 1, 1)
+			textlabel.Position = UDim2.new(0, 0, 0, -36)
+			textlabel.Parent = GuiLibrary.MainGui
+			repeat task.wait() until isfile("vape/"..scripturl)
+			textlabel:Destroy()
+		end)
 		local suc, res
 		task.delay(15, function()
 			if not res and not errorPopupShown then 
