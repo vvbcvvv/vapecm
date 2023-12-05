@@ -69,17 +69,7 @@ if not commit then
 end
 
 local function vapeGithubRequest(scripturl)
-	local replace
-	if isfile("vape/"..scripturl) then
-		file_hash = readHash(readfile("vape/"..scripturl))
-		if file_hash then
-			replace = file_hash ~= commit
-		else
-			replace = true
-		end
-	else
-		replace = true
-	end
+	local replace = isfile("vape/"..scripturl) and readHash(readfile("vape/"..scripturl)) ~= commit or not isfile("vape/"..scripturl)
 	if replace then
 		local suc, res
 		task.delay(15, function()
