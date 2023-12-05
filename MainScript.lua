@@ -1885,18 +1885,18 @@ GeneralSettings.CreateButton2({
 })
 
 local function customload(data, file)
-	print(`Loading {file}.lua`)
+	if shared.DebugMode then print(`Loading {file}.lua`) end
 	local success, err = pcall(function(data)
 		local chunk = loadstring(data)
 		if chunk then
-			print(`Compiled {file}.lua`)
+			if shared.DebugMode then print(`Compiled {file}.lua`) end
 			return chunk()
 		else
 			return error(`unable to load {file}.lua (syntax error)`)
 		end
 	end, data)
 	if success then
-		print(`Executed {file}.lua`)
+		if shared.DebugMode then print(`Executed {file}.lua`) end
 	else
 		GuiLibrary.SaveSettings = function() end
 		task.spawn(error, "newvape uED - Failed to load "..file..".lua | "..err .. debug.traceback('\nTraceback: '))

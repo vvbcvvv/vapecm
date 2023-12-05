@@ -122,10 +122,6 @@ local AutoLeave = {Enabled = false}
 table.insert(vapeConnections, workspace:GetPropertyChangedSignal('CurrentCamera'):Connect(function()
 	gameCamera = workspace.CurrentCamera or workspace:FindFirstChildWhichIsA('Camera')
 end))
-local isfile = isfile or function(file)
-	local suc, res = pcall(function() return readfile(file) end)
-	return suc and res ~= nil
-end
 local networkownerswitch = tick()
 local IsA = game.IsA
 local oldisnetworkowner = isnetworkowner
