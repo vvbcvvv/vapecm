@@ -4741,6 +4741,34 @@ runFunction(function()
 		{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-65), math.rad(65), math.rad(-79)), Time = 0.1},
 		{CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-98), math.rad(35), math.rad(-56)), Time = 0.2}
 	},
+    Wearish = {
+        {CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.1},
+        {CFrame = CFrame.new(0.7, -0.71, 0.58) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.17}
+    },
+    --https://media.discordapp.net/attachments/1149060010177994792/1149060015655751720/image.png?ex=657a0288&is=65678d88&hm=a37a5b3a55e14f8874c6cae3e6dd658dd712199fb0351737ba365491aa3eed59&=&format=webp&quality=lossless&width=478&height=571
+    --https://media.discordapp.net/attachments/1149060010177994792/1156242027973980190/attachment.gif?ex=6581ae4d&is=656f394d&hm=b3b8bfcfa3c356ef7d0618229af567c151ef7213fe3ae1f2dc03b773b407ffeb&=&width=329&height=571
+    Assura = {
+        {CFrame = CFrame.new(0.67, -0.66, 0.57) * CFrame.Angles(math.rad(-46), math.rad(45.73), math.rad(-85)), Time = 0.1},
+        {CFrame = CFrame.new(0.72, -0.71, 0.62) * CFrame.Angles(math.rad(-73), math.rad(59), math.rad(-50)), Time = 0.2}
+    },
+    ["Assura Old"] = {
+        {CFrame = CFrame.new(0.65, -0.68, 0.57) * CFrame.Angles(math.rad(-46), math.rad(45.73), math.rad(-76)), Time = 0.15},
+        {CFrame = CFrame.new(0.77, -0.71, 0.62) * CFrame.Angles(math.rad(-73), math.rad(76), math.rad(-32)), Time = 0.17},
+        {CFrame = CFrame.new(0.63, -0.68, 0.57) * CFrame.Angles(math.rad(-46), math.rad(65), math.rad(-65)), Time = 0.21},
+        {CFrame = CFrame.new(0.73, -0.71, 0.62) * CFrame.Angles(math.rad(-73), math.rad(49), math.rad(-25)), Time = 0.26}
+    },
+    ["Assura Combined"] = {
+        {CFrame = CFrame.new(0.67, -0.66, 0.57) * CFrame.Angles(math.rad(-46), math.rad(45.73), math.rad(-85)), Time = 0.12},
+        {CFrame = CFrame.new(0.72, -0.71, 0.62) * CFrame.Angles(math.rad(-73), math.rad(59), math.rad(-50)), Time = 0.14},
+        {CFrame = CFrame.new(0.65, -0.68, 0.57) * CFrame.Angles(math.rad(-46), math.rad(45.73), math.rad(-76)), Time = 0.15},
+        {CFrame = CFrame.new(0.77, -0.71, 0.62) * CFrame.Angles(math.rad(-73), math.rad(76), math.rad(-32)), Time = 0.17},
+        {CFrame = CFrame.new(0.63, -0.68, 0.57) * CFrame.Angles(math.rad(-46), math.rad(65), math.rad(-65)), Time = 0.21},
+        {CFrame = CFrame.new(0.73, -0.71, 0.62) * CFrame.Angles(math.rad(-73), math.rad(49), math.rad(-25)), Time = 0.26}
+    },
+    ScrxptedIsBLACK = {
+        {CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-89), math.rad(68), math.rad(-56)), Time = 0.12},
+        {CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-65), math.rad(68), math.rad(-35)), Time = 0.19}
+    },
 }
 
 	local function closestpos(block, pos)
@@ -14798,3 +14826,114 @@ runFunction(function()
 	HealthbarTextColor.Object.Visible = false
 	HealthbarFont.Object.Visible = false
 end)
+
+runFunction(function()
+    NameHider = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+        Name = "NameHider",
+        Function = function(callback)
+            if callback then
+                while game:IsLoaded() == false do wait() end
+                local fakeplr = {["Name"] = "ROBLOX", ["UserId"] = "1"}
+                local otherfakeplayers = {["Name"] = "ROBLOX", ["UserId"] = "1"}
+                local lplr = game:GetService("Players").LocalPlayer
+
+                local function plrthing(obj, property)
+                    for i,v in pairs(game:GetService("Players"):GetChildren()) do
+                        if v ~= lplr then
+                            obj[property] = obj[property]:gsub(v.Name, otherfakeplayers["Name"])
+                            obj[property] = obj[property]:gsub(v.DisplayName, otherfakeplayers["Name"])
+                            obj[property] = obj[property]:gsub(v.UserId, otherfakeplayers["UserId"])
+                        else
+                            obj[property] = obj[property]:gsub(v.Name, fakeplr["Name"])
+                            obj[property] = obj[property]:gsub(v.DisplayName, fakeplr["Name"])
+                            obj[property] = obj[property]:gsub(v.UserId, fakeplr["UserId"])
+                        end
+                    end
+                end
+
+                local function newobj(v)
+                    if v:IsA("TextLabel") or v:IsA("TextButton") then
+                        plrthing(v, "Text")
+                        v:GetPropertyChangedSignal("Text"):connect(function()
+                            plrthing(v, "Text")
+                        end)
+                    end
+                    if v:IsA("ImageLabel") then
+                        plrthing(v, "Image")
+                        v:GetPropertyChangedSignal("Image"):connect(function()
+                            plrthing(v, "Image")
+                        end)
+                    end
+                end
+
+                for i,v in pairs(game:GetDescendants()) do
+                    newobj(v)
+                end
+                game.DescendantAdded:connect(newobj)
+            end
+        end
+    })
+end)
+
+local AntiCrash = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
+    Name = "AntiCrash",
+    Function = function(callback) 
+        if callback then
+            ScriptSettings.AntiCrash = true
+            while wait(1.5) do
+                if not ScriptSettings.AntiCrash == true then return end
+                if game:GetService("Workspace"):GetRealPhysicsFPS() < ScriptSettings.AntiCrash_MinFps then
+                    game:Shutdown()
+                    boxnotify("FPS Are under minimum. Closed game.")
+                end  
+                if math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue())) > ScriptSettings.AntiCrash_MaxPing then
+                    game:Shutdown()
+            boxnotify("Crash Warning: Closed Game.")
+                end
+            end       
+        else
+            ScriptSettings.AntiCrash = false
+        end
+    end,
+    Default = false,
+    HoverText = "Automatically shutdowns game when fps or ping too low/high, sliders done by Zyals"
+})
+AntiCrash.CreateSlider({
+    ["Name"] = "MinFps",
+    ["Min"] = 0,
+    ["Max"] = 100,
+    ["Function"] = function(val)
+        ScriptSettings.AntiCrash_MinFps = val
+    end,
+    ["HoverText"] = "Minimum fps before closing roblox",
+    ["Default"] = 10
+})
+AntiCrash.CreateSlider({
+    ["Name"] = "MaxPing",
+    ["Min"] = 1000,
+    ["Max"] = 100000,
+    ["Function"] = function(val)
+        ScriptSettings.AntiCrash_MaxPing = val
+    end,
+    ["HoverText"] = "Minimum fps before closing roblox",
+    ["Default"] = 10
+})
+
+--muni
+local Messages = {"Zap","Wham","Kapow","Kaboom","Thump","Pow"}
+CustomButton = GuiLibrary["ObjectsThatCanBeSaved"]["UtilityWindow"]["Api"].CreateOptionsButton({
+        ["Name"] = "Juul SuperFx!",
+        ["HoverText"] = "SuperFx!",
+        ["Function"] = function(callback)
+            if callback then
+                debug.setupvalue(bedwars.DamageIndicator, 10, {
+                    Create = function(moonalicous, MessageParent, ...)
+                        if not MessageParent.Parent:IsA("TextLabel") then return end
+                        MessageParent.Parent.Text = Messages[math.random(1, #Messages)]
+                        MessageParent.Parent.TextColor3 =  Color3.fromHSV(tick()%5/5,1,1)
+                    end
+                })
+            end
+        end
+    end
+})
