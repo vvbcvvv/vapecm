@@ -941,7 +941,7 @@ if shared.VapeExecuted then
 				local hoverround3 = Instance.new("UICorner")
 				hoverround3.CornerRadius = UDim.new(0, 4)
 				hoverround3.Parent = hoverbox3
-				setclipboard("https://discord.gg/rQwt7wxpSH")
+				setclipboard("https://discord.gg/fjWsAP6xr6")
 				task.wait(1)
 				hoverbox3:Remove()
 			end)
