@@ -26,6 +26,9 @@
 + <b>inumgaming \[?\]</b>
     + Contributor
 
++ <b>Me \[?\]</b>
+    + Contributor
+
 ## Features
 + Invisibility
     + Hides your character below the map (you are still visible if they look towards the void)
