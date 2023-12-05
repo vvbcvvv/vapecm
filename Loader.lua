@@ -7,6 +7,10 @@ local isfile = isfile or function(file)
 end
 local delfile = delfile or function(file) writefile(file, "") end
 
+if not isfolder("vape") then
+	makefolder("vape")
+end
+
 local function displayErrorPopup(text, func)
 	local oldidentity = getidentity()
 	setidentity(8)
@@ -28,11 +32,55 @@ local function displayErrorPopup(text, func)
 	setidentity(oldidentity)
 end
 
-local lawlwatermark = "-- credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq\n"
-local lawlregex = '-- credits to all of those who participated in fixing this project'
+local vapeWatermark = [===[--[=[
+	Current Hash: placeholderGithubCommitHashStringForVape
+	newvape uED (user edition)
+	Discord: https://discord.gg/Qx4cNHBvJq
+]=]
+"]===]
+
+local function readHash(data)
+	local hash = data:sub(22, 61)
+	if hash == 'placeholderGithubCommitHashStringForVape' then
+		return false
+	end
+	if hash:gsub('%W+', '') == hash then
+		return hash
+	end
+	return false
+end
+
+local function writeHash(data, hash)
+	return vapeWatermark:gsub('placeholderGithubCommitHashStringForVape', hash) .. data
+end
+
+local commit = "main"
+for i,v in pairs(game:HttpGet("https://github.com/skiddinglua/NewVapeUnpatched4Roblox"):split("\n")) do 
+	if v:find("commit") and v:find("fragment") then 
+		local str = v:split("/")[5]
+		commit = str:sub(0, str:find('"') - 1)
+		break
+	end
+end
+
+if not commit then
+	displayErrorPopup("Failed to connect to github, please try using a VPN.")
+	error("Failed to connect to github, please try using a VPN.")
+end
 
 local function vapeGithubRequest(scripturl)
-	if not isfile("vape/"..scripturl) then
+	local replace
+	if isfile("vape/"..scripturl) then
+		file_hash = readHash(readfile("vape/"..scripturl))
+		if file_hash then
+			replace = file_hash ~= commit
+		else
+			replace = true
+		end
+	else
+		replace = true
+	end
+	if replace then
 		local suc, res
 		task.delay(15, function()
 			if not res and not errorPopupShown then 
@@ -40,58 +88,17 @@ local function vapeGithubRequest(scripturl)
 				displayErrorPopup("The connection to github is taking a while, Please be patient.")
 			end
 		end)
-		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
+		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..commit.."/"..scripturl, true) end)
 		if not suc or res == "404: Not Found" then
 			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
 			error(res)
 		end
-		if scripturl:match("^[lua]") then res = lawlwatermark..res end
+		if scripturl:match(".lua") then res = writeHash(res, commit) end
 		writefile("vape/"..scripturl, res)
 	end
 	return readfile("vape/"..scripturl)
 end
 
-if not shared.VapeDeveloper then 
-	local commit = "main"
-	for i,v in pairs(game:HttpGet("https://github.com/skiddinglua/NewVapeUnpatched4Roblox"):split("\n")) do 
-		if v:find("commit") and v:find("fragment") then 
-			local str = v:split("/")[5]
-			commit = str:sub(0, str:find('"') - 1)
-			break
-		end
-	end
-	if commit then
-		if isfolder("vape") then 
-			if ((not isfile("vape/commithash.txt")) or (readfile("vape/commithash.txt") ~= commit or commit == "main")) then
-				for i,v in pairs({"vape/Universal.lua", "vape/MainScript.lua", "vape/GuiLibrary.lua"}) do 
-					if isfile(v) and ({readfile(v):find(lawlregex)})[1] == 1 then
-						delfile(v)
-					end 
-				end
-				if isfolder("vape/CustomModules") then 
-					for i,v in pairs(listfiles("vape/CustomModules")) do 
-						if isfile(v) and ({readfile(v):find(lawlregex)})[1] == 1 then
-							delfile(v)
-						end 
-					end
-				end
-				if isfolder("vape/Libraries") then 
-					for i,v in pairs(listfiles("vape/Libraries")) do 
-						if isfile(v) and ({readfile(v):find(lawlregex)})[1] == 1 then
-							delfile(v)
-						end 
-					end
-				end
-				writefile("vape/commithash.txt", commit)
-			end
-		else
-			makefolder("vape")
-			writefile("vape/commithash.txt", commit)
-		end
-	else
-		displayErrorPopup("Failed to connect to github, please try using a VPN.")
-		error("Failed to connect to github, please try using a VPN.")
-	end
-end
+getgenv().vapeGithubRequest = vapeGithubRequest -- simplicity
 
 return loadstring(vapeGithubRequest("MainScript.lua"))()

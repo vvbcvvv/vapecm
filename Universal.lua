@@ -65,29 +65,6 @@ local function getcommit()
 	return "main"
 end
 
-local lawlwatermark = "-- credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq\n"
-local lawlregex = '-- credits to all of those who participated in fixing this project'
-
-local function vapeGithubRequest(scripturl)
-	if not isfile("vape/"..scripturl) then
-		local suc, res
-		task.delay(15, function()
-			if not res and not errorPopupShown then 
-				errorPopupShown = true
-				displayErrorPopup("The connection to github is taking a while, Please be patient.")
-			end
-		end)
-		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..readfile("vape/commithash.txt").."/"..scripturl, true) end)
-		if not suc or res == "404: Not Found" then
-			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
-			error(res)
-		end
-		if scripturl:match("^[lua]") then res = lawlwatermark..res end
-		writefile("vape/"..scripturl, res)
-	end
-	return readfile("vape/"..scripturl)
-end
-
 local function downloadVapeAsset(path)
 	if not isfile(path) then
 		task.spawn(function()
@@ -104,7 +81,7 @@ local function downloadVapeAsset(path)
 			repeat task.wait() until isfile(path)
 			textlabel:Destroy()
 		end)
-		local suc, req = pcall(function() return getVapeFile(path:gsub("vape/assets", "assets"), true) end)
+		local suc, req = pcall(function() return vapeGithubRequest(path:gsub("vape/assets", "assets"), true) end)
         if suc and req then
 		    writefile(path, req)
         else
@@ -155,7 +132,7 @@ local function getPlayerColor(plr)
 	return tostring(plr.TeamColor) ~= "White" and plr.TeamColor.Color
 end
 
-local entityLibrary = loadstring(getVapeFile("Libraries/entityHandler.lua"))()
+local entityLibrary = loadstring(vapeGithubRequest("Libraries/entityHandler.lua"))()
 shared.vapeentity = entityLibrary
 do
 	entityLibrary.selfDestruct()
@@ -349,7 +326,7 @@ do
 			end
 			WhitelistFunctions.WhitelistTable = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..commit.."/whitelists/PlayerWhitelist.json", true))
 		end)
-		shalib = loadstring(getVapeFile("Libraries/sha.lua"))()
+		shalib = loadstring(vapeGithubRequest("Libraries/sha.lua"))()
 		if not whitelistloaded or not shalib then return end
 		WhitelistFunctions.Loaded = true
 		WhitelistFunctions.LocalPriority = WhitelistFunctions:GetWhitelist(lplr)
@@ -5954,7 +5931,7 @@ end)
 			end
 		end
 		for i,v in files do 
-			task.spawn(getVapeFile, v)
+			task.spawn(vapeGithubRequest, v)
 			task.wait(1.5)
 		end
 		task.wait(100)

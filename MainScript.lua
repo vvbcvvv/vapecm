@@ -181,26 +181,6 @@ local function displayErrorPopup(text, funclist)
 	setidentity(oldidentity)
 end
 
-local function getVapeFile(file, nolawl)
-    if not isfolder("vape") then 
-        makefolder("vape")
-    end
-    local lawlwatermark = "-- lawl, credits to all of those who participated in fixing this project. https://discord.gg/Qx4cNHBvJq"
-    if not isfile("vape/"..file) or readfile("vape/"..file):find(lawlwatermark) == nil and not nolawl or nolawl and readfile("vape/"..file):find(lawlwatermark) == nil then 
-        local success, response = pcall(function()
-            return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..file, true) 
-        end)
-        if success and response ~= "404: Not Found" then 
-            response = (file:split(".")[#file:split(".")] == "lua" and lawlwatermark.."\n"..response or response)
-            writefile("vape/"..file, response)
-            return response
-        else
-            return error("Vape Unpatched - Failed to download "..file.." | HTTP 404")
-        end 
-    end
-    return isfile("vape/"..file) and readfile("vape/"..file) or error("Vape Unpatched - Failed to read "..file.." | HTTP 404")
-end
-
 local function downloadVapeAsset(path)
 	return vapeAssetTable[path] 
 end
@@ -212,7 +192,7 @@ for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "vape/Libraries", "vape/C
 	if not isfolder(v) then makefolder(v) end
 end
 
-GuiLibrary = loadstring(getVapeFile("GuiLibrary.lua"))()
+GuiLibrary = loadstring(vapeGithubRequest("GuiLibrary.lua"))()
 shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
@@ -1844,7 +1824,7 @@ GeneralSettings.CreateButton2({
 		shared.VapeSwitchServers = true
 		shared.VapeOpenGui = true
 		shared.VapePrivate = vapePrivateCheck
-		loadstring(getVapeFile("NewMainScript.lua"))()
+		loadstring(vapeGithubRequest("NewMainScript.lua"))()
 	end
 })
 GUISettings.CreateButton2({
@@ -1934,12 +1914,12 @@ end
 
 local function loadVape()
 	if true then -- removed shared.VapeIndepentant thingy
-		customload(getVapeFile("Universal.lua"), 'Universal')
+		customload(vapeGithubRequest("Universal.lua"), 'Universal')
 		if isBedwars then
 			shared.CustomSaveVape = 6872274481
-			customload(getVapeFile("CustomModules/6872274481.lua"), "6872274481")
+			customload(vapeGithubRequest("CustomModules/6872274481.lua"), "6872274481")
 		else
-			local success, response = pcall(getVapeFile, "CustomModules/"..game.PlaceId..".lua")
+			local success, response = pcall(vapeGithubRequest, "CustomModules/"..game.PlaceId..".lua")
 			if success and response then 
 				customload(response, game.PlaceId)
 			else
