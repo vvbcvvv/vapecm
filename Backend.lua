@@ -111,7 +111,7 @@ loader_gui.Parent = lplr.PlayerGui
 
 local function vapeGithubRequest(scripturl)
 	local oldCommit = isfile("vape/"..scripturl) and readHash(readfile("vape/"..scripturl))
-	local newCommit = getFileCommit(scripturl)
+	local newCommit = base_commit -- getFileCommit(scripturl)
 	local replace = oldCommit ~= newCommit or not isfile("vape/"..scripturl)
 	if replace then
 		task.spawn(function()
