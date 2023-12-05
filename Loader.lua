@@ -93,14 +93,14 @@ local function vapeGithubRequest(scripturl)
 	if replace then
 		task.spawn(function()
 			local textlabel = Instance.new("TextLabel")
-			textlabel.Size = UDim2.new(1, 0, 0, 36)
+			textlabel.Size = UDim2.new(1, 0, 0, 66)
 			textlabel.Text = `{oldCommit and 'Updating' or 'Downloading'} vape/{scripturl}{oldCommit and `\nfrom {oldCommit:sub(0, 7)} to {commit:sub(0, 7)}` or ''}`
 			textlabel.BackgroundTransparency = 1
 			textlabel.TextStrokeTransparency = 0
 			textlabel.TextSize = 30
 			textlabel.Font = Enum.Font.SourceSans
 			textlabel.TextColor3 = Color3.new(1, 1, 1)
-			textlabel.Position = UDim2.new(0, 0, 0, -36)
+			textlabel.Position = UDim2.new(0, 0, 0, -66)
 			textlabel.Parent = loader_gui
 			repeat task.wait() until isfile("vape/"..scripturl)
 			textlabel:Destroy()
