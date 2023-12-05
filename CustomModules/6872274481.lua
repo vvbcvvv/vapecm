@@ -23,7 +23,6 @@
 		Atmosphere - blxnk
 		HotbarMods - blxnk
 		AntiNoclip - blxnk
-		HotbarMods - blxnk
 		HealthbarMods - blxnk
 
 ]===]
