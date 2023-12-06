@@ -470,7 +470,7 @@ if shared.VapeExecuted then
 
 	GuiLibrary.SaveSettings = function()
 		if not loadedsuccessfully then return end
-		writefile(baseDirectory.."Profiles/"..(bedwars and "6872274481" or shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt", httpService:JSONEncode(GuiLibrary.Profiles))
+		writefile(baseDirectory.."Profiles/"..(isBedwars and "6872274481" or shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt", httpService:JSONEncode(GuiLibrary.Profiles))
 		local WindowTable = {}
 		for i,v in pairs(GuiLibrary.ObjectsThatCanBeSaved) do
 			if v.Type == "Window" then
