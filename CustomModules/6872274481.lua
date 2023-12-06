@@ -19,12 +19,14 @@
 		NoPing - scrxpted
 		Privacy - scrxpted
 		FpsBoostPlus - scrxpted
+		NameHider - scrxpted
 
 		Atmosphere - blxnk
 		HotbarMods - blxnk
 		AntiNoclip - blxnk
 		HealthbarMods - blxnk
 
+		Juul SuperFx! - muni
 ]===]
 
 local GuiLibrary = shared.GuiLibrary
@@ -14690,7 +14692,7 @@ runFunction(function()
 	end
 	HealthbarMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = 'HealthbarMods',
-		HoverText = 'Customize the color of your healthbar.\nAdd "<health>" to your custom text dropdown (if custom text enabled)to insert your health.',
+		HoverText = 'Customize the color of your healthbar.\nAdd \'<health>\' to your custom text dropdown (if custom text enabled)to insert your health.',
 		Function = function(callback)
 			if callback then 
 				task.spawn(function()
@@ -14828,112 +14830,92 @@ runFunction(function()
 end)
 
 runFunction(function()
-    NameHider = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-        Name = "NameHider",
-        Function = function(callback)
-            if callback then
-                while game:IsLoaded() == false do wait() end
-                local fakeplr = {["Name"] = "ROBLOX", ["UserId"] = "1"}
-                local otherfakeplayers = {["Name"] = "ROBLOX", ["UserId"] = "1"}
-                local lplr = game:GetService("Players").LocalPlayer
+	local NameHider = {Enabled = true}
 
-                local function plrthing(obj, property)
-                    for i,v in pairs(game:GetService("Players"):GetChildren()) do
-                        if v ~= lplr then
-                            obj[property] = obj[property]:gsub(v.Name, otherfakeplayers["Name"])
-                            obj[property] = obj[property]:gsub(v.DisplayName, otherfakeplayers["Name"])
-                            obj[property] = obj[property]:gsub(v.UserId, otherfakeplayers["UserId"])
-                        else
-                            obj[property] = obj[property]:gsub(v.Name, fakeplr["Name"])
-                            obj[property] = obj[property]:gsub(v.DisplayName, fakeplr["Name"])
-                            obj[property] = obj[property]:gsub(v.UserId, fakeplr["UserId"])
-                        end
-                    end
-                end
+	local fakeplr = {Name = 'normal', UserId = '239702688'}
+	local otherfakeplayers = {Name = 'immigrant', UserId = '1'}
 
-                local function newobj(v)
-                    if v:IsA("TextLabel") or v:IsA("TextButton") then
-                        plrthing(v, "Text")
-                        v:GetPropertyChangedSignal("Text"):connect(function()
-                            plrthing(v, "Text")
-                        end)
-                    end
-                    if v:IsA("ImageLabel") then
-                        plrthing(v, "Image")
-                        v:GetPropertyChangedSignal("Image"):connect(function()
-                            plrthing(v, "Image")
-                        end)
-                    end
-                end
+	local function sanitizeString(_instance : Instance, property : String)
+		for i,v in next, playersService:GetPlayers() do
+			if v ~= lplr then
+				_instance[property] = _instance[property]:gsub(v.Name, otherfakeplayers.Name)
+				_instance[property] = _instance[property]:gsub(v.DisplayName, otherfakeplayers.Name)
+				_instance[property] = _instance[property]:gsub(v.UserId, otherfakeplayers.UserId)
+			else
+				_instance[property] = _instance[property]:gsub(v.Name, fakeplr.Name)
+				_instance[property] = _instance[property]:gsub(v.DisplayName, fakeplr.Name)
+				_instance[property] = _instance[property]:gsub(v.UserId, fakeplr.UserId)
+			end
+		end
+	end
 
-                for i,v in pairs(game:GetDescendants()) do
-                    newobj(v)
-                end
-                game.DescendantAdded:connect(newobj)
-            end
-        end
-    })
+	local function fixInstance(_instance : Instance)
+		if _instance:IsA('TextLabel') or _instance:IsA('TextButton') then
+			table.insert(NameHider.Connections, _instance:GetPropertyChangedSignal('Text'):Connect(function()
+				sanitizeString(_instance, 'Text')
+			end))
+			sanitizeString(_instance, 'Text')
+		end
+		if _instance:IsA('ImageLabel') then
+			table.insert(NameHider.Connections, _instance:GetPropertyChangedSignal('Image'):Connect(function()
+				sanitizeString(_instance, 'Image')
+			end))
+			sanitizeString(_instance, 'Image')
+		end
+	end
+
+	local function cleanDescendants(parent : Instance)
+		for _, _instance in next, parent:GetDescendants() do
+			fixInstance(_instance)
+		end
+		table.insert(NameHider.Connections, parent.DescendantAdded:Connect(fixInstance))
+	end
+
+	NameHider = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = 'NameHider',
+		Function = function(callback)
+			if callback then
+				cleanDescendants(workspace)
+				cleanDescendants(lplr.PlayerGui)
+				cleanDescendants(coreGui)
+			else
+				singleWarning('NameHider', 'Join a new match to see names normally', 3) -- Not caching names and userids for disabling due to memory overloading + shit preformance
+			end
+		end
+	})
 end)
 
-local AntiCrash = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
-    Name = "AntiCrash",
-    Function = function(callback) 
-        if callback then
-            ScriptSettings.AntiCrash = true
-            while wait(1.5) do
-                if not ScriptSettings.AntiCrash == true then return end
-                if game:GetService("Workspace"):GetRealPhysicsFPS() < ScriptSettings.AntiCrash_MinFps then
-                    game:Shutdown()
-                    boxnotify("FPS Are under minimum. Closed game.")
-                end  
-                if math.floor(tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue())) > ScriptSettings.AntiCrash_MaxPing then
-                    game:Shutdown()
-            boxnotify("Crash Warning: Closed Game.")
-                end
-            end       
-        else
-            ScriptSettings.AntiCrash = false
-        end
-    end,
-    Default = false,
-    HoverText = "Automatically shutdowns game when fps or ping too low/high, sliders done by Zyals"
-})
-AntiCrash.CreateSlider({
-    ["Name"] = "MinFps",
-    ["Min"] = 0,
-    ["Max"] = 100,
-    ["Function"] = function(val)
-        ScriptSettings.AntiCrash_MinFps = val
-    end,
-    ["HoverText"] = "Minimum fps before closing roblox",
-    ["Default"] = 10
-})
-AntiCrash.CreateSlider({
-    ["Name"] = "MaxPing",
-    ["Min"] = 1000,
-    ["Max"] = 100000,
-    ["Function"] = function(val)
-        ScriptSettings.AntiCrash_MaxPing = val
-    end,
-    ["HoverText"] = "Minimum fps before closing roblox",
-    ["Default"] = 10
-})
+-- kill yourself 0piss
 
---muni
-local Messages = {"Zap","Wham","Kapow","Kaboom","Thump","Pow"}
-CustomButton = GuiLibrary["ObjectsThatCanBeSaved"]["UtilityWindow"]["Api"].CreateOptionsButton({
-        ["Name"] = "Juul SuperFx!",
-        ["HoverText"] = "SuperFx!",
-        ["Function"] = function(callback)
-            if callback then
-                debug.setupvalue(bedwars.DamageIndicator, 10, {
-                    Create = function(moonalicous, MessageParent, ...)
-                        if not MessageParent.Parent:IsA("TextLabel") then return end
-                        MessageParent.Parent.Text = Messages[math.random(1, #Messages)]
-                        MessageParent.Parent.TextColor3 =  Color3.fromHSV(tick()%5/5,1,1)
-                    end
-                })
-            end
-        end
-    end
-})
+--[===[
+
+			                                  $$\ 
+			                                  \__|
+			$$$$$$\$$$$\  $$\   $$\ $$$$$$$\  $$\ 
+			$$  _$$  _$$\ $$ |  $$ |$$  __$$\ $$ |
+			$$ / $$ / $$ |$$ |  $$ |$$ |  $$ |$$ |
+			$$ | $$ | $$ |$$ |  $$ |$$ |  $$ |$$ |
+			$$ | $$ | $$ |\$$$$$$  |$$ |  $$ |$$ |
+			\__| \__| \__| \______/ \__|  \__|\__|
+
+]===]
+runFunction(function()
+	local Messages = {'Zap', 'Wham', 'Kapow', 'Kaboom', 'Thump', 'Pow'}
+	CustomButton = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = 'Juul SuperFx!',
+		HoverText = 'SuperFx!',
+		Function = function(callback)
+			if callback then
+				debug.setupvalue(bedwars.DamageIndicator, 10, {
+					Create = function(self, MessageParent, ...)
+						if not MessageParent.Parent:IsA('TextLabel') then return end
+						MessageParent.Parent.Text = Messages[math.random(1, #Messages)]
+						MessageParent.Parent.TextColor3 =  Color3.fromHSV(tick()%5/5,1,1)
+					end
+				})
+			else
+				debug.setupvalue(bedwars.DamageIndicator, 10, tweenService)
+			end
+		end
+	})
+end)
