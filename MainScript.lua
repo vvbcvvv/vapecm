@@ -1,6 +1,6 @@
 repeat task.wait() until game:IsLoaded()
 local data = game:GetService("TeleportService"):GetLocalPlayerTeleportData()
-if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 or game.PlaceId ~= 6872274481 or game.PlaceId ~= 8444591321 then 
+if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 then 
     getgenv().isBedwars = true
 end
 
@@ -1889,7 +1889,7 @@ local function debugLoad(data, file)
 		local chunk = loadstring(data)
 		if chunk then
 			print(`Compiled {file}.lua`)
-			return chunk
+			return chunk()
 		else
 			return error(`unable to load {file}.lua (syntax error)`)
 		end
