@@ -26,7 +26,7 @@
 		AntiNoclip - blxnk
 		HealthbarMods - blxnk
 
-		Juul SuperFx! - muni
+		Juul SuperFx! - muni (old)
 ]===]
 
 local GuiLibrary = shared.GuiLibrary
