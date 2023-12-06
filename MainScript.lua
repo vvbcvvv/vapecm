@@ -1885,7 +1885,7 @@ GeneralSettings.CreateButton2({
 })
 
 local function customload(data, file)
-	if shared.DebugMode then print(`Loading {file}.lua`) end
+	print(`Loading {file}.lua`)
 	local success, err = pcall(function(data)
 		local chunk = loadstring(data)
 		if chunk then
@@ -1896,7 +1896,7 @@ local function customload(data, file)
 		end
 	end, data)
 	if success then
-		if shared.DebugMode then print(`Executed {file}.lua`) end
+		print(`Executed {file}.lua`)
 	else
 		GuiLibrary.SaveSettings = function() end
 		task.spawn(error, "newvape uED - Failed to load "..file..".lua | "..err .. debug.traceback('\nTraceback: '))
@@ -1904,7 +1904,7 @@ local function customload(data, file)
 			local notification = GuiLibrary.CreateNotification("Failure loading "..file..".lua", err, 25, "assets/WarningNotification.png")
 			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 			notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
-	    end)
+		end)
 	end
 end
 
