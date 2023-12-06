@@ -14,19 +14,18 @@
 
 ## People:
 
-+ <b>0prime (me) \[[Discord](https://discord.com/users/1095127276099752078)\]</b>
++ <b>0prime (skiddinglua) \[[Discord](https://discord.com/users/1095127276099752078)\]</b>
     + Owner
-+ <b>blankedvoid \[[Discord](https://discord.com/users/841083857050665000)\]</b>
++ <b>blankedvoid (SystemXVoid) \[[Discord](https://discord.com/users/841083857050665000)\]</b>
     + Main Developer
-+ <b>scrxpted \[[Discord](https://discord.com/users/759071932276146216)\]</b>
++ <b>scrxpted (supercellgamer) \[[Discord](https://discord.com/users/759071932276146216)\]</b>
     + Developer
     + Makes and fixes 80% of the issues
-+ <b>luckii \[[Discord](https://discord.com/users/900857825788583956)\]</b>
++ <b>luckii (?) \[[Discord](https://discord.com/users/900857825788583956)\]</b>
     + :\)
-+ <b>inumgaming \[?\]</b>
++ <b>inumgaming (?) \[[Discord](https://discord.com/users/1170324143015727148)\]</b>
     + Contributor
-
-+ <b>Me \[[Discord](https://discord.com/users/1128579930586877962)\]</b>
++ <b>Me (kaithub) \[[Discord](https://discord.com/users/1128579930586877962)\]</b>
     + Contributor
 
 ## Features
