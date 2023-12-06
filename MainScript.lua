@@ -1,6 +1,6 @@
 repeat task.wait() until game:IsLoaded()
 local data = game:GetService("TeleportService"):GetLocalPlayerTeleportData()
-if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 then 
+if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 or game.PlaceId ~= 6872274481 then 
     getgenv().isBedwars = true
 end
 
