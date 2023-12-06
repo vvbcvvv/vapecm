@@ -1884,12 +1884,12 @@ GeneralSettings.CreateButton2({
 	Function = GuiLibrary.SelfDestruct
 })
 
-local function customload(data, file)
+local function debugLoad(data, file)
 	print(`Loading {file}.lua`)
 	local success, err = pcall(function(data)
 		local chunk = loadstring(data)
 		if chunk then
-			if shared.DebugMode then print(`Compiled {file}.lua`) end
+			print(`Compiled {file}.lua`)
 			return chunk
 		else
 			return error(`unable to load {file}.lua (syntax error)`)
@@ -1899,25 +1899,25 @@ local function customload(data, file)
 		print(`Executed {file}.lua`)
 	else
 		GuiLibrary.SaveSettings = function() end
-		task.spawn(error, "newvape uED - Failed to load "..file..".lua | "..err .. debug.traceback('\nTraceback: '))
 		pcall(function()
 			local notification = GuiLibrary.CreateNotification("Failure loading "..file..".lua", err, 25, "assets/WarningNotification.png")
 			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 			notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 		end)
+		error("newvape uED - Failed to load "..file..".lua | "..err .. debug.traceback('\nTraceback: '))
 	end
 end
 
 local function loadVape()
 	if true then -- removed shared.VapeIndepentant thingy
-		customload(vapeGithubRequest("Universal.lua"), 'Universal')
+		debugLoad(vapeGithubRequest("Universal.lua"), 'Universal')
 		if isBedwars then
 			shared.CustomSaveVape = 6872274481
-			customload(vapeGithubRequest("CustomModules/6872274481.lua"), "6872274481")
+			debugLoad(vapeGithubRequest("CustomModules/6872274481.lua"), "6872274481")
 		else
 			local success, response = pcall(vapeGithubRequest, "CustomModules/"..game.PlaceId..".lua")
 			if success and response then 
-				customload(response, game.PlaceId)
+				debugLoad(response, game.PlaceId)
 			else
 				local notification = GuiLibrary.CreateNotification('Vape', 'CustomModule ('..game.PlaceId..') not found', 10, "assets/WarningNotification.png")
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
