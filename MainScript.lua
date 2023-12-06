@@ -1890,7 +1890,7 @@ local function customload(data, file)
 		local chunk = loadstring(data)
 		if chunk then
 			if shared.DebugMode then print(`Compiled {file}.lua`) end
-			return chunk()
+			return chunk
 		else
 			return error(`unable to load {file}.lua (syntax error)`)
 		end
