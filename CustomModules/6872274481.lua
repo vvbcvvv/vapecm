@@ -12776,10 +12776,8 @@ runFunction(function()
 	task.wait(0.3)
 	local AnticheatBypass = {Enabled = false}
 	local AnticheatBypassShowRoot = {Enabled = false}
-	local AnticheatBypassOnlyScythe = {Enabled = true}
 
 	local BypassNumbers = {
-		Speed = 1000,
 		Lerp = 0.3,
 		Frequency = 0.33,
 		TPLowest = 0.05,
@@ -12918,13 +12916,6 @@ runFunction(function()
 				task.spawn(function()
 					if bedwarsStore.matchState == 0 then
 						repeat task.wait() until bedwarsStore.matchState ~= 0 or not AnticheatBypass.Enabled
-						if not AnticheatBypass.Enabled then
-							return
-						end
-					end
-					if AnticheatBypassOnlyScythe.Enabled then
-						repeat task.wait(0.1) until not (AnticheatBypass.Enabled and AnticheatBypassOnlyScythe.Enabled) or bedwarsStore.hasScythe
-						task.wait(1)
 						if not AnticheatBypass.Enabled then
 							return
 						end
@@ -13229,13 +13220,6 @@ runFunction(function()
 			end
 		end
 	})
-	--[=[AnticheatBypass.CreateSlider({
-		Name = 'Speed',
-		Min = 0,
-		Max = 1400,
-		Default = BypassNumbers.Speed,
-		Function = function(val) BypassNumbers.Speed = val end
-	})]=]
 	AnticheatBypass.CreateSlider({
 		Name = 'Lerp',
 		Min = 0,
