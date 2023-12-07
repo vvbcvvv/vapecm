@@ -1,3 +1,4 @@
+-- broken
 repeat task.wait() until game:IsLoaded()
 local data = game:GetService("TeleportService"):GetLocalPlayerTeleportData()
 if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 then 
