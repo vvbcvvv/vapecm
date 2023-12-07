@@ -14895,8 +14895,7 @@ end)
 			\__| \__| \__| \______/ \__|  \__|\__|
 
 ]===]
---put in brackets until further due (testing)
---[[runFunction(function()
+runFunction(function()
 	local Messages = {'Zap', 'Wham', 'Kapow', 'Kaboom', 'Thump', 'Pow'}
 	CustomButton = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'Dmg Indicators',
@@ -14915,4 +14914,4 @@ end)
 			end
 		end
 	})
-end)]]
+end)

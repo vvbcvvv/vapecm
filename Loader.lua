@@ -1,3 +1,4 @@
+--OMG CUSTOM LOADER FOR NEWVAPE?!!?!?!?!?!?!!
 local commit = 'main'
 for i,v in pairs(game:HttpGet('https://github.com/skiddinglua/NewVapeUnpatched4Roblox'):split('\n')) do 
 	if v:find('commit') and v:find('fragment') then 
