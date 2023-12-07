@@ -1,3 +1,4 @@
+--asset upd soon O_O
 if shared.VapeExecuted then
 	local VERSION = "4.10 LAWL"
 	local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")

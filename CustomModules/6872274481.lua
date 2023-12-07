@@ -25,8 +25,7 @@
 		HotbarMods - blxnk
 		AntiNoclip - blxnk
 		HealthbarMods - blxnk
-
-		Juul SuperFx! - muni (old)
+		
 ]===]
 
 local GuiLibrary = shared.GuiLibrary
@@ -11827,6 +11826,7 @@ local GuiHandler = {}
 do
 	local GuiPositions = {}
 	local DraggableGuis = {}
+	--pistonware reference
 	local SavePath = string.format('vape/Profiles/%sPistonwareGUIPositions.json', shared.CustomSaveVape or game.PlaceId)
 
 	function GuiHandler.Save()
@@ -12299,12 +12299,12 @@ do
 	end
 end
 
-runFunction(function()
+--[[runFunction(function()
 	local ChatMover = {Enabled = false}
 	local chatApp
 	local oldChatPosition
 
-	ChatMover = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	ChatMover = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'ChatMover',
 		Function = function(callback)
 			if callback then
@@ -12324,7 +12324,7 @@ runFunction(function()
 			end
 		end
 	})
-end)
+end)]]
 
 runFunction(function()
 	local InvisNoCollide = {Enabled = false}
@@ -12404,7 +12404,7 @@ runFunction(function()
 			setCollisions(lplr.Character, true)
 		end
 	end
-	Invis = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+	Invis = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'Invis',
 		Function = function(callback)
 			if callback then
@@ -12725,7 +12725,7 @@ runFunction(function()
 		end
 	}
 
-	Teleport = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+	Teleport = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'Teleport',
 		Function = function(callback)
 			if callback then
@@ -12910,7 +12910,7 @@ runFunction(function()
 	end
 
 	local pausedvelo = false
-	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
+	AnticheatBypass = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'AnticheatAbuse',
 		HoverText = 'gives the anticheat ptsd so you don\'t get lagbacked',
 		Function = function(callback)
@@ -13370,7 +13370,7 @@ runFunction(function()
 		ResetRemote:SendToServer()
 	end)
 
-	KeepInventory = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+	KeepInventory = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'KeepInventory',
 		Function = function(callback)
 			if callback then
@@ -13438,7 +13438,7 @@ runFunction(function()
 	local oldCreatePing
 	local oldCooldown
 
-	NoPing = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	NoPing = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'NoPing',
 		Function = function(callback)
 			if callback then
@@ -13474,7 +13474,7 @@ runFunction(function()
 	local newMetatable
 	local oldFireServer2
 
-	Privacy = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+	Privacy = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'Privacy',
 		Function = function(callback)
 			if callback then
@@ -13592,7 +13592,7 @@ runFunction(function()
 		end
 	end
 
-	FpsBoostPlus = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+	FpsBoostPlus = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'FpsBoostPlus',
 		Function = function(callback)
 			task.spawn(function()
@@ -14273,7 +14273,7 @@ runFunction(function()
 	end
 }
 
-Atmosphere = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+Atmosphere = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'Atmosphere',
 		ExtraText = function()
 			return AtmosphereMethod.Value ~= 'Custom' and AtmosphereMethod.Value or ''
@@ -14424,9 +14424,10 @@ Atmosphere = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButt
 	table.insert(skythemeobjects, SkyMoon)
 end)
 
+--extremely useful module!!
 runFunction(function()
 	local AntiNoclip = {Enabled = false}
-	AntiNoclip = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsButton({
+	AntiNoclip = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'AntiNoclip',
 		HoverText = 'Prevents you from noclipping into the ground when landing from\nInfiniteFly etc. (Prevents being lagbacked using infinitefly)',
 		Function = function(callback)
@@ -14501,7 +14502,7 @@ runFunction(function()
 			end 
 		end
 	end
-	HotbarMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	HotbarMods = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'HotbarMods',
 		HoverText = 'Add customization to your hotbar.',
 		Function = function(callback)
@@ -14685,7 +14686,7 @@ runFunction(function()
 			end
 		end
 	end
-	HealthbarMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	HealthbarMods = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'HealthbarMods',
 		HoverText = 'Customize the color of your healthbar.\nAdd \'<health>\' to your custom text dropdown (if custom text enabled)to insert your health.',
 		Function = function(callback)
@@ -14824,7 +14825,7 @@ runFunction(function()
 	HealthbarFont.Object.Visible = false
 end)
 
-runFunction(function()
+--[[runFunction(function()
 	local NameHider = {Enabled = true}
 
 	local fakeplr = {Name = 'normal', UserId = '239702688'}
@@ -14866,7 +14867,7 @@ runFunction(function()
 		table.insert(NameHider.Connections, parent.DescendantAdded:Connect(fixInstance))
 	end
 
-	NameHider = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+	NameHider = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'NameHider',
 		Function = function(callback)
 			if callback then
@@ -14878,9 +14879,9 @@ runFunction(function()
 			end
 		end
 	})
-end)
+end)]]
 
--- kill yourself 0piss
+-- kill yourself 0piss (whoever wrote this is a fucking black nig)
 
 --[===[
 
@@ -14894,10 +14895,11 @@ end)
 			\__| \__| \__| \______/ \__|  \__|\__|
 
 ]===]
-runFunction(function()
+--put in brackets until further due (testing)
+--[[runFunction(function()
 	local Messages = {'Zap', 'Wham', 'Kapow', 'Kaboom', 'Thump', 'Pow'}
-	CustomButton = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-		Name = 'Juul SuperFx!',
+	CustomButton = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
+		Name = 'Dmg Indicators',
 		HoverText = 'SuperFx!',
 		Function = function(callback)
 			if callback then
@@ -14913,4 +14915,4 @@ runFunction(function()
 			end
 		end
 	})
-end)
+end)]]

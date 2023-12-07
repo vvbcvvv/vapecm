@@ -1,3 +1,4 @@
+--scrxpted skidded this from rise backend
 local playersService = game:GetService("Players")
 local lplr = playersService.LocalPlayer
 local coreGui = game:GetService("CoreGui")
