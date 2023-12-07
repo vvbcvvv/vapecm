@@ -39,13 +39,13 @@
 + KeepInventory
     + Attempts to move items to your enderchest when you have low health/lagback
 + AnticheatAbuse
-    + funny.
+    + Partially bypasses the anticheat
 + NoPing
     + Unbinds your ping keybinds
 + Privacy
     + Blocks some analytics
 + FpsBoostPlus
-    + lots.
+    + Gives a huge FPS boost
 + Atmosphere
     + blxnk do this.
 + HotbarMods
