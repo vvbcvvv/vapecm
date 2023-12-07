@@ -13310,11 +13310,6 @@ runFunction(function()
 		end,
 		Default = true
 	})
-	AnticheatBypassOnlyScythe = AnticheatBypass.CreateToggle({
-		Name = 'Only Scythe',
-		Function = function() end,
-		Default = true
-	})
 end)
 
 runFunction(function()
