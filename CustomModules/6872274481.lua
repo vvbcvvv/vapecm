@@ -12299,7 +12299,7 @@ do
 	end
 end
 
---[[runFunction(function()
+runFunction(function()
 	local ChatMover = {Enabled = false}
 	local chatApp
 	local oldChatPosition
@@ -12324,7 +12324,7 @@ end
 			end
 		end
 	})
-end)]]
+end)
 
 runFunction(function()
 	local InvisNoCollide = {Enabled = false}
@@ -14879,7 +14879,7 @@ end)
 			end
 		end
 	})
-end)]]
+end)
 
 -- kill yourself 0piss (whoever wrote this is a fucking black nig)
 
