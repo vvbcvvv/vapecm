@@ -14825,7 +14825,7 @@ runFunction(function()
 	HealthbarFont.Object.Visible = false
 end)
 
---[[runFunction(function()
+runFunction(function()
 	local NameHider = {Enabled = true}
 
 	local fakeplr = {Name = 'normal', UserId = '239702688'}
