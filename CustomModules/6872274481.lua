@@ -12299,7 +12299,7 @@ do
 	end
 end
 
---[[runFunction(function()
+runFunction(function()
 	local ChatMover = {Enabled = false}
 	local chatApp
 	local oldChatPosition
@@ -12324,7 +12324,7 @@ end
 			end
 		end
 	})
-end)]]
+end)
 
 runFunction(function()
 	local InvisNoCollide = {Enabled = false}
@@ -14825,7 +14825,7 @@ runFunction(function()
 	HealthbarFont.Object.Visible = false
 end)
 
---[[runFunction(function()
+runFunction(function()
 	local NameHider = {Enabled = true}
 
 	local fakeplr = {Name = 'normal', UserId = '239702688'}
@@ -14879,7 +14879,7 @@ end)
 			end
 		end
 	})
-end)]]
+end)
 
 -- kill yourself 0piss (whoever wrote this is a fucking black nig)
 
