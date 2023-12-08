@@ -1,6 +1,3 @@
---scrxpted skidded this from rise backend
--- no I didn't I just chose Backend for the name
---stfu blackie your skidded rise
 local playersService = game:GetService("Players")
 local lplr = playersService.LocalPlayer
 local coreGui = game:GetService("CoreGui")
