@@ -4080,7 +4080,7 @@ runFunction(function()
 		PistonWareBlock = {
 			{CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.00001} 
 	},
-	['Normal'] = {
+	--[[['Normal'] = {
         {CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(295), math.rad(55), math.rad(290)), Time = 0.05},
         {CFrame = CFrame.new(0.69, -0.71, 0.6) * CFrame.Angles(math.rad(200), math.rad(60), math.rad(1)), Time = 0.05}
     },
@@ -4091,7 +4091,7 @@ runFunction(function()
     ['Slow'] = {
         {CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(295), math.rad(55), math.rad(290)), Time = 0.15},
         {CFrame = CFrame.new(0.69, -0.71, 0.6) * CFrame.Angles(math.rad(200), math.rad(60), math.rad(1)), Time = 0.15}
-    },
+    },]]
     ['1.8'] = {
 		{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-65), math.rad(55), math.rad(-51)), Time = 0.12},
 		{CFrame = CFrame.new(0.16, -1.16, 1) * CFrame.Angles(math.rad(-179), math.rad(54), math.rad(33)), Time = 0.12}
@@ -4251,6 +4251,7 @@ runFunction(function()
         {CFrame = CFrame.new(-2.5, -4.5, -0.02) * CFrame.Angles(math.rad(90), math.rad(0), math.rad(-0)), Time = 0.1},
         {CFrame = CFrame.new(-2.5, -1, -0.02) * CFrame.Angles(math.rad(90), math.rad(0), math.rad(-0)), Time = 0.05}
     },
+	--scrxpted needs to do this ^^
 	['SmootherExhibition'] = {
 		{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.6},
 		{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.3},
@@ -4310,6 +4311,7 @@ runFunction(function()
 		{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(295), math.rad(55), math.rad(290)), Time = 0.06},
 		{CFrame = CFrame.new(0.69, -0.71, 0.6) * CFrame.Angles(math.rad(200), math.rad(60), math.rad(1)), Time = 0.05}
 	},
+	--https://cdn.discordapp.com/attachments/1180128067239292949/1182778437790879824/IMG_0129.png?ex=6585ef42&is=65737a42&hm=66a4a46d8e748b3b0a1c1e2e36e1142d70bc0a7f83d1752a7b69e7f87b665793&
 	['PRISMASTADAWN'] = {
 		{CFrame = CFrame.new(0.3, -2, .1) * CFrame.Angles(math.rad(190), math.rad(75), math.rad(90)), Time = 0.13},
 		{CFrame = CFrame.new(0.3, -2, .2) * CFrame.Angles(math.rad(190), math.rad(95), math.rad(80)), Time = 0.13},
@@ -14811,7 +14813,8 @@ runFunction(function()
 	HealthbarFont.Object.Visible = false
 end)
 
-runFunction(function()
+
+--[[runFunction(function()
 	local NameHider = {Enabled = true}
 
 	local fakeplr = {Name = 'normal', UserId = '239702688'}
@@ -14865,7 +14868,7 @@ runFunction(function()
 			end
 		end
 	})
-end)
+end)]]
 
 -- kill yourself 0piss (whoever wrote this is a fucking black nig)
 
