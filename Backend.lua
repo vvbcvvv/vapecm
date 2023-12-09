@@ -188,6 +188,7 @@ getgenv().debugLoad = function(src, tag, exec_info)
 		print(`{(('  '):rep(exec_info.Level))}▶️ Running {tag} ({exec_info.Old or 'root'})`)
 		local new_info = table.clone(exec_info)
 		new_info.Level += 1
+		new_info.Old = src
 		local packed = {pcall(chunk, new_info)}
 		success = packed[1]
 		table.remove(packed, 1)
