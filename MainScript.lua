@@ -1770,6 +1770,11 @@ local teleportConnection = VapeCleanup:append(playersService.LocalPlayer.OnTelep
 		queueonteleport(teleportScript)
     end
 end))
+local closeConnection = VapeCleanup:append(game.Close:Connect(function()
+	if vapeInjected then
+		GuiLibrary.SaveSettings()
+	end
+end))
 
 GuiLibrary.SelfDestruct = function()
 	task.spawn(function()
@@ -1817,6 +1822,7 @@ GuiLibrary.SelfDestruct = function()
 		MiddleClickInput:Disconnect()
 	end
 	teleportConnection:Disconnect()
+	closeConnection:Disconnect()
 	GuiLibrary.MainGui:Destroy()
 	game:GetService("RunService"):SetRobloxGuiFocused(false)
 	VapeCleanup:wipe()
