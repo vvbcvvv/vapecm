@@ -1540,11 +1540,12 @@ local windowSortOrder = {
 	RenderButton = 3,
 	UtilityButton = 4,
 	WorldButton = 5,
-	FriendsButton = 6,
-	TargetsButton = 7,
-	ProfilesButton = 8
+	NewVape = 6,
+	FriendsButton = 7,
+	TargetsButton = 8,
+	ProfilesButton = 9
 }
-local windowSortOrder2 = {"Combat", "Blatant", "Render", "Utility", "World"}
+local windowSortOrder2 = {"Combat", "Blatant", "Render", "Utility", "World", "NewVape"}
 
 local function getVapeSaturation(val)
 	local sat = 0.9
@@ -1859,12 +1860,13 @@ GUISettings.CreateButton2({
 			RenderWindow = 4,
 			UtilityWindow = 5,
 			WorldWindow = 6,
-			FriendsWindow = 7,
-			TargetsWindow = 8,
-			ProfilesWindow = 9,
-			["Text GUICustomWindow"] = 10,
-			TargetInfoCustomWindow = 11,
-			RadarCustomWindow = 12,
+			NewVapeWindow = 7,
+			FriendsWindow = 8,
+			TargetsWindow = 9,
+			ProfilesWindow = 10,
+			["Text GUICustomWindow"] = 11,
+			TargetInfoCustomWindow = 12,
+			RadarCustomWindow = 13,
 		}
 		local storedpos = {}
 		local num = 6
