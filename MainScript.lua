@@ -678,7 +678,7 @@ VapeCleanup:append(OnlineProfilesButton.MouseButton1Click:Connect(function()
 	GuiLibrary.MainGui.ScaledGui.ClickGui.Visible = false
 	if not profilesLoaded then
 		local onlineprofiles = {}
-		local saveplaceid = tostring(shared.CustomSaveVape or game.PlaceId)
+		local saveplaceid = shared.CustomSaveVape or game.PlaceId
         local success, result = pcall(function()
             return game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/VapeProfiles/main/Profiles/"..saveplaceid.."/profilelist.txt", true))
         end)

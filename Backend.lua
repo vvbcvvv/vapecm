@@ -189,7 +189,9 @@ getgenv().debugLoad = function(src, tag, exec_info)
 		local new_info = table.clone(exec_info)
 		new_info.Level += 1
 		new_info.Old = tag
-		local packed = {pcall(chunk, new_info)}
+		local packed = {xpcall(chunk, function(err)
+			print(`{(('  '):rep(exec_info.Level))}❌ Failed {tag} ({exec_info.Old or 'root'}) ({err}) {debug_traceback('Traceback: ')}`)
+		end, new_info)}
 		success = packed[1]
 		table.remove(packed, 1)
 		if success then
@@ -204,12 +206,11 @@ getgenv().debugLoad = function(src, tag, exec_info)
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 				notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 			end)
-			print(`{(('  '):rep(exec_info.Level))}❌ Failed {tag} ({exec_info.Old or 'root'})({packed[1]}){debug_traceback('\nTraceback: ')}`)
-			return error('', 2)
+			return task.wait(math.huge)
 		end
 	else
-		print(`{(('  '):rep(exec_info.Level))}❌ Failed {tag} ({exec_info.Old or 'root'})({fail})`)
-		return error('', 2)
+		print(`{(('  '):rep(exec_info.Level))}❌ Failed {tag} ({exec_info.Old or 'root'}) ({fail})`)
+		return task.wait(math.huge)
 	end
 end
 
