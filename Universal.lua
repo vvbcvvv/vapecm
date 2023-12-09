@@ -282,7 +282,7 @@ do
 			end
 			WhitelistFunctions.WhitelistTable = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..commit.."/whitelists/PlayerWhitelist.json", true))
 		end)
-		shalib = debugLoad(vapeGithubRequest("Libraries/sha.lua"))
+		shalib = debugLoad(vapeGithubRequest("Libraries/sha.lua"), 'sha.lua (Universal.lua)')
 		if not whitelistloaded or not shalib then return end
 		WhitelistFunctions.Loaded = true
 		WhitelistFunctions.LocalPriority = WhitelistFunctions:GetWhitelist(lplr)
