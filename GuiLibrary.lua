@@ -650,8 +650,6 @@ if shared.VapeExecuted then
 			else
 				print('failed to decode gui positions (error: ' .. result3 .. ')')
 			end
-			delfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt")
-			print('deleted gui positions successfully')
 		end
 		local success, result = pcall(function()
 			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(game.PlaceId)..".vapeprofile.txt"))
@@ -801,8 +799,6 @@ if shared.VapeExecuted then
 			else
 				print('failed to decode game profile (error: ' .. result .. ')')
 			end
-			delfile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(game.PlaceId)..".vapeprofile.txt")
-			print('deleted game profile successfully')
 		end
 		loadedsuccessfully = true
 	end
