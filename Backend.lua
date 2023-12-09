@@ -179,31 +179,24 @@ getgenv().vapeGithubRequest = vapeGithubRequest -- simplicity
 getgenv().downloadVapeAsset = downloadVapeAsset
 getgenv().debugLoad = function(src, tag)
 	tag = tag or 'unknown'
-	local success, err = pcall(function(src)
-		local chunk, fail = loadstring(src)
-		if chunk then
-			print(`Compiled {tag}`)
-			local success2, err2 = pcall(chunk)
-			if success2 then
-				return err2
-			else
-				return error(`Failure loading {tag}({err2})`)
-			end
+	local chunk, fail = loadstring(src)
+	if chunk then
+		print(`Compiled {tag}`)
+		local success, _error = pcall(chunk)
+		if success then
+			print(`Loaded {tag}`)
+			return _error
 		else
-			return error(`Failure loading {tag}({fail})`)
+			GuiLibrary.SaveSettings = function() end
+			pcall(function()
+				local notification = shared.GuiLibrary.CreateNotification(`Failure loading {fail}`, err, 25, "assets/WarningNotification.png")
+				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
+				notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
+			end)
+			return error(`Execution Failure {tag}({_error}){debug.traceback('\nTraceback: ')}`)
 		end
-	end, src)
-	if success then
-		print(`Loaded {tag}`)
-		return err
 	else
-		GuiLibrary.SaveSettings = function() end
-		pcall(function()
-			local notification = shared.GuiLibrary.CreateNotification(`Failure loading {fail}`, err, 25, "assets/WarningNotification.png")
-			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
-			notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
-		end)
-		return error(`Failure loading {fail} ({err}){debug.traceback('\nTraceback: ')}`)
+		return error(`Syntax Error {tag}({fail})`)
 	end
 end
 
