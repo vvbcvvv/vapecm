@@ -470,7 +470,7 @@ if shared.VapeExecuted then
 	end
 
 	GuiLibrary.SaveSettings = function()
-		if not loadedsuccessfully then return end
+		if not loadedsuccessfully then return print('vape didn\'t load successfully') end
 		writefile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt", httpService:JSONEncode(GuiLibrary.Profiles))
 		local WindowTable = {}
 		for i,v in pairs(GuiLibrary.ObjectsThatCanBeSaved) do
@@ -541,7 +541,9 @@ if shared.VapeExecuted then
 	end
 
 	GuiLibrary.LoadSettings = function(customprofile)
+		print('attempting to load config: ' .. customprofile or 'default')
 		if isfile("vape/Profiles/GUIPositions.vapeprofile.txt") and game.GameId == 2619619496 then
+			print('GUIPositions.vapeprofile.txt overwrite')
 			writefile("vape/Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt", readfile("vape/Profiles/GUIPositions.vapeprofile.txt"))
 			if delfile then delfile("vape/Profiles/GUIPositions.vapeprofile.txt") end
 		end
@@ -549,14 +551,21 @@ if shared.VapeExecuted then
 			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt"))
 		end)
 		if success2 and type(result2) == "table" then
+			print('profile list decoded successfully')
 			GuiLibrary.Profiles = result2
+		else
+			if success2 then
+				print('failed to decode profile list (type: ' .. type(result2) .. ')')
+			else
+				print('failed to decode profile list (error: ' .. result2 .. ')')
+			end
 		end
 		for i,v in pairs(GuiLibrary.Profiles) do
 			if v.Selected then
 				GuiLibrary.CurrentProfile = i
 			end
 		end
-		if customprofile then 
+		if customprofile then
 			GuiLibrary.Profiles[GuiLibrary.CurrentProfile]["Selected"] = false
 			GuiLibrary.Profiles[customprofile] = GuiLibrary.Profiles[customprofile] or {["Keybind"] = "", ["Selected"] = true}
 			GuiLibrary.CurrentProfile = customprofile
@@ -565,6 +574,7 @@ if shared.VapeExecuted then
 			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt"))
 		end)
 		if success3 and type(result3) == "table" then
+			print('gui positions decoded successfully')
 			for i,v in pairs(result3) do
 				local obj = GuiLibrary.ObjectsThatCanBeSaved[i]
 				if obj then
@@ -630,11 +640,18 @@ if shared.VapeExecuted then
 					GuiLibrary["GUIKeybind"] = v["Value"]
 				end
 			end
+		else
+			if success3 then
+				print('failed to decode gui positions (type: ' .. type(result3) .. ')')
+			else
+				print('failed to decode gui positions (error: ' .. result3 .. ')')
+			end
 		end
 		local success, result = pcall(function()
 			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(game.PlaceId)..".vapeprofile.txt"))
 		end)
 		if success and type(result) == "table" then
+			print('game profile decoded successfully')
 			GuiLibrary["LoadSettingsEvent"]:Fire(result)
 			for i,v in pairs(result) do
 				if v.Type == "Custom" and GuiLibrary.Settings[i] then
@@ -746,7 +763,14 @@ if shared.VapeExecuted then
 						end
 					end
 				end
+			else
+				if success then
+					print('failed to decode game profile (type: ' .. type(result) .. ')')
+				else
+					print('failed to decode game profile (error: ' .. result .. ')')
+				end
 			end
+			print('setting keybinds')
 			for i,v in pairs(result) do
 				local obj = GuiLibrary.ObjectsThatCanBeSaved[i]
 				if obj then 
@@ -760,6 +784,7 @@ if shared.VapeExecuted then
 					end
 				end
 			end
+			print('adding mobile buttons')
 			for i,v in pairs(result) do
 				if v.Type == "MobileButtons" then 
 					for _, mobileButton in pairs(v.Buttons) do 
@@ -5757,37 +5782,41 @@ if shared.VapeExecuted then
 			end))
 			if inputService.TouchEnabled then 
 				local touched = false
-				VapeCleanup:append(button.MouseButton1Down:Connect(function()
-					touched = true
-					local oldbuttonposition = button.AbsolutePosition
-					local touchtick = tick()
-					repeat 
-						task.wait() 
-						if button.AbsolutePosition ~= oldbuttonposition then 
-							touched = false
-							break
-						end
-					until (tick() - touchtick) > 1 or not touched or not clickgui.Visible
-					if touched and clickgui.Visible then 
-						clickgui.Visible = false
-						legitgui.Visible = not clickgui.Visible
-						game:GetService("RunService"):SetRobloxGuiFocused(clickgui.Visible and GuiLibrary["MainBlur"].Size ~= 0 or guiService:GetErrorType() ~= Enum.ConnectionError.OK)
-						for _, mobileButton in pairs(GuiLibrary.MobileButtons) do mobileButton.Visible = not clickgui.Visible end	
-						local touchconnection
-						touchconnection = VapeCleanup:append(inputService.InputBegan:Connect(function(inputType)
-							if inputType.UserInputType == Enum.UserInputType.Touch then 
-								createMobileButton(buttonapi, inputType.Position)
-								clickgui.Visible = true
-								legitgui.Visible = not clickgui.Visible
-								game:GetService("RunService"):SetRobloxGuiFocused(clickgui.Visible and GuiLibrary["MainBlur"].Size ~= 0 or guiService:GetErrorType() ~= Enum.ConnectionError.OK)
-								for _, mobileButton in pairs(GuiLibrary.MobileButtons) do mobileButton.Visible = not clickgui.Visible end		
-								touchconnection:Disconnect()
+				VapeCleanup:append(inputService.InputBegan:Connect(function(inputType)
+					if inputType.UserInputType == Enum.UserInputType.Touch then 
+						touched = true
+						local oldbuttonposition = button.AbsolutePosition
+						local touchtick = tick()
+						repeat 
+							task.wait() 
+							if button.AbsolutePosition ~= oldbuttonposition then 
+								touched = false
+								break
 							end
-						end))
+						until (tick() - touchtick) > 1 or not touched or not clickgui.Visible
+						if touched and clickgui.Visible then 
+							clickgui.Visible = false
+							legitgui.Visible = not clickgui.Visible
+							game:GetService("RunService"):SetRobloxGuiFocused(clickgui.Visible and GuiLibrary["MainBlur"].Size ~= 0 or guiService:GetErrorType() ~= Enum.ConnectionError.OK)
+							for _, mobileButton in pairs(GuiLibrary.MobileButtons) do mobileButton.Visible = not clickgui.Visible end	
+							local touchconnection
+							touchconnection = VapeCleanup:append(inputService.InputBegan:Connect(function(inputType)
+								if inputType.UserInputType == Enum.UserInputType.Touch then 
+									createMobileButton(buttonapi, inputType.Position)
+									clickgui.Visible = true
+									legitgui.Visible = not clickgui.Visible
+									game:GetService("RunService"):SetRobloxGuiFocused(clickgui.Visible and GuiLibrary["MainBlur"].Size ~= 0 or guiService:GetErrorType() ~= Enum.ConnectionError.OK)
+									for _, mobileButton in pairs(GuiLibrary.MobileButtons) do mobileButton.Visible = not clickgui.Visible end		
+									touchconnection:Disconnect()
+								end
+							end))
+						end
 					end
 				end))
-				VapeCleanup:append(button.MouseButton1Up:Connect(function()
-					touched = false
+				VapeCleanup:append(inputService.InputEnded:Connect(function(inputType)
+					if inputType.UserInputType == Enum.UserInputType.Touch then
+						touched = false
+					end
 				end))
 			end
 			VapeCleanup:append(button.MouseEnter:Connect(function() 
