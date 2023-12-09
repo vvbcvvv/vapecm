@@ -177,7 +177,6 @@ end
 
 getgenv().vapeGithubRequest = vapeGithubRequest -- simplicity
 getgenv().downloadVapeAsset = downloadVapeAsset
-=
 getgenv().debugLoad = function(src, tag)
 	tag = tag or 'unknown'
 	local chunk, fail = loadstring(src)
