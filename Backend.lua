@@ -180,7 +180,7 @@ getgenv().downloadVapeAsset = downloadVapeAsset
 getgenv().debugLoad = function(src, tag)
 	tag = tag or 'unknown'
 	local chunk, fail = loadstring(src)
-	if chunk then=
+	if chunk then
 		print(`Compiled {tag}`)
 		local packed = {pcall(chunk)}
 		success = packed[1]
