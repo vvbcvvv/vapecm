@@ -6296,14 +6296,14 @@ runFunction(function()
 		Min = 1,
 		Max = 27,
 		Function = function(val) end,
-		Default = 27
+		Default = 23
 	})
 	SpeedValueLarge = Speed.CreateSlider({
 		Name = 'Big Mode Speed',
 		Min = 1,
 		Max = 27,
 		Function = function(val) end,
-		Default = 27
+		Default = 23
 	})
 	SpeedDamageBoost = Speed.CreateToggle({
 		Name = 'Damage Boost',
