@@ -184,13 +184,13 @@ getgenv().debugLoad = function(src, tag, level)
 	tag = tag or 'unknown'
 	local chunk, fail = loadstring(src)
 	if chunk then
-		print(`{('  ':rep(level))}⚙️ Compiled {tag}`)
+		print(`{(('  '):rep(level))}⚙️ Compiled {tag}`)
 		local packed = {pcall(chunk, level)}
 		success = packed[1]
 		table.remove(packed, 1)
-		print(`{('  ':rep(level))}▶️ Running {tag}`)
+		print(`{(('  '):rep(level))}▶️ Running {tag}`)
 		if success then
-			print(`{('  ':rep(level))}✅ Success {tag}`)
+			print(`{(('  '):rep(level))}✅ Success {tag}`)
 			return unpack(packed)
 		else
 			if GuiLibrary then
@@ -201,11 +201,11 @@ getgenv().debugLoad = function(src, tag, level)
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 				notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 			end)
-			print(`{('  ':rep(level))}❌ Failed {tag}({packed[1]}){debug_traceback('\nTraceback: ')}`)
+			print(`{(('  '):rep(level))}❌ Failed {tag}({packed[1]}){debug_traceback('\nTraceback: ')}`)
 			return error('', 2)
 		end
 	else
-		print(`{('  ':rep(level))}❌ Failed {tag}({fail})`)
+		print(`{(('  '):rep(level))}❌ Failed {tag}({fail})`)
 		return error('', 2)
 	end
 end
