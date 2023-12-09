@@ -1,3 +1,4 @@
+local EXECUTION_LEVEL = (...)
 local entity = {
     entityList = {},
     entityConnections = {},

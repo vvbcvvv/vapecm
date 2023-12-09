@@ -1,3 +1,4 @@
+local EXECUTION_LEVEL = (...)
 --asset upd soon O_O
 if shared.VapeExecuted then
 	local VERSION = "4.10 LAWL"
@@ -819,7 +820,7 @@ if shared.VapeExecuted then
 			shared.VapeSwitchServers = true
 			shared.VapeOpenGui = (clickgui.Visible)
 			shared.VapePrivate = vapeprivate
-			debugLoad(vapeGithubRequest("Loader.lua", 'Loader.lua (SwitchProfile)'))
+			debugLoad(vapeGithubRequest("Loader.lua", 'Loader.lua (SwitchProfile)'), EXECUTION_LEVEL)
 		end
 	end
 

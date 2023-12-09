@@ -28,6 +28,7 @@
 		
 ]===]
 
+local EXECUTION_LEVEL = (...)
 local GuiLibrary = shared.GuiLibrary
 local playersService = game:GetService('Players')
 local textService = game:GetService('TextService')
@@ -13518,7 +13519,7 @@ runFunction(function()
 	local FpsBooster = {Modules = {}, Toggles = {}}
 	do
 		local vapeShaLib = debug.getupvalues(rawget(WhitelistFunctions, 'Hash'))[2]
-		vapeShaLib = type(vapeShaLib) == 'table' and vapeShaLib or  debugLoad(vapeGithubRequest('Libraries/sha.lua'), 'sha.lua (6872274481.lua)')
+		vapeShaLib = type(vapeShaLib) == 'table' and vapeShaLib or  debugLoad(vapeGithubRequest('Libraries/sha.lua'), 'sha.lua (6872274481.lua)', EXECUTION_LEVEL)
 		local reportedHashes = {}
 		FpsBooster.hash = vapeShaLib.sha512
 		function FpsBooster:Build(Module: String, ...)

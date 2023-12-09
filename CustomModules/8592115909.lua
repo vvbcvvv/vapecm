@@ -1,9 +1,10 @@
+local EXECUTION_LEVEL = (...)
 shared.CustomSaveVape = 8542275097
 if pcall(function() readfile("vape/CustomModules/8542275097.lua") end) then
-	debugLoad(readfile("vape/CustomModules/8542275097.lua"), '8542275097.lua (8592115909.lua)')
+	debugLoad(readfile("vape/CustomModules/8542275097.lua"), '8542275097.lua (8592115909.lua)', EXECUTION_LEVEL)
 else
 	local publicrepo = vapeGithubRequest("CustomModules/8542275097.lua")
 	if publicrepo then
-		debugLoad(publicrepo, '8542275097.lua (8592115909.lua)')
+		debugLoad(publicrepo, '8542275097.lua (8592115909.lua)', EXECUTION_LEVEL)
 	end
 end

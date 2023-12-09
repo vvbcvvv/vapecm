@@ -180,17 +180,17 @@ getgenv().downloadVapeAsset = downloadVapeAsset
 
 local debug_traceback = debug.traceback or getrenv().debug.traceback -- thanks hydrogen
 
-getgenv().debugLoad = function(src, tag)
+getgenv().debugLoad = function(src, tag, level)
 	tag = tag or 'unknown'
 	local chunk, fail = loadstring(src)
 	if chunk then
-		print(`⚙️ Compiled {tag}`)
-		local packed = {pcall(chunk)}
+		print(`{('  ':rep(level))}⚙️ Compiled {tag}`)
+		local packed = {pcall(chunk, level)}
 		success = packed[1]
 		table.remove(packed, 1)
-		print(`▶️ Running {tag}`)
+		print(`{('  ':rep(level))}▶️ Running {tag}`)
 		if success then
-			print(`✅ Success {tag}`)
+			print(`{('  ':rep(level))}✅ Success {tag}`)
 			return unpack(packed)
 		else
 			if GuiLibrary then
@@ -201,13 +201,13 @@ getgenv().debugLoad = function(src, tag)
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 				notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 			end)
-			print(`❌ Failed {tag}({packed[1]}){debug_traceback('\nTraceback: ')}`)
+			print(`{('  ':rep(level))}❌ Failed {tag}({packed[1]}){debug_traceback('\nTraceback: ')}`)
 			return error('', 2)
 		end
 	else
-		print(`❌ Failed {tag}({fail})`)
+		print(`{('  ':rep(level))}❌ Failed {tag}({fail})`)
 		return error('', 2)
 	end
 end
 
-return debugLoad(vapeGithubRequest("MainScript.lua"), 'MainScript.lua (Backend.lua)')
+return debugLoad(vapeGithubRequest("MainScript.lua"), 'MainScript.lua (Backend.lua)', 0)
