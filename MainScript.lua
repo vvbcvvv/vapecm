@@ -194,7 +194,6 @@ shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
 	repeat
-		print('SaveSettings()')
 		GuiLibrary.SaveSettings()
         task.wait(10)
 	until not vapeInjected or not GuiLibrary
