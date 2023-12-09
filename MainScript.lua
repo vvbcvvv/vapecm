@@ -194,6 +194,7 @@ shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
 	repeat
+		print('SaveSettings()')
 		GuiLibrary.SaveSettings()
         task.wait(10)
 	until not vapeInjected or not GuiLibrary
@@ -1757,7 +1758,7 @@ local teleportConnection = VapeCleanup:append(playersService.LocalPlayer.OnTelep
 		teleportedServers = true
 		local teleportScript = [[
 			pcall(function()
-				loadfile("vape/NewMainScript.lua")()
+				loadfile("vape/Loader.lua")()
 			end)
 		]]
 		if shared.VapeCustomProfile then 
@@ -1832,7 +1833,7 @@ GeneralSettings.CreateButton2({
 		shared.VapeSwitchServers = true
 		shared.VapeOpenGui = true
 		shared.VapePrivate = vapePrivateCheck
-		loadstring(vapeGithubRequest("NewMainScript.lua"))()
+		loadstring(vapeGithubRequest("Loader.lua"))()
 	end
 })
 GUISettings.CreateButton2({
