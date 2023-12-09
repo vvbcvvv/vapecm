@@ -3851,7 +3851,7 @@ runFunction(function()
             {CFrame = CFrame.new(0.3, -0.9, -1.17) * CFrame.Angles(math.rad(160), math.rad(70), math.rad(90)), Time = 0.18},
             {CFrame = CFrame.new(0.4, -0.65, -0.8) * CFrame.Angles(math.rad(160), math.rad(111), math.rad(90)), Time = 0.18}
 		},
-		['Sigma2'] = {
+		['SigmaJello'] = {
 		    {CFrame = CFrame.new(0.2, 0, -1.3) * CFrame.Angles(math.rad(111), math.rad(111), math.rad(130)), Time = 0.18},
             {CFrame = CFrame.new(0, -0.2, -1.7) * CFrame.Angles(math.rad(30), math.rad(111), math.rad(190)), Time = 0.18}
 		},
@@ -3943,7 +3943,7 @@ runFunction(function()
 			{CFrame = CFrame.new(0.7, -0.7, 0.6) * CFrame.Angles(math.rad(-60), math.rad(60), math.rad(-70)), Time = 0.15, RealDelay = 0.15},
 			{CFrame = CFrame.new(0.5, -0.7, -0.2) * CFrame.Angles(math.rad(-120), math.rad(60), math.rad(-50)), Time = 0.15, RealDelay = 0.15}
 		},
-		['Future'] = {
+		['Future2'] = {
 			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(295), math.rad(55), math.rad(290)), Time = 0.90},
 			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(295), math.rad(55), math.rad(290)), Time = 0.90},
 		},
@@ -4158,7 +4158,7 @@ runFunction(function()
         {CFrame = CFrame.new(-2.5, -4.5, -0.02) * CFrame.Angles(math.rad(90), math.rad(0), math.rad(-0)), Time = 0.1},
         {CFrame = CFrame.new(-2.5, -1, -0.02) * CFrame.Angles(math.rad(90), math.rad(0), math.rad(-0)), Time = 0.05}
     },
-    ['Goofy'] = {
+    ['Goofy2'] = {
         {CFrame = CFrame.new(0.5, -0.01, -1.91) * CFrame.Angles(math.rad(-51), math.rad(9), math.rad(56)), Time = 0.10},
         {CFrame = CFrame.new(0.5, -0.51, -1.91) * CFrame.Angles(math.rad(-51), math.rad(9), math.rad(56)), Time = 0.08},
         {CFrame = CFrame.new(0.5, -0.01, -1.91) * CFrame.Angles(math.rad(-51), math.rad(9), math.rad(56)), Time = 0.08}
@@ -4168,7 +4168,7 @@ runFunction(function()
 		{CFrame = CFrame.new(0.7, -0.7, 0.6) * CFrame.Angles(math.rad(-16), math.rad(60), math.rad(-80)), Time = 0.900},
 		{CFrame = CFrame.new(0.95, -1.06, -2.25) * CFrame.Angles(math.rad(-179), math.rad(61), math.rad(80)), Time = 0.15}
 	},
-    ['Rise2'] = {
+    ['Rise4'] = {
         {CFrame = CFrame.new(0.9,0,0) * CFrame.Angles(math.rad(-80), math.rad(60), math.rad(-40)), Time = 0.14},
         {CFrame = CFrame.new(0.5,-0.2,-0.7) * CFrame.Angles(math.rad(-150), math.rad(55), math.rad(20)), Time = 0.14}
     },
@@ -4556,7 +4556,7 @@ runFunction(function()
 		{CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(-90), math.rad(8), math.rad(5)), Time = 0.1},
 		{CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(180), math.rad(3), math.rad(13)), Time = 0.1},
 		{CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(90), math.rad(-5), math.rad(8)), Time = 0.1},
-		{CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(-0), math.rad(-0)), Time = 0.1}, --if you're seeing this, yes i did add all animations into 1 and yes i did have to remove animations for it to fit
+		{CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(0), math.rad(-0), math.rad(-0)), Time = 0.1},
 		{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.15},
 		{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.05},
 		{CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.1},
@@ -4770,6 +4770,7 @@ runFunction(function()
         {CFrame = CFrame.new(0.63, -0.68, 0.57) * CFrame.Angles(math.rad(-46), math.rad(65), math.rad(-65)), Time = 0.21},
         {CFrame = CFrame.new(0.73, -0.71, 0.62) * CFrame.Angles(math.rad(-73), math.rad(49), math.rad(-25)), Time = 0.26}
     },
+	--scrxpted skidded from rise backend
     ScrxptedIsBLACK = {
         {CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-89), math.rad(68), math.rad(-56)), Time = 0.12},
         {CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-65), math.rad(68), math.rad(-35)), Time = 0.19}
@@ -6292,7 +6293,7 @@ runFunction(function()
 	SpeedValue = Speed.CreateSlider({
 		Name = 'Speed',
 		Min = 1,
-		Max = 23,
+		Max = 30,
 		Function = function(val) end,
 		Default = 23
 	})
@@ -14250,6 +14251,16 @@ runFunction(function()
 		skyobj.SunAngularSize = 0
 		skyobj.StarCount = 0
 	end,
+	ZYLA = function()
+		skyobj.SkyboxBk = 'rbxassetid://9851144466'
+		skyobj.SkyboxDn = 'rbxassetid://9851144249'
+		skyobj.SkyboxFt = 'rbxassetid://9851144099'
+		skyobj.SkyboxLf = 'rbxassetid://9851143942'
+		skyobj.SkyboxRt = 'rbxassetid://9851143761'
+		skyobj.SkyboxUp = 'rbxassetid://9851143257'
+		skyobj.SunAngularSize = 10
+		skyobj.StarCount = 10
+	end,
 	PitchDark = function()
 		skyobj.StarCount = 0
 		oldtime = lightingService.TimeOfDay
@@ -14882,6 +14893,7 @@ end)]]
 			$$ | $$ | $$ |$$ |  $$ |$$ |  $$ |$$ |
 			$$ | $$ | $$ |\$$$$$$  |$$ |  $$ |$$ |
 			\__| \__| \__| \______/ \__|  \__|\__|
+
 
 ]===]
 runFunction(function()
