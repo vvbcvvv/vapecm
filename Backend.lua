@@ -178,18 +178,25 @@ end
 getgenv().vapeGithubRequest = vapeGithubRequest -- simplicity
 getgenv().downloadVapeAsset = downloadVapeAsset
 getgenv().debugLoad = function(src, tag)
+	tag = tag or 'unknown'
 	print(`Loading {tag}`)
-	local success, err = pcall(function(data)
-		local chunk, fail = loadstring(data)
+	local success, err = pcall(function(src)
+		local chunk, fail = loadstring(src)
 		if chunk then
 			print(`Compiled {tag}`)
-			return chunk()
+			local success2, err2 = pcall(chunk)
+			if success2 then
+				return err2
+			else
+				return error(`Failure loading {tag}({err2})`)
+			end
 		else
-			return error(`Failure loading {fail}({fail})`)
+			return error(`Failure loading {tag}({fail})`)
 		end
-	end, data)
+	end, src)
 	if success then
 		print(`Executed {tag}`)
+		return err
 	else
 		GuiLibrary.SaveSettings = function() end
 		pcall(function()
