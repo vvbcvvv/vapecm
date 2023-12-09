@@ -1906,7 +1906,7 @@ local function loadVape()
 		else
 			local success, response = pcall(vapeGithubRequest, "CustomModules/"..game.PlaceId..".lua")
 			if success and response then 
-				debugLoad(response, game.PlaceId...lua)
+				debugLoad(response, game.PlaceId..'.lua')
 			else
 				local notification = GuiLibrary.CreateNotification('Vape', 'CustomModule ('..game.PlaceId..') not found', 10, "assets/WarningNotification.png")
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
