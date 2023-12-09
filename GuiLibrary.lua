@@ -818,7 +818,7 @@ if shared.VapeExecuted then
 			shared.VapeSwitchServers = true
 			shared.VapeOpenGui = (clickgui.Visible)
 			shared.VapePrivate = vapeprivate
-			loadstring(vapeGithubRequest("NewMainScript.lua"))()
+			loadstring(vapeGithubRequest("Loader.lua"))()
 		end
 	end
 
