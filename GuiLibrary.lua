@@ -553,7 +553,7 @@ if shared.VapeExecuted then
 		end
 		local success2, result2 = pcall(function()
 			local json = readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt")
-			print(json)
+			print(#json)
 			return httpService:JSONDecode(json)
 		end)
 		if success2 and type(result2) == "table" then
@@ -578,7 +578,7 @@ if shared.VapeExecuted then
 		end
 		local success3, result3 = pcall(function()
 			local json = readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt")
-			print(json)
+			print(#json)
 			return httpService:JSONDecode(json)
 		end)
 		if success3 and type(result3) == "table" then
@@ -657,7 +657,7 @@ if shared.VapeExecuted then
 		end
 		local success, result = pcall(function()
 			local json = readfile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(game.PlaceId)..".vapeprofile.txt")
-			print(json)
+			print(#json)
 			return httpService:JSONDecode(json)
 		end)
 		if success and type(result) == "table" then
