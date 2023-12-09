@@ -185,6 +185,7 @@ getgenv().debugLoad = function(src, tag)
 		env.stackLevel = env.stackLevel or 0
 		env.stackLevel += 1
 		setfenv(chunk, env)
+		print(`ENV: {env}`)
 		print(`Compiled {tag} ({env.stackLevel})`)
 		local packed = {pcall(chunk)}
 		success = packed[1]
