@@ -1,4 +1,4 @@
-local EXECUTION_LEVEL = (...)
+local EXECUTION_INFO = (...)
 local entity = {
     entityList = {},
     entityConnections = {},

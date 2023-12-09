@@ -1,4 +1,4 @@
-local EXECUTION_LEVEL = (...)
+local EXECUTION_INFO = (...)
 --[=[------------------------------------------------------------------------------------------------------------------------
 -- HashLib by Egor Skriptunoff, boatbomber, and howmanysmall
 

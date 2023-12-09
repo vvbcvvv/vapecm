@@ -1,4 +1,4 @@
-local EXECUTION_LEVEL = (...)
+local EXECUTION_INFO = (...)
 -- broken
 repeat task.wait() until game:IsLoaded()
 local data = game:GetService("TeleportService"):GetLocalPlayerTeleportData()
@@ -190,7 +190,7 @@ for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "vape/Libraries", "vape/C
 	if not isfolder(v) then makefolder(v) end
 end
 
-GuiLibrary = debugLoad(vapeGithubRequest("GuiLibrary.lua"), 'GuiLibrary.lua (MainScript.lua)', EXECUTION_LEVEL)
+GuiLibrary = debugLoad(vapeGithubRequest("GuiLibrary.lua"), 'GuiLibrary.lua', EXECUTION_INFO)
 shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
@@ -1767,7 +1767,6 @@ local teleportConnection = VapeCleanup:append(playersService.LocalPlayer.OnTelep
 		if shared.VapeCustomProfile then 
 			teleportScript = "shared.VapeCustomProfile = '"..shared.VapeCustomProfile.."'\n"..teleportScript
 		end
-		print('[TeleportListener] Getting GuiLibrary: ' .. tostring(GuiLibrary))
 		GuiLibrary.SaveSettings()
 		queueonteleport(teleportScript)
     end
@@ -1837,7 +1836,7 @@ GeneralSettings.CreateButton2({
 		shared.VapeSwitchServers = true
 		shared.VapeOpenGui = true
 		shared.VapePrivate = vapePrivateCheck
-		debugLoad(vapeGithubRequest("Loader.lua"), 'Loader.lua (ProfileReset)', EXECUTION_LEVEL)
+		debugLoad(vapeGithubRequest("Loader.lua"), 'Loader.lua (ProfileReset)', EXECUTION_INFO)
 	end
 })
 GUISettings.CreateButton2({
@@ -1903,14 +1902,14 @@ GeneralSettings.CreateButton2({
 
 local function loadVape()
 	if true then -- removed shared.VapeIndepentant thingy
-		debugLoad(vapeGithubRequest("Universal.lua"), 'Universal.lua (MainScript.lua)', EXECUTION_LEVEL)
+		debugLoad(vapeGithubRequest("Universal.lua"), 'Universal.lua', EXECUTION_INFO)
 		if isBedwars then
 			shared.CustomSaveVape = 6872274481
-			debugLoad(vapeGithubRequest("CustomModules/6872274481.lua"), "6872274481.lua (MainScript.lua)", EXECUTION_LEVEL)
+			debugLoad(vapeGithubRequest("CustomModules/6872274481.lua"), "6872274481.lua", EXECUTION_INFO)
 		else
 			local success, response = pcall(vapeGithubRequest, "CustomModules/"..game.PlaceId..".lua")
 			if success and response then 
-				debugLoad(response, game.PlaceId..'.lua (MainScript.lua)', EXECUTION_LEVEL)
+				debugLoad(response, game.PlaceId..'.lua', EXECUTION_INFO)
 			else
 				local notification = GuiLibrary.CreateNotification('Vape', 'CustomModule ('..game.PlaceId..') not found', 10, "assets/WarningNotification.png")
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)

@@ -180,34 +180,36 @@ getgenv().downloadVapeAsset = downloadVapeAsset
 
 local debug_traceback = debug.traceback or getrenv().debug.traceback -- thanks hydrogen
 
-getgenv().debugLoad = function(src, tag, level)
+getgenv().debugLoad = function(src, tag, exec_info)
 	tag = tag or 'unknown'
 	local chunk, fail = loadstring(src)
 	if chunk then
-		print(`{(('  '):rep(level))}⚙️ Compiled {tag}`)
-		local packed = {pcall(chunk, level + 1)}
+		print(`{(('  '):rep(exec_info.Level))}⚙️ Compiled {tag} ({exec_info.Old or 'root'})`)
+		print(`{(('  '):rep(exec_info.Level))}▶️ Running {tag} ({exec_info.Old or 'root'})`)
+		local packed = {pcall(chunk, exec_info.Level + 1)}
 		success = packed[1]
 		table.remove(packed, 1)
-		print(`{(('  '):rep(level))}▶️ Running {tag}`)
 		if success then
-			print(`{(('  '):rep(level))}✅ Success {tag}`)
+			print(`{(('  '):rep(exec_info.Level))}✅ Success {tag} ({exec_info.Old or 'root'})`)
 			return unpack(packed)
 		else
-			if GuiLibrary then
-				GuiLibrary.SaveSettings = function() end
+			if shared.GuiLibrary then
+				shared.GuiLibrary.SaveSettings = function() end
 			end
 			pcall(function()
 				local notification = shared.GuiLibrary.CreateNotification(`Execution Failure {tag}`, packed[1], 25, "assets/WarningNotification.png")
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 				notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 			end)
-			print(`{(('  '):rep(level))}❌ Failed {tag}({packed[1]}){debug_traceback('\nTraceback: ')}`)
+			print(`{(('  '):rep(exec_info.Level))}❌ Failed {tag} ({exec_info.Old or 'root'})({packed[1]}){debug_traceback('\nTraceback: ')}`)
 			return error('', 2)
 		end
 	else
-		print(`{(('  '):rep(level))}❌ Failed {tag}({fail})`)
+		print(`{(('  '):rep(exec_info.Level))}❌ Failed {tag} ({exec_info.Old or 'root'})({fail})`)
 		return error('', 2)
 	end
 end
 
-return debugLoad(vapeGithubRequest("MainScript.lua"), 'MainScript.lua (Backend.lua)', 0)
+return debugLoad(vapeGithubRequest("MainScript.lua"), 'MainScript.lua', {
+	Level = 0,
+})
