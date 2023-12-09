@@ -189,7 +189,9 @@ getgenv().debugLoad = function(src, tag)
 			print(`Loaded {tag}`)
 			return unpack(packed)
 		else
-			GuiLibrary.SaveSettings = function() end
+			if GuiLibrary then
+				GuiLibrary.SaveSettings = function() end
+			end
 			pcall(function()
 				local notification = shared.GuiLibrary.CreateNotification(`Failure loading {fail}`, err, 25, "assets/WarningNotification.png")
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)

@@ -1902,14 +1902,14 @@ GeneralSettings.CreateButton2({
 
 local function loadVape()
 	if true then -- removed shared.VapeIndepentant thingy
-		debugLoad(vapeGithubRequest("Universal.lua"), 'Universal.lua')
+		debugLoad(vapeGithubRequest("Universal.lua"), 'Universal.lua (MainScript.lua)')
 		if isBedwars then
 			shared.CustomSaveVape = 6872274481
-			debugLoad(vapeGithubRequest("CustomModules/6872274481.lua"), "6872274481.lua")
+			debugLoad(vapeGithubRequest("CustomModules/6872274481.lua"), "6872274481.lua (MainScript.lua)")
 		else
 			local success, response = pcall(vapeGithubRequest, "CustomModules/"..game.PlaceId..".lua")
 			if success and response then 
-				debugLoad(response, game.PlaceId..'.lua')
+				debugLoad(response, game.PlaceId..'.lua (MainScript.lua)')
 			else
 				local notification = GuiLibrary.CreateNotification('Vape', 'CustomModule ('..game.PlaceId..') not found', 10, "assets/WarningNotification.png")
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
