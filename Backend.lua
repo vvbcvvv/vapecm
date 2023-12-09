@@ -177,22 +177,17 @@ end
 
 getgenv().vapeGithubRequest = vapeGithubRequest -- simplicity
 getgenv().downloadVapeAsset = downloadVapeAsset
+=
 getgenv().debugLoad = function(src, tag)
 	tag = tag or 'unknown'
 	local chunk, fail = loadstring(src)
-	if chunk then
-		local env = getfenv(chunk)
-		local new = setmetatable(table.clone(env), debug.getmetatable(env))
-		env.stackLevel = env.stackLevel or 0
-		env.stackLevel += 1
-		setfenv(chunk, env)
-		print(`ENV: {env}`)
-		print(`Compiled {tag} ({env.stackLevel})`)
+	if chunk then=
+		print(`Compiled {tag}`)
 		local packed = {pcall(chunk)}
 		success = packed[1]
 		table.remove(packed, 1)
 		if success then
-			print(`Loaded {tag} ({eenvnv.stackLevel})`)
+			print(`Loaded {tag}`)
 			return unpack(packed)
 		else
 			GuiLibrary.SaveSettings = function() end
