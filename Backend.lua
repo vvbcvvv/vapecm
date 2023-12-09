@@ -182,18 +182,20 @@ getgenv().debugLoad = function(src, tag)
 	local chunk, fail = loadstring(src)
 	if chunk then
 		print(`Compiled {tag}`)
-		local success, _error = pcall(chunk)
+		local packed = {pcall(chunk)}
+		success = packed[1]
+		table.remove(packed, 1)
 		if success then
 			print(`Loaded {tag}`)
-			return _error
+			return unpack(packed)
 		else
 			GuiLibrary.SaveSettings = function() end
 			pcall(function()
-				local notification = shared.GuiLibrary.CreateNotification(`Failure loading {fail}`, err, 25, "assets/WarningNotification.png")
+				local notification = shared.GuiLibrary.CreateNotification(`Failure loading {fail}`, packed[2], 25, "assets/WarningNotification.png")
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 				notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 			end)
-			return error(`Execution Failure {tag}({_error}){debug.traceback('\nTraceback: ')}`)
+			return error(`Execution Failure {tag}({packed[2]}){debug.traceback('\nTraceback: ')}`)
 		end
 	else
 		return error(`Syntax Error {tag}({fail})`)
