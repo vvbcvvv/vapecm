@@ -88,7 +88,7 @@ local function getPlayerColor(plr)
 	return tostring(plr.TeamColor) ~= "White" and plr.TeamColor.Color
 end
 
-local entityLibrary = debugLoad(vapeGithubRequest("Libraries/entityHandler.lua"))
+local entityLibrary = debugLoad(vapeGithubRequest("Libraries/entityHandler.lua"), 'entityHandler.lua (Universal.lua)')
 shared.vapeentity = entityLibrary
 do
 	entityLibrary.selfDestruct()

@@ -818,7 +818,7 @@ if shared.VapeExecuted then
 			shared.VapeSwitchServers = true
 			shared.VapeOpenGui = (clickgui.Visible)
 			shared.VapePrivate = vapeprivate
-			debugLoad(vapeGithubRequest("Loader.lua"))
+			debugLoad(vapeGithubRequest("Loader.lua", 'Loader.lua (SwitchProfile)'))
 		end
 	end
 

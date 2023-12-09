@@ -189,7 +189,7 @@ for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "vape/Libraries", "vape/C
 	if not isfolder(v) then makefolder(v) end
 end
 
-GuiLibrary = debugLoad(vapeGithubRequest("GuiLibrary.lua"))
+GuiLibrary = debugLoad(vapeGithubRequest("GuiLibrary.lua"), 'GuiLibrary.lua (MainScript.lua)')
 shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
@@ -197,7 +197,7 @@ local saveSettingsLoop = coroutine.create(function()
 		print('SaveSettings()')
 		GuiLibrary.SaveSettings()
         task.wait(10)
-	until not vapeInjected or not GuiLibrary
+	until not vapeInjected or not shared.GuiLibrary
 end)
 
 task.spawn(function()
@@ -1833,7 +1833,7 @@ GeneralSettings.CreateButton2({
 		shared.VapeSwitchServers = true
 		shared.VapeOpenGui = true
 		shared.VapePrivate = vapePrivateCheck
-		debugLoad(vapeGithubRequest("Loader.lua"))
+		debugLoad(vapeGithubRequest("Loader.lua"), 'Loader.lua (ProfileReset)')
 	end
 })
 GUISettings.CreateButton2({
@@ -1899,14 +1899,14 @@ GeneralSettings.CreateButton2({
 
 local function loadVape()
 	if true then -- removed shared.VapeIndepentant thingy
-		debugLoad(vapeGithubRequest("Universal.lua"), 'Universal')
+		debugLoad(vapeGithubRequest("Universal.lua"), 'Universal.lua')
 		if isBedwars then
 			shared.CustomSaveVape = 6872274481
-			debugLoad(vapeGithubRequest("CustomModules/6872274481.lua"), "6872274481")
+			debugLoad(vapeGithubRequest("CustomModules/6872274481.lua"), "6872274481.lua")
 		else
 			local success, response = pcall(vapeGithubRequest, "CustomModules/"..game.PlaceId..".lua")
 			if success and response then 
-				debugLoad(response, game.PlaceId)
+				debugLoad(response, game.PlaceId...lua)
 			else
 				local notification = GuiLibrary.CreateNotification('Vape', 'CustomModule ('..game.PlaceId..') not found', 10, "assets/WarningNotification.png")
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)

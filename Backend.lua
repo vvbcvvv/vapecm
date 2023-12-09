@@ -179,7 +179,6 @@ getgenv().vapeGithubRequest = vapeGithubRequest -- simplicity
 getgenv().downloadVapeAsset = downloadVapeAsset
 getgenv().debugLoad = function(src, tag)
 	tag = tag or 'unknown'
-	print(`Loading {tag}`)
 	local success, err = pcall(function(src)
 		local chunk, fail = loadstring(src)
 		if chunk then
@@ -195,7 +194,7 @@ getgenv().debugLoad = function(src, tag)
 		end
 	end, src)
 	if success then
-		print(`Executed {tag}`)
+		print(`Loaded {tag}`)
 		return err
 	else
 		GuiLibrary.SaveSettings = function() end
@@ -208,4 +207,4 @@ getgenv().debugLoad = function(src, tag)
 	end
 end
 
-return debugLoad(vapeGithubRequest("MainScript.lua"))
+return debugLoad(vapeGithubRequest("MainScript.lua"), 'MainScript.lua (Backend.lua)')
