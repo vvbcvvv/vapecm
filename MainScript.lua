@@ -193,6 +193,7 @@ GuiLibrary = debugLoad(vapeGithubRequest("GuiLibrary.lua"), 'GuiLibrary.lua (Mai
 shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
+	if inputService.touchEnabled then return end
 	repeat
 		print('SaveSettings()')
 		GuiLibrary.SaveSettings()
@@ -1946,6 +1947,7 @@ local function loadVape()
 		shared.VapeOpenGui = nil
 	end
 
+	print('saveSettingsLoop starting...')
 	coroutine.resume(saveSettingsLoop)
 	shared.VapeFullyLoaded = true
 end
