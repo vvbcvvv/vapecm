@@ -193,6 +193,7 @@ GuiLibrary = debugLoad(vapeGithubRequest("GuiLibrary.lua"), 'GuiLibrary.lua (Mai
 shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
+	print(GuiLibrary)
 	if inputService.touchEnabled then return end
 	repeat
 		print('SaveSettings()')
@@ -1765,6 +1766,7 @@ local teleportConnection = VapeCleanup:append(playersService.LocalPlayer.OnTelep
 		if shared.VapeCustomProfile then 
 			teleportScript = "shared.VapeCustomProfile = '"..shared.VapeCustomProfile.."'\n"..teleportScript
 		end
+		print('[TeleportListener] Getting GuiLibrary: ' .. tostring(GuiLibrary))
 		GuiLibrary.SaveSettings()
 		queueonteleport(teleportScript)
     end
@@ -1776,7 +1778,7 @@ GuiLibrary.SelfDestruct = function()
 	end)
 	if GuiLibrary.ColorStepped then GuiLibrary.ColorStepped:Disconnect() end
 
-	if vapeInjected then 
+	if vapeInjected then
 		GuiLibrary.SaveSettings()
 	end
 	vapeInjected = false

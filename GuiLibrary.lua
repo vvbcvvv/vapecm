@@ -802,16 +802,13 @@ if shared.VapeExecuted then
 		loadedsuccessfully = true
 	end
 
-	GuiLibrary.SaveSettings = function(customprofile)
-		warn('ghost SaveSettings called')
-	end
-
 	GuiLibrary["SwitchProfile"] = function(profilename)
 		GuiLibrary.Profiles[GuiLibrary.CurrentProfile]["Selected"] = false
 		GuiLibrary.Profiles[profilename]["Selected"] = true
 		if (not isfile(baseDirectory.."Profiles/"..(profilename == "default" and "" or profilename)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt")) then
 			local realprofile = GuiLibrary.CurrentProfile
 			GuiLibrary.CurrentProfile = profilename
+			print('SwitchProfile')
 			GuiLibrary.SaveSettings()
 			GuiLibrary.CurrentProfile = realprofile
 		end
