@@ -177,6 +177,9 @@ end
 
 getgenv().vapeGithubRequest = vapeGithubRequest -- simplicity
 getgenv().downloadVapeAsset = downloadVapeAsset
+
+local debug_traceback = debug.traceback or getrenv().debug.traceback -- thanks hydrogen
+
 getgenv().debugLoad = function(src, tag)
 	tag = tag or 'unknown'
 	local chunk, fail = loadstring(src)
@@ -197,7 +200,7 @@ getgenv().debugLoad = function(src, tag)
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
 				notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 			end)
-			return error(`Execution Failure {tag}({packed[2]}){debug.traceback('\nTraceback: ')}`)
+			return error(`Execution Failure {tag}({packed[2]}){debug_traceback('\nTraceback: ')}`)
 		end
 	else
 		return error(`Syntax Error {tag}({fail})`)
