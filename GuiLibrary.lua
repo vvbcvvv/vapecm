@@ -766,12 +766,6 @@ if shared.VapeExecuted then
 						end
 					end
 				end
-			else
-				if success then
-					print('failed to decode game profile (type: ' .. type(result) .. ')')
-				else
-					print('failed to decode game profile (error: ' .. result .. ')')
-				end
 			end
 			print('setting keybinds')
 			for i,v in pairs(result) do
@@ -798,6 +792,12 @@ if shared.VapeExecuted then
 					end
 				end
 			end
+		else
+			if success then
+				print('failed to decode game profile (type: ' .. type(result) .. ')')
+			else
+				print('failed to decode game profile (error: ' .. result .. ')')
+			end
 		end
 		loadedsuccessfully = true
 	end
@@ -818,7 +818,7 @@ if shared.VapeExecuted then
 			shared.VapeSwitchServers = true
 			shared.VapeOpenGui = (clickgui.Visible)
 			shared.VapePrivate = vapeprivate
-			loadstring(vapeGithubRequest("Loader.lua"))()
+			debugLoad(vapeGithubRequest("Loader.lua"))
 		end
 	end
 

@@ -10,10 +10,10 @@ end
 
 shared.CustomSaveVape = 292439477
 if pcall(function() readfile("vape/CustomModules/292439477.lua") end) then
-	loadstring(readfile("vape/CustomModules/292439477.lua"))()
+	debugLoad(readfile("vape/CustomModules/292439477.lua"))
 else
 	local publicrepo = vapeGithubRequest("CustomModules/292439477.lua")
 	if publicrepo then
-		loadstring(publicrepo)()
+		debugLoad(publicrepo)
 	end
 end

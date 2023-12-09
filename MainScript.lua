@@ -189,10 +189,9 @@ for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "vape/Libraries", "vape/C
 	if not isfolder(v) then makefolder(v) end
 end
 
-GuiLibrary = loadstring(vapeGithubRequest("GuiLibrary.lua"))()
+GuiLibrary = debugLoad(vapeGithubRequest("GuiLibrary.lua"))
 shared.GuiLibrary = GuiLibrary
 
-local print = print
 local saveSettingsLoop = coroutine.create(function()
 	repeat
 		print('SaveSettings()')
@@ -1834,7 +1833,7 @@ GeneralSettings.CreateButton2({
 		shared.VapeSwitchServers = true
 		shared.VapeOpenGui = true
 		shared.VapePrivate = vapePrivateCheck
-		loadstring(vapeGithubRequest("Loader.lua"))()
+		debugLoad(vapeGithubRequest("Loader.lua"))
 	end
 })
 GUISettings.CreateButton2({
@@ -1897,30 +1896,6 @@ GeneralSettings.CreateButton2({
 	Name = "UNINJECT",
 	Function = GuiLibrary.SelfDestruct
 })
-
-local function debugLoad(data, file)
-	print(`Loading {file}.lua`)
-	local success, err = pcall(function(data)
-		local chunk = loadstring(data)
-		if chunk then
-			print(`Compiled {file}.lua`)
-			return chunk()
-		else
-			return error(`unable to load {file}.lua (syntax error)`)
-		end
-	end, data)
-	if success then
-		print(`Executed {file}.lua`)
-	else
-		GuiLibrary.SaveSettings = function() end
-		pcall(function()
-			local notification = GuiLibrary.CreateNotification("Failure loading "..file..".lua", err, 25, "assets/WarningNotification.png")
-			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
-			notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
-		end)
-		error("newvape uED - Failed to load "..file..".lua | "..err .. debug.traceback('\nTraceback: '))
-	end
-end
 
 local function loadVape()
 	if true then -- removed shared.VapeIndepentant thingy

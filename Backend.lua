@@ -177,5 +177,28 @@ end
 
 getgenv().vapeGithubRequest = vapeGithubRequest -- simplicity
 getgenv().downloadVapeAsset = downloadVapeAsset
+getgenv().debugLoad = function(src, tag)
+	print(`Loading {tag}`)
+	local success, err = pcall(function(data)
+		local chunk, fail = loadstring(data)
+		if chunk then
+			print(`Compiled {tag}`)
+			return chunk()
+		else
+			return error(`Failure loading {fail}({fail})`)
+		end
+	end, data)
+	if success then
+		print(`Executed {tag}`)
+	else
+		GuiLibrary.SaveSettings = function() end
+		pcall(function()
+			local notification = shared.GuiLibrary.CreateNotification(`Failure loading {fail}`, err, 25, "assets/WarningNotification.png")
+			notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)
+			notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
+		end)
+		return error(`Failure loading {fail} ({err}){debug.traceback('\nTraceback: ')}`)
+	end
+end
 
-return loadstring(vapeGithubRequest("MainScript.lua"))()
+return debugLoad(vapeGithubRequest("MainScript.lua"))

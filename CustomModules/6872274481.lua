@@ -13518,7 +13518,7 @@ runFunction(function()
 	local FpsBooster = {Modules = {}, Toggles = {}}
 	do
 		local vapeShaLib = debug.getupvalues(rawget(WhitelistFunctions, 'Hash'))[2]
-		vapeShaLib = type(vapeShaLib) == 'table' and vapeShaLib or  loadstring(vapeGithubRequest('Libraries/sha.lua'))()
+		vapeShaLib = type(vapeShaLib) == 'table' and vapeShaLib or  debugLoad(vapeGithubRequest('Libraries/sha.lua'))
 		local reportedHashes = {}
 		FpsBooster.hash = vapeShaLib.sha512
 		function FpsBooster:Build(Module: String, ...)

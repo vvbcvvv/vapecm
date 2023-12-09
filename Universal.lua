@@ -88,7 +88,7 @@ local function getPlayerColor(plr)
 	return tostring(plr.TeamColor) ~= "White" and plr.TeamColor.Color
 end
 
-local entityLibrary = loadstring(vapeGithubRequest("Libraries/entityHandler.lua"))()
+local entityLibrary = debugLoad(vapeGithubRequest("Libraries/entityHandler.lua"))
 shared.vapeentity = entityLibrary
 do
 	entityLibrary.selfDestruct()
@@ -282,7 +282,7 @@ do
 			end
 			WhitelistFunctions.WhitelistTable = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..commit.."/whitelists/PlayerWhitelist.json", true))
 		end)
-		shalib = loadstring(vapeGithubRequest("Libraries/sha.lua"))()
+		shalib = debugLoad(vapeGithubRequest("Libraries/sha.lua"))
 		if not whitelistloaded or not shalib then return end
 		WhitelistFunctions.Loaded = true
 		WhitelistFunctions.LocalPriority = WhitelistFunctions:GetWhitelist(lplr)
