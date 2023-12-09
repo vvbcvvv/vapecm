@@ -394,7 +394,7 @@ Friends.CreateColorSlider({
 		end
 	end
 })
-local ProfilesTextList = {RefreshValues = function() end}
+local ProfilesTextList = {RefreshValues = function(...) end}
 ProfilesTextList = Profiles.CreateTextList({
 	Name = "ProfilesList",
 	TempText = "Type name", 

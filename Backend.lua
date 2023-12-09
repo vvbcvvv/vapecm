@@ -186,7 +186,9 @@ getgenv().debugLoad = function(src, tag, exec_info)
 	if chunk then
 		print(`{(('  '):rep(exec_info.Level))}⚙️ Compiled {tag} ({exec_info.Old or 'root'})`)
 		print(`{(('  '):rep(exec_info.Level))}▶️ Running {tag} ({exec_info.Old or 'root'})`)
-		local packed = {pcall(chunk, exec_info.Level + 1)}
+		local new_info = table.clone(exec_info)
+		new_info.Level += 1
+		local packed = {pcall(chunk, new_info)}
 		success = packed[1]
 		table.remove(packed, 1)
 		if success then
