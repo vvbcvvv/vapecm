@@ -545,7 +545,7 @@ if shared.VapeExecuted then
 	end
 
 	GuiLibrary.LoadSettings = function(customprofile)
-		print('attempting to load config: ' .. customprofile or 'default')
+		print('attempting to load config: ' .. (customprofile or 'default'))
 		if isfile("vape/Profiles/GUIPositions.vapeprofile.txt") and game.GameId == 2619619496 then
 			print('GUIPositions.vapeprofile.txt overwrite')
 			writefile("vape/Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt", readfile("vape/Profiles/GUIPositions.vapeprofile.txt"))
