@@ -185,7 +185,7 @@ getgenv().debugLoad = function(src, tag, level)
 	local chunk, fail = loadstring(src)
 	if chunk then
 		print(`{(('  '):rep(level))}⚙️ Compiled {tag}`)
-		local packed = {pcall(chunk, level)}
+		local packed = {pcall(chunk, level + 1)}
 		success = packed[1]
 		table.remove(packed, 1)
 		print(`{(('  '):rep(level))}▶️ Running {tag}`)
