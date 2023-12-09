@@ -192,6 +192,7 @@ end
 GuiLibrary = loadstring(vapeGithubRequest("GuiLibrary.lua"))()
 shared.GuiLibrary = GuiLibrary
 
+local print = print
 local saveSettingsLoop = coroutine.create(function()
 	repeat
 		print('SaveSettings()')

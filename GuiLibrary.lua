@@ -5785,41 +5785,37 @@ if shared.VapeExecuted then
 			end))
 			if inputService.TouchEnabled then 
 				local touched = false
-				VapeCleanup:append(inputService.InputBegan:Connect(function(inputType)
-					if inputType.UserInputType == Enum.UserInputType.Touch then 
-						touched = true
-						local oldbuttonposition = button.AbsolutePosition
-						local touchtick = tick()
-						repeat 
-							task.wait() 
-							if button.AbsolutePosition ~= oldbuttonposition then 
-								touched = false
-								break
-							end
-						until (tick() - touchtick) > 1 or not touched or not clickgui.Visible
-						if touched and clickgui.Visible then 
-							clickgui.Visible = false
-							legitgui.Visible = not clickgui.Visible
-							game:GetService("RunService"):SetRobloxGuiFocused(clickgui.Visible and GuiLibrary["MainBlur"].Size ~= 0 or guiService:GetErrorType() ~= Enum.ConnectionError.OK)
-							for _, mobileButton in pairs(GuiLibrary.MobileButtons) do mobileButton.Visible = not clickgui.Visible end	
-							local touchconnection
-							touchconnection = VapeCleanup:append(inputService.InputBegan:Connect(function(inputType)
-								if inputType.UserInputType == Enum.UserInputType.Touch then 
-									createMobileButton(buttonapi, inputType.Position)
-									clickgui.Visible = true
-									legitgui.Visible = not clickgui.Visible
-									game:GetService("RunService"):SetRobloxGuiFocused(clickgui.Visible and GuiLibrary["MainBlur"].Size ~= 0 or guiService:GetErrorType() ~= Enum.ConnectionError.OK)
-									for _, mobileButton in pairs(GuiLibrary.MobileButtons) do mobileButton.Visible = not clickgui.Visible end		
-									touchconnection:Disconnect()
-								end
-							end))
+				VapeCleanup:append(button.MouseButton1Click:Connect(function()
+					touched = true
+					local oldbuttonposition = button.AbsolutePosition
+					local touchtick = tick()
+					repeat 
+						task.wait() 
+						if button.AbsolutePosition ~= oldbuttonposition then 
+							touched = false
+							break
 						end
+					until (tick() - touchtick) > 1 or not touched or not clickgui.Visible
+					if touched and clickgui.Visible then 
+						clickgui.Visible = false
+						legitgui.Visible = not clickgui.Visible
+						game:GetService("RunService"):SetRobloxGuiFocused(clickgui.Visible and GuiLibrary["MainBlur"].Size ~= 0 or guiService:GetErrorType() ~= Enum.ConnectionError.OK)
+						for _, mobileButton in pairs(GuiLibrary.MobileButtons) do mobileButton.Visible = not clickgui.Visible end	
+						local touchconnection
+						touchconnection = VapeCleanup:append(inputService.InputBegan:Connect(function(inputType)
+							if inputType.UserInputType == Enum.UserInputType.Touch then 
+								createMobileButton(buttonapi, inputType.Position)
+								clickgui.Visible = true
+								legitgui.Visible = not clickgui.Visible
+								game:GetService("RunService"):SetRobloxGuiFocused(clickgui.Visible and GuiLibrary["MainBlur"].Size ~= 0 or guiService:GetErrorType() ~= Enum.ConnectionError.OK)
+								for _, mobileButton in pairs(GuiLibrary.MobileButtons) do mobileButton.Visible = not clickgui.Visible end		
+								touchconnection:Disconnect()
+							end
+						end))
 					end
 				end))
-				VapeCleanup:append(inputService.InputEnded:Connect(function(inputType)
-					if inputType.UserInputType == Enum.UserInputType.Touch then
-						touched = false
-					end
+				VapeCleanup:append(button.MouseButton1Up:Connect(function()
+					touched = false
 				end))
 			end
 			VapeCleanup:append(button.MouseEnter:Connect(function() 
@@ -6894,7 +6890,7 @@ if shared.VapeExecuted then
 
 	GuiLibrary["LoadedAnimation"] = function(enabled)
 		if enabled then
-			touch = inputService.TouchEnabled
+			local touch = inputService.TouchEnabled
 		    GuiLibrary.CreateNotification(
 				"Loaded",
 				(touch or GuiLibrary.GUIKeybind == "RightShift") and "Press the button on the top right to open the Interface." or "Press "..GuiLibrary.GUIKeybind.." to open the Interface.",
