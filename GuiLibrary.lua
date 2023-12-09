@@ -531,7 +531,7 @@ if shared.VapeExecuted then
 				GuiLibrary.Settings[i] = {["Type"] = "LegitModule", ["Enabled"] = v["Api"]["Enabled"], ["Position"] = {v.Object.Position.X.Scale, v.Object.Position.X.Offset, v.Object.Position.Y.Scale, v.Object.Position.Y.Offset}}
 			end
 		end
-		print('saved all settings to table')
+		--print('saved all settings to table')
 		local mobileButtonSaving = {}
 		for _, mobileButton in pairs(GuiLibrary.MobileButtons) do 
 			table.insert(mobileButtonSaving, {Position = {mobileButton.Position.X.Offset, mobileButton.Position.Y.Offset}, Module = mobileButton.Text.."OptionsButton"})
@@ -539,9 +539,9 @@ if shared.VapeExecuted then
 		GuiLibrary.Settings["MobileButtons"] = {["Type"] = "MobileButtons", ["Buttons"] = mobileButtonSaving}
 		WindowTable["GUIKeybind"] = {["Type"] = "GUIKeybind", ["Value"] = GuiLibrary["GUIKeybind"]}
 		writefile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt", httpService:JSONEncode(GuiLibrary.Settings))
-		print('saved settings to '..baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt")
+		--print('saved settings to '..baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt")
 		writefile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt", httpService:JSONEncode(WindowTable))
-		print('saved gui positions to '..baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt")
+		--print('saved gui positions to '..baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt")
 	end
 
 	GuiLibrary.LoadSettings = function(customprofile)
@@ -552,7 +552,9 @@ if shared.VapeExecuted then
 			if delfile then delfile("vape/Profiles/GUIPositions.vapeprofile.txt") end
 		end
 		local success2, result2 = pcall(function()
-			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt"))
+			local json = readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt")
+			print(json)
+			return httpService:JSONDecode(json)
 		end)
 		if success2 and type(result2) == "table" then
 			print('profile list decoded successfully')
@@ -575,7 +577,9 @@ if shared.VapeExecuted then
 			GuiLibrary.CurrentProfile = customprofile
 		end
 		local success3, result3 = pcall(function()
-			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt"))
+			local json = readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt")
+			print(json)
+			return httpService:JSONDecode(json)
 		end)
 		if success3 and type(result3) == "table" then
 			print('gui positions decoded successfully')
@@ -652,7 +656,9 @@ if shared.VapeExecuted then
 			end
 		end
 		local success, result = pcall(function()
-			return httpService:JSONDecode(readfile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(game.PlaceId)..".vapeprofile.txt"))
+			local json = readfile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(game.PlaceId)..".vapeprofile.txt")
+			print(json)
+			return httpService:JSONDecode(json)
 		end)
 		if success and type(result) == "table" then
 			print('game profile decoded successfully')
