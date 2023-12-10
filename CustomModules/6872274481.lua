@@ -14491,7 +14491,7 @@ runFunction(function()
 				if HotbarHighlight.Enabled then
 					local highlight = Instance.new('UIStroke')
 					highlight.Color = Color3.fromHSV(HotbarHighlightColor.Hue, HotbarHighlightColor.Sat, HotbarHighlightColor.Value)
-					highlight.Thickness = 1.6 
+					highlight.Thickness = 1.3
 					highlight.Parent = sloticon.Parent
 					table.insert(hotbarobjects, highlight)
 				end
