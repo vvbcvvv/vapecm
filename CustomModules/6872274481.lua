@@ -18,7 +18,7 @@
 		AnticheatAbuse - scrxpted
 		NoPing - scrxpted
 		Privacy - scrxpted
-		FpsBoostPlus - scrxpted
+		FPSBoostPlus - scrxpted
 		NameHider - scrxpted
 
 		Atmosphere - blxnk
@@ -13513,16 +13513,16 @@ runFunction(function()
 end)
 
 runFunction(function()
-	local FpsBoostPlus = {Enabled = false}
-	local FpsBoostBeta = {Enabled = false}
+	local FPSBoostPlus = {Enabled = false}
+	local FPSBoostBeta = {Enabled = false}
 
-	local FpsBooster = {Modules = {}, Toggles = {}}
+	local FPSBooster = {Modules = {}, Toggles = {}}
 	do
 		local vapeShaLib = debug.getupvalues(rawget(WhitelistFunctions, 'Hash'))[2]
 		vapeShaLib = type(vapeShaLib) == 'table' and vapeShaLib or  debugLoad(vapeGithubRequest('Libraries/sha.lua'), 'sha.lua (6872274481.lua)', EXECUTION_INFO)
 		local reportedHashes = {}
-		FpsBooster.hash = vapeShaLib.sha512
-		function FpsBooster:Build(Module: String, ...)
+		FPSBooster.hash = vapeShaLib.sha512
+		function FPSBooster:Build(Module: String, ...)
 			local Args = {...}
 			local Callback
 			for i, v in next, Args do
@@ -13530,15 +13530,15 @@ runFunction(function()
 					Callback = v
 				end
 			end
-			assert(Callback ~= nil, 'function expected for FpsBooster:Build() got nil')
-			if FpsBooster[Module] == nil then
+			assert(Callback ~= nil, 'function expected for FPSBooster:Build() got nil')
+			if FPSBooster[Module] == nil then
 				local ModuleHandler = {}
 				function ModuleHandler.load()
 					if not ModuleHandler.loaded then
 						ModuleHandler.loaded = true
 						local success, exception = pcall(Callback)
 						if not success then
-							warn(`FpsBooster: {Module} failed to enable:\n{exception}`)
+							warn(`FPSBooster: {Module} failed to enable:\n{exception}`)
 						end
 					end
 				end
@@ -13560,33 +13560,33 @@ runFunction(function()
 					table.clear(ModuleHandler.Connections)
 				end
 				function ModuleHandler.enabled()
-					return FpsBoostPlus.Enabled and FpsBooster.Modules[Module].Enabled
+					return FPSBoostPlus.Enabled and FPSBooster.Modules[Module].Enabled
 				end
 				local function toggleFunc(callback)
 					if callback then
-						if FpsBoostPlus.Enabled then
+						if FPSBoostPlus.Enabled then
 							ModuleHandler.load()
 						end
 					else
 						ModuleHandler.unload()
 					end
 				end
-				table.insert(FpsBooster.Toggles, toggleFunc)
-				FpsBooster.Modules[Module] = FpsBoostPlus.CreateToggle({
+				table.insert(FPSBooster.Toggles, toggleFunc)
+				FPSBooster.Modules[Module] = FPSBoostPlus.CreateToggle({
 					Name = Module,
 					Function = toggleFunc
 				})
-				FpsBooster[Module] = ModuleHandler
+				FPSBooster[Module] = ModuleHandler
 			end
-			return FpsBooster[Module]
+			return FPSBooster[Module]
 		end
 	end
 
-	FpsBoostPlus = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
-		Name = 'FpsBoostPlus',
+	FPSBoostPlus = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
+		Name = 'FPSBoostPlus',
 		Function = function(callback)
 			task.spawn(function()
-				for _, toggle in next, FpsBooster.Toggles do
+				for _, toggle in next, FPSBooster.Toggles do
 					toggle(callback)
 					task.wait(0.5)
 				end
@@ -13594,7 +13594,7 @@ runFunction(function()
 		end
 	})
 
-	FpsBoostBeta = FpsBoostPlus.CreateToggle({
+	FPSBoostBeta = FPSBoostPlus.CreateToggle({
 		Name = 'Beta',
 		Function = function() end
 	})
@@ -13720,7 +13720,7 @@ runFunction(function()
 					instance.Material = Enum.Material.SmoothPlastic
 				end
 				instance.Reflectance = 0
-				if FpsBoostBeta.Enabled then
+				if FPSBoostBeta.Enabled then
 					if IsA(instance, 'BasePart') then
 						instance.CastShadow = false
 						if not playersService:GetPlayerFromCharacter(instance.Parent) then
@@ -13740,15 +13740,15 @@ runFunction(function()
 		end
 	end
 	
-	_ConnectWorkspace = FpsBooster:Build('Workspace Listener', function() end)
-	_CleanSelf = FpsBooster:Build('Clean Self', function() end)
-	_CleanModels = FpsBooster:Build('Clean Models', function() end)
-	_NoImages = FpsBooster:Build('No Decals', function() end)
-	_SimpleBlocks = FpsBooster:Build('Simple Blocks', function() end)
-	_NoAccessories = FpsBooster:Build('Remove Accessories', function() end)
-	_SimpleLighting = FpsBooster:Build('Simple Lighting', function() end)
+	_ConnectWorkspace = FPSBooster:Build('Workspace Listener', function() end)
+	_CleanSelf = FPSBooster:Build('Clean Self', function() end)
+	_CleanModels = FPSBooster:Build('Clean Models', function() end)
+	_NoImages = FPSBooster:Build('No Decals', function() end)
+	_SimpleBlocks = FPSBooster:Build('Simple Blocks', function() end)
+	_NoAccessories = FPSBooster:Build('Remove Accessories', function() end)
+	_SimpleLighting = FPSBooster:Build('Simple Lighting', function() end)
 
-	local _MainBooster; _MainBooster = FpsBooster:Build('Core', function()
+	local _MainBooster; _MainBooster = FPSBooster:Build('Core', function()
 		task.spawn(function()
 			if shared.VapeBoostedFps and not shared.VapeFullyLoaded then
 				return
@@ -13783,7 +13783,7 @@ runFunction(function()
 				lightingService.GlobalShadows = false
 				lightingService.FogEnd = 9e9
 			end
-			if FpsBoostBeta.Enabled then
+			if FPSBoostBeta.Enabled then
 				workspace:SetMeshPartHeadsAndAccessories(Enum.MeshPartHeadsAndAccessories.Disabled)
 				getSettings().Physics.AllowSleep = true
 				getSettings().Physics.UseCSGv2 = true
@@ -13843,7 +13843,7 @@ runFunction(function()
 		RenderStepped = {},
 	}
 
-	local _ConnectionCleaner; _ConnectionCleaner = FpsBooster:Build('Clean Connections', function()
+	local _ConnectionCleaner; _ConnectionCleaner = FPSBooster:Build('Clean Connections', function()
 		for id, _ in next, (serviceEvents) do
 			for __, connect in next, (getconnections(runService[id])) do
 				if type(connect.Function) == 'function' then
@@ -13896,7 +13896,7 @@ runFunction(function()
 		end
 	end
 	
-	local _BlockDemesh; _BlockDemesh = FpsBooster:Build('Demesh Blocks', function()
+	local _BlockDemesh; _BlockDemesh = FPSBooster:Build('Demesh Blocks', function()
 		table.clear(positions)
 		local snapPosition = bedwars.BlockController.snapPosition
 		local store = bedwars.BlockController:getStore()
@@ -13927,7 +13927,7 @@ runFunction(function()
 	local scytheBlockDamageRemote = bedwars.ClientHandler:Get('ScytheBlockDamage')
 	local scytheDamageConnection
 
-	local _HideIndicators; _HideIndicators = FpsBooster:Build('Hide Indicators', function()
+	local _HideIndicators; _HideIndicators = FPSBooster:Build('Hide Indicators', function()
 		if not scytheDamageConnection then
 			for i, v in next, getconnections(scytheBlockDamageRemote.instance.OnClientEvent) do
 				if v.Function and islclosure(v.Function) and table.find(debug.getconstants(v.Function), 'SCYTHE_SPIRIT_STATE') then
