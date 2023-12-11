@@ -190,7 +190,7 @@ for i,v in pairs({baseDirectory:gsub("/", ""), "vape", "vape/Libraries", "vape/C
 	if not isfolder(v) then makefolder(v) end
 end
 
-GuiLibrary = debugLoad(vapeGithubRequest("GuiLibrary.lua"), 'GuiLibrary.lua', EXECUTION_INFO)
+GuiLibrary = VLib.loadFile(VLib.requestFile("GuiLibrary.lua"), 'GuiLibrary.lua', EXECUTION_INFO)
 shared.GuiLibrary = GuiLibrary
 
 local saveSettingsLoop = coroutine.create(function()
@@ -203,7 +203,7 @@ end)
 
 task.spawn(function()
 	local image = Instance.new("ImageLabel")
-	image.Image = downloadVapeAsset("vape/assets/CombatIcon.png")
+	image.Image = VLib.downloadAsset("vape/assets/CombatIcon.png")
 	image.Position = UDim2.new()
 	image.BackgroundTransparency = 1
 	image.Size = UDim2.fromOffset(100, 100)
@@ -434,7 +434,7 @@ ProfilesTextList = Profiles.CreateTextList({
 		bindbkg.Visible = GuiLibrary.Profiles[profileName].Keybind ~= ""
 		bindbkg.Parent = profileObject
 		local bindimg = Instance.new("ImageLabel")
-		bindimg.Image = downloadVapeAsset("vape/assets/KeybindIcon.png")
+		bindimg.Image = VLib.downloadAsset("vape/assets/KeybindIcon.png")
 		bindimg.BackgroundTransparency = 1
 		bindimg.Size = UDim2.new(0, 12, 0, 12)
 		bindimg.Position = UDim2.new(0, 4, 0, 5)
@@ -498,14 +498,14 @@ ProfilesTextList = Profiles.CreateTextList({
 			end
 		end))
 		VapeCleanup:append(bindbkg.MouseEnter:Connect(function() 
-			bindimg.Image = downloadVapeAsset("vape/assets/PencilIcon.png") 
+			bindimg.Image = VLib.downloadAsset("vape/assets/PencilIcon.png") 
 			bindimg.Visible = true
 			bindtext.Visible = false
 			bindbkg.Size = UDim2.new(0, 20, 0, 21)
 			bindbkg.Position = UDim2.new(1, -50, 0, 6)
 		end))
 		VapeCleanup:append(bindbkg.MouseLeave:Connect(function() 
-			bindimg.Image = downloadVapeAsset("vape/assets/KeybindIcon.png")
+			bindimg.Image = VLib.downloadAsset("vape/assets/KeybindIcon.png")
 			if GuiLibrary.Profiles[profileName].Keybind ~= "" then
 				bindimg.Visible = false
 				bindtext.Visible = true
@@ -559,7 +559,7 @@ local OnlineProfilesButtonImage = Instance.new("ImageLabel")
 OnlineProfilesButtonImage.BackgroundTransparency = 1
 OnlineProfilesButtonImage.Position = UDim2.new(0, 14, 0, 7)
 OnlineProfilesButtonImage.Size = UDim2.new(0, 17, 0, 16)
-OnlineProfilesButtonImage.Image = downloadVapeAsset("vape/assets/OnlineProfilesButton.png")
+OnlineProfilesButtonImage.Image = VLib.downloadAsset("vape/assets/OnlineProfilesButton.png")
 OnlineProfilesButtonImage.ImageColor3 = Color3.fromRGB(121, 121, 121)
 OnlineProfilesButtonImage.ZIndex = 1
 OnlineProfilesButtonImage.Active = false
@@ -580,7 +580,7 @@ OnlineProfilesExitButton.Name = "OnlineProfilesExitButton"
 OnlineProfilesExitButton.ImageColor3 = Color3.fromRGB(121, 121, 121)
 OnlineProfilesExitButton.Size = UDim2.new(0, 24, 0, 24)
 OnlineProfilesExitButton.AutoButtonColor = false
-OnlineProfilesExitButton.Image = downloadVapeAsset("vape/assets/ExitIcon1.png")
+OnlineProfilesExitButton.Image = VLib.downloadAsset("vape/assets/ExitIcon1.png")
 OnlineProfilesExitButton.Visible = true
 OnlineProfilesExitButton.Position = UDim2.new(1, -31, 0, 8)
 OnlineProfilesExitButton.BackgroundColor3 = Color3.fromRGB(26, 25, 26)
@@ -597,7 +597,7 @@ end))
 local OnlineProfilesFrameShadow = Instance.new("ImageLabel")
 OnlineProfilesFrameShadow.AnchorPoint = Vector2.new(0.5, 0.5)
 OnlineProfilesFrameShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-OnlineProfilesFrameShadow.Image = downloadVapeAsset("vape/assets/WindowBlur.png")
+OnlineProfilesFrameShadow.Image = VLib.downloadAsset("vape/assets/WindowBlur.png")
 OnlineProfilesFrameShadow.BackgroundTransparency = 1
 OnlineProfilesFrameShadow.ZIndex = -1
 OnlineProfilesFrameShadow.Size = UDim2.new(1, 6, 1, 6)
@@ -607,7 +607,7 @@ OnlineProfilesFrameShadow.SliceCenter = Rect.new(10, 10, 118, 118)
 OnlineProfilesFrameShadow.Parent = OnlineProfilesFrame
 local OnlineProfilesFrameIcon = Instance.new("ImageLabel")
 OnlineProfilesFrameIcon.Size = UDim2.new(0, 19, 0, 16)
-OnlineProfilesFrameIcon.Image = downloadVapeAsset("vape/assets/ProfilesIcon.png")
+OnlineProfilesFrameIcon.Image = VLib.downloadAsset("vape/assets/ProfilesIcon.png")
 OnlineProfilesFrameIcon.Name = "WindowIcon"
 OnlineProfilesFrameIcon.BackgroundTransparency = 1
 OnlineProfilesFrameIcon.Position = UDim2.new(0, 10, 0, 13)
@@ -795,7 +795,7 @@ VapeLogo.BackgroundColor3 = Color3.new()
 VapeLogo.BorderSizePixel = 0
 VapeLogo.BackgroundTransparency = 1
 VapeLogo.Visible = true
-VapeLogo.Image = downloadVapeAsset("vape/assets/VapeLogo3.png")
+VapeLogo.Image = VLib.downloadAsset("vape/assets/VapeLogo3.png")
 local VapeLogoV4 = Instance.new("ImageLabel")
 VapeLogoV4.Parent = VapeLogo
 VapeLogoV4.Size = UDim2.new(0, 41, 0, 24)
@@ -804,7 +804,7 @@ VapeLogoV4.Position = UDim2.new(1, 0, 0, 1)
 VapeLogoV4.BorderSizePixel = 0
 VapeLogoV4.BackgroundColor3 = Color3.new()
 VapeLogoV4.BackgroundTransparency = 1
-VapeLogoV4.Image = downloadVapeAsset("vape/assets/VapeLogo4.png")
+VapeLogoV4.Image = VLib.downloadAsset("vape/assets/VapeLogo4.png")
 local VapeLogoShadow = VapeLogo:Clone()
 VapeLogoShadow.ImageColor3 = Color3.new()
 VapeLogoShadow.ImageTransparency = 0.5
@@ -1362,7 +1362,7 @@ TargetInfoHealthBackground.Parent = TargetInfoMainInfo
 local TargetInfoHealthBackgroundShadow = Instance.new("ImageLabel")
 TargetInfoHealthBackgroundShadow.AnchorPoint = Vector2.new(0.5, 0.5)
 TargetInfoHealthBackgroundShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-TargetInfoHealthBackgroundShadow.Image = downloadVapeAsset("vape/assets/WindowBlur.png")
+TargetInfoHealthBackgroundShadow.Image = VLib.downloadAsset("vape/assets/WindowBlur.png")
 TargetInfoHealthBackgroundShadow.BackgroundTransparency = 1
 TargetInfoHealthBackgroundShadow.ImageTransparency = 0.6
 TargetInfoHealthBackgroundShadow.ZIndex = -1
@@ -1841,7 +1841,7 @@ GeneralSettings.CreateButton2({
 		shared.VapeSwitchServers = true
 		shared.VapeOpenGui = true
 		shared.VapePrivate = vapePrivateCheck
-		debugLoad(vapeGithubRequest("Loader.lua"), 'Loader.lua (ProfileReset)', EXECUTION_INFO)
+		VLib.loadFile(VLib.requestFile("Loader.lua"), 'Loader.lua (ProfileReset)', EXECUTION_INFO)
 	end
 })
 GUISettings.CreateButton2({
@@ -1908,14 +1908,14 @@ GeneralSettings.CreateButton2({
 
 local function loadVape()
 	if true then -- removed shared.VapeIndepentant thingy
-		debugLoad(vapeGithubRequest("Universal.lua"), 'Universal.lua', EXECUTION_INFO)
+		VLib.loadFile(VLib.requestFile("Universal.lua"), 'Universal.lua', EXECUTION_INFO)
 		if isBedwars then
 			shared.CustomSaveVape = 6872274481
-			debugLoad(vapeGithubRequest("CustomModules/6872274481.lua"), "6872274481.lua", EXECUTION_INFO)
+			VLib.loadFile(VLib.requestFile("CustomModules/6872274481.lua"), "6872274481.lua", EXECUTION_INFO)
 		else
-			local success, response = pcall(vapeGithubRequest, "CustomModules/"..game.PlaceId..".lua")
+			local success, response = pcall(VLib.requestFile, "CustomModules/"..game.PlaceId..".lua")
 			if success and response then 
-				debugLoad(response, game.PlaceId..'.lua', EXECUTION_INFO)
+				VLib.loadFile(response, game.PlaceId..'.lua', EXECUTION_INFO)
 			else
 				local notification = GuiLibrary.CreateNotification('Vape', 'CustomModule ('..game.PlaceId..') not found', 10, "assets/WarningNotification.png")
 				notification.IconLabel.ImageColor3 = Color3.new(220, 0, 0)

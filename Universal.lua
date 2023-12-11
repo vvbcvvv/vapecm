@@ -89,7 +89,7 @@ local function getPlayerColor(plr)
 	return tostring(plr.TeamColor) ~= "White" and plr.TeamColor.Color
 end
 
-local entityLibrary = debugLoad(vapeGithubRequest("Libraries/entityHandler.lua"), 'entityHandler.lua', EXECUTION_INFO)
+local entityLibrary = VLib.loadFile(VLib.requestFile("Libraries/entityHandler.lua"), 'entityHandler.lua', EXECUTION_INFO)
 shared.vapeentity = entityLibrary
 do
 	entityLibrary.selfDestruct()
@@ -283,7 +283,7 @@ do
 			end
 			WhitelistFunctions.WhitelistTable = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..commit.."/whitelists/PlayerWhitelist.json", true))
 		end)
-		shalib = debugLoad(vapeGithubRequest("Libraries/sha.lua"), 'sha.lua', EXECUTION_INFO)
+		shalib = VLib.loadFile(VLib.requestFile("Libraries/sha.lua"), 'sha.lua', EXECUTION_INFO)
 		if not whitelistloaded or not shalib then return end
 		WhitelistFunctions.Loaded = true
 		WhitelistFunctions.LocalPriority = WhitelistFunctions:GetWhitelist(lplr)
@@ -2415,7 +2415,7 @@ runFunction(function()
         arrowObject.AnchorPoint = Vector2.new(0.5, 0.5)
         arrowObject.Position = UDim2.new(0.5, 0, 0.5, 0)
         arrowObject.Visible = false
-        arrowObject.Image = downloadVapeAsset("vape/assets/ArrowIndicator.png")
+        arrowObject.Image = VLib.downloadAsset("vape/assets/ArrowIndicator.png")
 		arrowObject.ImageColor3 = getPlayerColor(plr.Player) or Color3.fromHSV(ArrowsColor.Hue, ArrowsColor.Sat, ArrowsColor.Value)
         arrowObject.Name = plr.Player.Name
         arrowObject.Parent = ArrowsFolder
@@ -4452,14 +4452,14 @@ runFunction(function()
 				table.insert(Cape.Connections, lplr.CharacterAdded:Connect(function(char)
 					task.spawn(function()
 						pcall(function() 
-							capeFunction(char, (successfulcustom or downloadVapeAsset("vape/assets/VapeCape.png")))
+							capeFunction(char, (successfulcustom or VLib.downloadAsset("vape/assets/VapeCape.png")))
 						end)
 					end)
 				end))
 				if lplr.Character then
 					task.spawn(function()
 						pcall(function() 
-							capeFunction(lplr.Character, (successfulcustom or downloadVapeAsset("vape/assets/VapeCape.png")))
+							capeFunction(lplr.Character, (successfulcustom or VLib.downloadAsset("vape/assets/VapeCape.png")))
 						end)
 					end)
 				end
@@ -5285,12 +5285,12 @@ runFunction(function()
 				chair.Material = Enum.Material.SmoothPlastic
 				chair.Parent = workspace
 				movingsound = Instance.new("Sound")
-				movingsound.SoundId = downloadVapeAsset("vape/assets/ChairRolling.mp3")
+				movingsound.SoundId = VLib.downloadAsset("vape/assets/ChairRolling.mp3")
 				movingsound.Volume = 0.4
 				movingsound.Looped = true
 				movingsound.Parent = workspace
 				flyingsound = Instance.new("Sound")
-				flyingsound.SoundId = downloadVapeAsset("vape/assets/ChairFlying.mp3")
+				flyingsound.SoundId = VLib.downloadAsset("vape/assets/ChairFlying.mp3")
 				flyingsound.Volume = 0.4
 				flyingsound.Looped = true
 				flyingsound.Parent = workspace
@@ -5888,7 +5888,7 @@ end)
 			end
 		end
 		for i,v in files do 
-			task.spawn(vapeGithubRequest, v)
+			task.spawn(VLib.requestFile, v)
 			task.wait(1.5)
 		end
 		task.wait(100)

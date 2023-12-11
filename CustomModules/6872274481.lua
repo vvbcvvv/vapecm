@@ -897,7 +897,7 @@ local function CreateAutoHotbarGUI(children2, argstable)
 	addbutton.Position = UDim2.new(0, 93, 0, 9)
 	addbutton.Size = UDim2.new(0, 12, 0, 12)
 	addbutton.ImageColor3 = Color3.fromRGB(5, 133, 104)
-	addbutton.Image = downloadVapeAsset('vape/assets/AddItem.png')
+	addbutton.Image = VLib.downloadAsset('vape/assets/AddItem.png')
 	addbutton.Parent = toggleframe1
 	local children3 = Instance.new('Frame')
 	children3.Name = argstable['Name']..'Children'
@@ -938,7 +938,7 @@ local function CreateAutoHotbarGUI(children2, argstable)
 	ItemListExitButton.ImageColor3 = Color3.fromRGB(121, 121, 121)
 	ItemListExitButton.Size = UDim2.new(0, 24, 0, 24)
 	ItemListExitButton.AutoButtonColor = false
-	ItemListExitButton.Image = downloadVapeAsset('vape/assets/ExitIcon1.png')
+	ItemListExitButton.Image = VLib.downloadAsset('vape/assets/ExitIcon1.png')
 	ItemListExitButton.Visible = true
 	ItemListExitButton.Position = UDim2.new(1, -31, 0, 8)
 	ItemListExitButton.BackgroundColor3 = Color3.fromRGB(26, 25, 26)
@@ -959,7 +959,7 @@ local function CreateAutoHotbarGUI(children2, argstable)
 	local ItemListFrameShadow = Instance.new('ImageLabel')
 	ItemListFrameShadow.AnchorPoint = Vector2.new(0.5, 0.5)
 	ItemListFrameShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-	ItemListFrameShadow.Image = downloadVapeAsset('vape/assets/WindowBlur.png')
+	ItemListFrameShadow.Image = VLib.downloadAsset('vape/assets/WindowBlur.png')
 	ItemListFrameShadow.BackgroundTransparency = 1
 	ItemListFrameShadow.ZIndex = -1
 	ItemListFrameShadow.Size = UDim2.new(1, 6, 1, 6)
@@ -1881,7 +1881,7 @@ runFunction(function()
 				end
 				if str == '' then str = 'skill issue' end
 				local video = Instance.new('VideoFrame')
-				video.Video = downloadVapeAsset('vape/assets/skill.webm')
+				video.Video = VLib.downloadAsset('vape/assets/skill.webm')
 				video.Size = UDim2.new(1, 0, 1, 36)
 				video.Visible = false
 				video.Position = UDim2.new(0, 0, 0, -36)
@@ -13519,7 +13519,7 @@ runFunction(function()
 	local FPSBooster = {Modules = {}, Toggles = {}}
 	do
 		local vapeShaLib = debug.getupvalues(rawget(WhitelistFunctions, 'Hash'))[2]
-		vapeShaLib = type(vapeShaLib) == 'table' and vapeShaLib or  debugLoad(vapeGithubRequest('Libraries/sha.lua'), 'sha.lua (6872274481.lua)', EXECUTION_INFO)
+		vapeShaLib = type(vapeShaLib) == 'table' and vapeShaLib or  VLib.loadFile(VLib.requestFile('Libraries/sha.lua'), 'sha.lua (6872274481.lua)', EXECUTION_INFO)
 		local reportedHashes = {}
 		FPSBooster.hash = vapeShaLib.sha512
 		function FPSBooster:Build(Module: String, ...)

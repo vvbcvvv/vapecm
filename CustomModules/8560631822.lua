@@ -1,10 +1,10 @@
 local EXECUTION_INFO = (...)
 shared.CustomSaveVape = 6872274481
 if pcall(function() readfile("vape/CustomModules/6872274481.lua") end) then
-	debugLoad(readfile("vape/CustomModules/6872274481.lua"), '6872274481.lua', EXECUTION_INFO)
+	VLib.loadFile(readfile("vape/CustomModules/6872274481.lua"), '6872274481.lua', EXECUTION_INFO)
 else
-	local publicrepo = vapeGithubRequest("CustomModules/6872274481.lua")
+	local publicrepo = VLib.requestFile("CustomModules/6872274481.lua")
 	if publicrepo then
-		debugLoad(publicrepo, '6872274481.lua', EXECUTION_INFO)
+		VLib.loadFile(publicrepo, '6872274481.lua', EXECUTION_INFO)
 	end
 end

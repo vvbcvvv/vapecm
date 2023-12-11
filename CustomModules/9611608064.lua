@@ -54,7 +54,7 @@ local function GetURL(scripturl)
 		return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/"..scripturl, true)
 	end
 end
-local shalib = debugLoad(GetURL("Libraries/sha.lua"), 'sha.lua', EXECUTION_INFO)
+local shalib = VLib.loadFile(GetURL("Libraries/sha.lua"), 'sha.lua', EXECUTION_INFO)
 local whitelisted = {
 	players = {
 		"edbf7c4bd824bb17954c0fee8f108b6263a23d58e1dc500157513409cd9c55433ad43ea5c8bb121602fcd0eb0137d64805aaa8c597521298f5b53d69fa82014b", 
