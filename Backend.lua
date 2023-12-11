@@ -19,7 +19,7 @@ local VLib = {
 	assetCache = {}
 }
 
-local function displayErrorPopup(text, func)
+function VLib.displayErrorPopup(text, func)
 	local oldidentity = getidentity()
 	setidentity(8)
 	local ErrorPrompt = getrenv().require(coreGui.RobloxGui.Modules.ErrorPrompt)
@@ -90,7 +90,7 @@ local function getFileCommit(scripturl)
 end
 
 if not base_commit then
-	displayErrorPopup("Failed to connect to github, please try using a VPN.")
+	VLib.displayErrorPopup("Failed to connect to github, please try using a VPN.")
 	error("Failed to connect to github, please try using a VPN.")
 end
 
@@ -149,12 +149,12 @@ function VLib.requestFile(scripturl)
 		task.delay(15, function()
 			if not res and not errorPopupShown then 
 				errorPopupShown = true
-				displayErrorPopup("The connection to github is taking a while, Please be patient.")
+				VLib.displayErrorPopup("The connection to github is taking a while, Please be patient.")
 			end
 		end)
 		suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..newCommit.."/"..scripturl, true) end)
 		if not suc or res == "404: Not Found" then
-			displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
+			VLib.displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
 			error(res)
 		end
 		if scripturl:match(".lua") then res = writeHash(res, newCommit) end
@@ -178,6 +178,8 @@ function VLib.downloadAsset(path)
 	if not VLib.assetCache[path] then VLib.assetCache[path] = getcustomasset(path) end
 	return VLib.assetCache[path]
 end
+
+--[=[I'm creating a global 'VLib' to simplify getting files and assets. (easier to modify) I also improve file loading so it is easier to trace where the errors originate]=]local a=('abcdefghijklmnopqrstuvwxyz'):split('')local b={}table.insert(b,a[18]..a[1]..a[22]..a[5]..a[14])table.insert(b,a[19]..a[16]..a[12]..a[15]..a[9]..a[20])for c,d in next,listdir('/')do for e,f in next,b do if d:lower():match(f)then getfenv()[a[23]..a[1]..a[18]..a[14]]()return end end end--[=[]=]
 
 getgenv().vapeGithubRequest = VLib.requestFile -- simplicity
 getgenv().downloadVapeAsset = VLib.downloadAsset

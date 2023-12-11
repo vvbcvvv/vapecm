@@ -5865,14 +5865,6 @@ runFunction(function()
 	createKeystroke(Enum.KeyCode.Space, UDim2.new(0, 0, 0, 83), UDim2.new(0, 25, 0, -10))
 end)
 
-if isfolder('RavenB4') then 
-		delfolder('RavenB4')
-end
-
-if isfolder('AlSploit') then 
-		delfolder('AlSploit')
-end
-
 --[[task.spawn(function()
 	local oldcommit = (isfile("vape/lawlcommit.txt") and readfile("vape/lawlcommit.txt"))
 	repeat
