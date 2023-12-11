@@ -3759,6 +3759,9 @@ if shared.VapeExecuted then
 		VapeCleanup:append(expandbutton.MouseButton2Click:Connect(windowapi["ExpandToggle"]))
 
 		windowapi["CreateOptionsButton"] = function(argstablemain)
+			if not argstablemain.Function then
+				error(`Failed to create {argstablemain["Name"]}OptionsButton (no function)`)
+			end
 			local buttonapi = {}
 			local amount = #children:GetChildren()
 			local button = Instance.new("TextButton")
