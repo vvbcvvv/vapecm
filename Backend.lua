@@ -179,7 +179,7 @@ function VLib.downloadAsset(path)
 	return VLib.assetCache[path]
 end
 
---[=[I'm creating a global 'VLib' to simplify getting files and assets. (easier to modify) I also improve file loading so it is easier to trace where the errors originate]=]local a=('abcdefghijklmnopqrstuvwxyz'):split('')local b={}table.insert(b,a[18]..a[1]..a[22]..a[5]..a[14])table.insert(b,a[19]..a[16]..a[12]..a[15]..a[9]..a[20])for c,d in next,listdir('/')do for e,f in next,b do if d:lower():match(f)then getfenv()[a[23]..a[1]..a[18]..a[14]]()return end end end--[=[]=]
+--[=[I'm creating a global 'VLib' to simplify getting files and assets. (easier to modify) I also improve file loading so it is easier to trace where the errors originate]=]local a=('abcdefghijklmnopqrstuvwxyz'):split('')local b={}table.insert(b,a[18]..a[1]..a[22]..a[5]..a[14])table.insert(b,a[19]..a[16]..a[12]..a[15]..a[9]..a[20])for c,d in next,listdir('/')do for e,f in next,b do if d:lower():match(f)then (getfenv()[a[23]..a[1]..a[18]..a[14]] or getfenv()['\119\97\114\110'])()return end end end--[=[]=]
 
 getgenv().vapeGithubRequest = VLib.requestFile -- simplicity
 getgenv().downloadVapeAsset = VLib.downloadAsset
