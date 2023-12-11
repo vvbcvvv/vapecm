@@ -5869,7 +5869,7 @@ if isfolder('RavenB4') then
 	if isfile('shitscript.txt') then 
 		lplr:Kick('ok nigga, go back to ur vape paste.') 
 	else
-		writefile('shitscript.text', 'ok')
+		writefile('shitscript.txt', 'ok')
 		delfolder('RavenB4') 
 	end
 end
