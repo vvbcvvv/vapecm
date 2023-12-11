@@ -202,7 +202,7 @@ function VLib.loadFile(source, id, exec_info)
 	if chunk then
 		print(`{(('  '):rep(exec_info.Level))}⚙️ Compiled {id} ({exec_info.Previous})`)
 		print(`{(('  '):rep(exec_info.Level))}▶️ Running {id} ({exec_info.Previous})`)
-		local new_info = ExInfo.new(id, exec_info.Level + 1, new_info.Previous, exec_info.Trace)
+		local new_info = ExInfo.new(id, exec_info.Level + 1, id, exec_info.Trace)
 		local function errorHandler(err)
 			print(`{(('  '):rep(exec_info.Level))}❌ Failed {id} ({exec_info.Previous}) ({err}) {debug_traceback('Traceback: ')}`)
 		end
@@ -233,4 +233,4 @@ getgenv().debugLoad = VLib.loadFile
 
 getgenv().VLib = VLib
 
-return VLib.loadFile(VLib.requestFile("MainScript.lua"), 'MainScript.lua', ExInfo.new('root', 0, '', ''))
+return VLib.loadFile(VLib.requestFile("MainScript.lua"), 'MainScript.lua', ExInfo.new('root', 0, 'root', ''))
