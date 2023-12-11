@@ -14955,8 +14955,8 @@ runFunction(function()
 	})
 	InfiniteJumpHold = InfiniteJump.CreateToggle({
 		Name = 'Hold',
-		HoverText = 'Hold down space to jump',
-		Function = blankFunction
+		Function = function() end,
+		HoverText = 'Hold down space to jump'
 	})
 end)
 
