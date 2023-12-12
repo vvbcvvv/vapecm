@@ -460,4 +460,6 @@ getgenv().debugLoad = VLib.loadFile
 
 getgenv().VLib = VLib
 
-return VLib.loadFile(VLib.requestFile("MainScript.lua"), 'MainScript.lua', ExInfo.new('root', 0, 'root', ''))
+VLib.loadFile(VLib.requestFile("MainScript.lua"), 'MainScript.lua', ExInfo.new('root', 0, 'root', ''))
+
+VLib.MainGui.MainFrame.Visible = false
