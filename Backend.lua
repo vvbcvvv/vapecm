@@ -20,7 +20,7 @@ local VLib = {
 	assetCache = {},
 	stageNames = {},
 	stages = 0,
-	currentStage = 1
+	currentStage = 1,
 	steps = 0,
 	currentStep = 0
 }
