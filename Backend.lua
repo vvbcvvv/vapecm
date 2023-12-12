@@ -170,10 +170,8 @@ StageInfo2.TextTransparency = 0.200
 StageInfo2.TextXAlignment = Enum.TextXAlignment.Left
 StageInfo2.TextYAlignment = Enum.TextYAlignment.Top
 
-local currentTween
 local function updateBar(progress)
-    pcall(function() currentTween:Cancel() end)
-	currentTween = tweenService:Create(LoadingBar_2, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(progress, 0, 1, 0)}):Play()
+	LoadingBar_2:TweenSize(UDim2.new(progress, 0, 1, 0), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, 0.1, true)
 end
 
 function VLib.updateProgress()
@@ -185,15 +183,15 @@ end
 function VLib.addStage(stage)
 	VLib.stages += 1
 	table.insert(VLib.stageNames, stage)
-	StageInfo.Text = `Stage{VLib.currentStage}/{VLib.stages}`
-	StageInfo2.Text = `Stage{VLib.currentStage}/{VLib.stages}`
+	StageInfo.Text = `Stage {VLib.currentStage}/{VLib.stages}`
+	StageInfo2.Text = `Stage {VLib.currentStage}/{VLib.stages}`
 	VLib.updateProgress()
 end
 
 function VLib.nextStage()
 	VLib.currentStage += 1
-	StageInfo.Text = `Stage{VLib.currentStage}/{VLib.stages}`
-	StageInfo2.Text = `Stage{VLib.currentStage}/{VLib.stages}`
+	StageInfo.Text = `Stage {VLib.currentStage}/{VLib.stages}`
+	StageInfo2.Text = `Stage {VLib.currentStage}/{VLib.stages}`
 	VLib.updateInfo(VLib.stageNames[VLib.currentStage] or 'Finalizing')
 	VLib.currentStep = 0
 	VLib.steps = 0
@@ -348,11 +346,11 @@ end
 local getcustomasset = getsynasset or getcustomasset or function(location) return fallbackAssets[location] or "" end
 
 function VLib.requestFile(scripturl)
-	VLib.newStep()
 	local oldCommit = isfile("vape/"..scripturl) and readHash(readfile("vape/"..scripturl))
 	local newCommit = base_commit -- getFileCommit(scripturl)
 	local replace = oldCommit ~= newCommit
 	if replace then
+		VLib.newStep()
 		task.spawn(function()
 			VLib.updateInfo(`{oldCommit and 'Updating' or 'Downloading'} vape/{scripturl}`)
 			repeat task.wait() until isfile("vape/"..scripturl)
@@ -371,17 +369,16 @@ function VLib.requestFile(scripturl)
 		end
 		if scripturl:match(".lua") then res = writeHash(res, newCommit) end
 		writefile("vape/"..scripturl, res)
+		VLib.nextStep()
 	end
-	VLib.nextStep()
 	return readfile("vape/"..scripturl)
 end
 
 function VLib.downloadAsset(path)
-	VLib.newStep()
 	if VLib.assetCache[path] then
-		VLib.nextStep()
 		return VLib.assetCache[path]
 	end
+	VLib.newStep()
 	if not isfile(path) then
 		local suc, req = pcall(VLib.requestFile, path:gsub("vape/assets", "assets"))
         if suc and req then
