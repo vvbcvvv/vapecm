@@ -40,6 +40,8 @@ function VLib.displayErrorPopup(text, func)
 	setidentity(oldidentity)
 end
 
+if not shared.isScrxpted then VLib.displayErrorPopup("scrxpted is fixing newvape, please shut the fuck up <3") return end
+
 local vapeWatermark = [===[--[=[
 	Current Hash: placeholderGithubCommitHashStringForVape
 	newvape uED (user edition)
