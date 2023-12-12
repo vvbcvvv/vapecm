@@ -18,6 +18,7 @@ end
 
 local VLib = {
 	assetCache = {},
+	stageNames = {},
 	stages = 0,
 	currentStage = 1
 	steps = 0,
@@ -177,8 +178,9 @@ function VLib.updateProgress()
 	end
 end
 
-function VLib.addStage()
+function VLib.addStage(stage)
 	VLib.stages += 1
+	table.insert(VLib.stageNames, stage)
 	StageInfo.Text = `Stage{VLib.currentStage}/{VLib.stages}`
 	StageInfo2.Text = `Stage{VLib.currentStage}/{VLib.stages}`
 	VLib.updateProgress()
@@ -188,6 +190,7 @@ function VLib.nextStage()
 	VLib.currentStage += 1
 	StageInfo.Text = `Stage{VLib.currentStage}/{VLib.stages}`
 	StageInfo2.Text = `Stage{VLib.currentStage}/{VLib.stages}`
+	VLib.updateInfo(VLib.stageNames[VLib.currentStage] or 'Finalizing')
 	VLib.currentStep = 0
 	VLib.steps = 0
 	VLib.updateProgress()
@@ -231,13 +234,13 @@ end
 
 -- if not shared.isScrxpted then VLib.displayErrorPopup("scrxpted is fixing newvape, please shut the fuck up <3") return end
 
-VLib.addStage() -- commit fetching
+VLib.addStage('Fetching lastest commit') -- commit fetching
 -- VLib.addStage() -- authentication
-VLib.addStage() -- gui library loading
-VLib.addStage() -- main script loading
+VLib.addStage('Loaded gui library') -- gui library loading
+VLib.addStage('Loaded internal functions') -- main script loading
 -- VLib.addStage() -- hooking
-VLib.addStage() -- game script loading
-VLib.addStage() -- profile loading
+VLib.addStage('Loading game script') -- game script loading
+VLib.addStage('Loading profile') -- profile loading
 -- VLib.addStage() -- finalize
 
 local vapeWatermark = [===[--[=[

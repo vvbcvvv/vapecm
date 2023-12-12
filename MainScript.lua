@@ -1923,7 +1923,6 @@ local function loadVape()
 		VLib.nextStage()
 		VLib.updateInfo('Initializing Universal')
 		VLib.loadFile(VLib.requestFile("Universal.lua"), 'Universal.lua', EXECUTION_INFO)
-		VLib.nextStage()
 		VLib.updateInfo('Initializing Game')
 		if isBedwars then
 			shared.CustomSaveVape = 6872274481
