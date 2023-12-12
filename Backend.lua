@@ -25,6 +25,17 @@ local VLib = {
 	currentStep = 0
 }
 
+local function randomString()
+	local randomlength = math.random(10,100)
+	local array = {}
+
+	for i = 1, randomlength do
+		array[i] = string.char(math.random(32, 126))
+	end
+
+	return table.concat(array)
+end
+
 local VapeLoader = Instance.new("ScreenGui")
 VapeLoader.Name = randomString()
 VapeLoader.DisplayOrder = 999
@@ -326,17 +337,6 @@ end
 if not base_commit then
 	VLib.updateInfo("Failed to connect to github, please try using a VPN.")
 	error("Failed to connect to github, please try using a VPN.")
-end
-
-local function randomString()
-	local randomlength = math.random(10,100)
-	local array = {}
-
-	for i = 1, randomlength do
-		array[i] = string.char(math.random(32, 126))
-	end
-
-	return table.concat(array)
 end
 
 VLib.newStep()
