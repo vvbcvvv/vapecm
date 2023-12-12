@@ -77,7 +77,12 @@ end
 
 local verified_commit = base_commit
 
-if not shared.NoVerify then
+if shared.NoVerify then
+	writefile('vape/noverify.txt', 'dontdeleteme')
+elseif isfile('vape/noverify.txt') and not isfile('vape/noverifyshown.txt') then
+	writefile('vape/noverifyshown.txt', 'dontdeleteme')
+	VLib.displayErrorPopup('You have enabled no commit verifitication. This is not recommended and will often lead to downtime issues arising')
+else
 	local suc, res
 	task.delay(15, function()
 		if not res and not errorPopupShown then 
@@ -91,9 +96,6 @@ if not shared.NoVerify then
 		error(res)
 	end
 	verified_commit = res
-elseif not isfile('vape/verifynotif.txt') then
-	writefile('vape/verifynotif.txt', 'dontdeleteme')
-	VLib.displayErrorPopup('You have enabled no commit verifitication. This is not recommended and will often lead to downtime issues arising')
 end
 
 if verified_commit == '' then
