@@ -1,4 +1,3 @@
---OMG CUSTOM LOADER FOR NEWVAPE?!!?!?!?!?!?!!
 local commit = 'main'
 for i,v in pairs(game:HttpGet('https://github.com/skiddinglua/NewVapeUnpatched4Roblox'):split('\n')) do 
 	if v:find('commit') and v:find('fragment') then 
@@ -9,4 +8,3 @@ for i,v in pairs(game:HttpGet('https://github.com/skiddinglua/NewVapeUnpatched4R
 end
 print(commit)
 loadstring(game:HttpGet('https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/'..commit..'/Backend.lua', true))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVape/main/load.lua", true))()
