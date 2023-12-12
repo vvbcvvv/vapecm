@@ -14963,7 +14963,7 @@ end)
 --lol??
 runFunction(function()
 	local InfernalKill = {Enabled = false}
-  InfernalKill = GuiLibrary["ObjectsThatCanBeSaved"]["UtilityWindow"]["Api"].CreateOptionsButton({
+  InfernalKill = GuiLibrary["ObjectsThatCanBeSaved"]["NewVapeWindow"]["Api"].CreateOptionsButton({
 	  ["Name"] = "4BigGuysExploit",
 	  ["Function"] = function(callback)
 		  if callback then
