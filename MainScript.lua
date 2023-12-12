@@ -1,5 +1,6 @@
 local EXECUTION_INFO = (...)
 -- broken
+VLib.newStep()
 repeat task.wait() until game:IsLoaded()
 local data = game:GetService("TeleportService"):GetLocalPlayerTeleportData()
 if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 then 
@@ -45,6 +46,7 @@ do
 	getgenv().MemoryManager = MemoryManager
 	getgenv().VapeCleanup = MemoryManager.new()
 end
+VLib.nextStep()
 
 local GuiLibrary
 local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
@@ -192,6 +194,8 @@ end
 
 GuiLibrary = VLib.loadFile(VLib.requestFile("GuiLibrary.lua"), 'GuiLibrary.lua', EXECUTION_INFO)
 shared.GuiLibrary = GuiLibrary
+VLib.nextStage()
+VLib.updateInfo('Loaded GuiLibrary')
 
 local saveSettingsLoop = coroutine.create(function()
 	repeat
@@ -224,6 +228,8 @@ task.spawn(function()
 	end)
 end)
 
+VLib.newStep()
+VLib.updateInfo('Loaded GuiLibrary')
 local GUI = GuiLibrary.CreateMainWindow()
 local Combat = GuiLibrary.CreateWindow({
 	Name = "Combat", 
@@ -321,7 +327,7 @@ GUI.CreateButton({
 	Name = "Profiles", 
 	Function = function(callback) Profiles.SetVisible(callback) end, 
 })
-
+VLib.nextStep()
 
 local FriendsTextListTable = {
 	Name = "FriendsList", 
@@ -537,6 +543,7 @@ ProfilesTextList = Profiles.CreateTextList({
 	end
 })
 
+VLib.newStep('OnlineProfiles')
 local OnlineProfilesButton = Instance.new("TextButton")
 OnlineProfilesButton.Name = "OnlineProfilesButton"
 OnlineProfilesButton.LayoutOrder = 1
@@ -762,7 +769,9 @@ VapeCleanup:append(OnlineProfilesExitButton.MouseButton1Click:Connect(function()
 	GuiLibrary.MainGui.ScaledGui.ClickGui.Visible = true
 end))
 GUI.CreateDivider()
+VLib.nextStep()
 
+VLib.newStep('Text GUI')
 local TextGUI = GuiLibrary.CreateCustomWindow({
 	Name = "Text GUI", 
 	Icon = "vape/assets/TextGUIIcon1.png", 
@@ -1296,7 +1305,9 @@ CustomText = TextGUI.CreateTextBox({
 	end
 })
 CustomText.Object.Visible = false
+VLib.nextStep()
 
+VLib.newStep('Target Info')
 local function newHealthColor(percent)
 	if percent > 0.5 then 
 		return Color3.fromRGB(5, 134, 105):lerp(Color3.fromRGB(255, 255, 0), (0.5 - (percent - 0.5)) / 0.5)
@@ -1464,6 +1475,7 @@ task.spawn(function()
 		task.wait()
 	until not vapeInjected
 end)
+VLib.nextStep()
 
 local GeneralSettings = GUI.CreateDivider2("General Settings")
 local ModuleSettings = GUI.CreateDivider2("Module Settings")
@@ -1908,7 +1920,11 @@ GeneralSettings.CreateButton2({
 
 local function loadVape()
 	if true then -- removed shared.VapeIndepentant thingy
+		VLib.nextStage()
+		VLib.updateInfo('Initializing Universal')
 		VLib.loadFile(VLib.requestFile("Universal.lua"), 'Universal.lua', EXECUTION_INFO)
+		VLib.nextStage()
+		VLib.updateInfo('Initializing Game')
 		if isBedwars then
 			shared.CustomSaveVape = 6872274481
 			VLib.loadFile(VLib.requestFile("CustomModules/6872274481.lua"), "6872274481.lua", EXECUTION_INFO)
@@ -1922,7 +1938,9 @@ local function loadVape()
 				notification.Frame.Frame.ImageColor3 = Color3.new(220, 0, 0)
 			end
 		end
+		VLib.nextStage()
 	end
+	VLib.updateInfo('Loading Profile')
 	if #ProfilesTextList.ObjectList == 0 then
 		table.insert(ProfilesTextList.ObjectList, "default")
 		ProfilesTextList.RefreshValues(ProfilesTextList.ObjectList)
@@ -1935,6 +1953,8 @@ local function loadVape()
 	table.sort(profiles, function(a, b) return b == "default" and true or a:lower() < b:lower() end)
 	ProfilesTextList.RefreshValues(profiles)
 	GUIbind.Reload()
+	VLib.nextStage()
+	VLib.updateInfo('Finalizing...')
 	TextGUIUpdate()
 	GuiLibrary.UpdateUI(GUIColorSlider.Hue, GUIColorSlider.Sat, GUIColorSlider.Value, true)
 	if not shared.VapeSwitchServers then
@@ -1957,6 +1977,7 @@ local function loadVape()
 
 	coroutine.resume(saveSettingsLoop)
 	shared.VapeFullyLoaded = true
+	VLib.nextStage()
 end
 
 if shared.VapeIndependent then

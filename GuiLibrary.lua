@@ -1,6 +1,7 @@
 local EXECUTION_INFO = (...)
 --asset upd soon O_O
 if shared.VapeExecuted then
+	VLib.newStep()
 	local VERSION = "4.10 LAWL"
 	local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 	local vapeAssetTable = {
@@ -160,6 +161,10 @@ if shared.VapeExecuted then
 	clickgui.BackgroundColor3 = Color3.fromRGB(79, 83, 166)
 	clickgui.Visible = false
 	clickgui.Parent = scaledgui
+
+	VLib.nextStep()
+
+	VLib.newStep()
 	local searchbarmain = Instance.new("Frame")
 	searchbarmain.Size = UDim2.new(0, 220, 0, 37)
 	searchbarmain.Position = UDim2.new(0.5, -110, 0, -23)
@@ -545,27 +550,33 @@ if shared.VapeExecuted then
 	end
 
 	GuiLibrary.LoadSettings = function(customprofile)
-		print('attempting to load config: ' .. (customprofile or 'default'))
+		VLib.newStep()
+		--print('attempting to load config: ' .. (customprofile or 'default'))
 		if isfile("vape/Profiles/GUIPositions.vapeprofile.txt") and game.GameId == 2619619496 then
-			print('GUIPositions.vapeprofile.txt overwrite')
+			--print('GUIPositions.vapeprofile.txt overwrite')
 			writefile("vape/Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt", readfile("vape/Profiles/GUIPositions.vapeprofile.txt"))
 			if delfile then delfile("vape/Profiles/GUIPositions.vapeprofile.txt") end
 		end
+		VLib.nextStep()
+		VLib.newStep()
 		local success2, result2 = pcall(function()
 			local json = readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId)..".vapeprofiles.txt")
 			-- print(#json)
 			return httpService:JSONDecode(json)
 		end)
 		if success2 and type(result2) == "table" then
-			print('profile list decoded successfully')
+			--print('profile list decoded successfully')
+			VLib.updateInfo('Decoded profiles')
 			GuiLibrary.Profiles = result2
 		else
+			VLib.updateInfo('Faield to decode profiles')
 			if success2 then
-				print('failed to decode profile list (type: ' .. type(result2) .. ')')
+				--print('failed to decode profile list (type: ' .. type(result2) .. ')')
 			else
-				print('failed to decode profile list (error: ' .. result2 .. ')')
+				--print('failed to decode profile list (error: ' .. result2 .. ')')
 			end
 		end
+		VLib.nextStep()
 		for i,v in pairs(GuiLibrary.Profiles) do
 			if v.Selected then
 				GuiLibrary.CurrentProfile = i
@@ -576,13 +587,15 @@ if shared.VapeExecuted then
 			GuiLibrary.Profiles[customprofile] = GuiLibrary.Profiles[customprofile] or {["Keybind"] = "", ["Selected"] = true}
 			GuiLibrary.CurrentProfile = customprofile
 		end
+		VLib.newStep()
 		local success3, result3 = pcall(function()
 			local json = readfile(baseDirectory.."Profiles/"..(shared.CustomSaveVape or game.PlaceId).."GUIPositions.vapeprofile.txt")
 			-- print(#json)
 			return httpService:JSONDecode(json)
 		end)
 		if success3 and type(result3) == "table" then
-			print('gui positions decoded successfully')
+			VLib.updateInfo('Decoded GUI Positions')
+			--print('gui positions decoded successfully')
 			for i,v in pairs(result3) do
 				local obj = GuiLibrary.ObjectsThatCanBeSaved[i]
 				if obj then
@@ -649,19 +662,22 @@ if shared.VapeExecuted then
 				end
 			end
 		else
+			VLib.updateInfo('Failed to decode GUI Positions')
 			if success3 then
-				print('failed to decode gui positions (type: ' .. type(result3) .. ')')
+				--print('failed to decode gui positions (type: ' .. type(result3) .. ')')
 			else
-				print('failed to decode gui positions (error: ' .. result3 .. ')')
+				--print('failed to decode gui positions (error: ' .. result3 .. ')')
 			end
 		end
+		VLib.nextStep()
 		local success, result = pcall(function()
 			local json = readfile(baseDirectory.."Profiles/"..(GuiLibrary.CurrentProfile == "default" and "" or GuiLibrary.CurrentProfile)..(shared.CustomSaveVape or game.PlaceId)..".vapeprofile.txt")
 			-- print(#json)
 			return httpService:JSONDecode(json)
 		end)
+		VLib.newStep()
 		if success and type(result) == "table" then
-			print('game profile decoded successfully')
+			VLib.updateInfo('Decoded game profile')
 			GuiLibrary["LoadSettingsEvent"]:Fire(result)
 			for i,v in pairs(result) do
 				if v.Type == "Custom" and GuiLibrary.Settings[i] then
@@ -788,7 +804,7 @@ if shared.VapeExecuted then
 					end
 				end
 			end
-			print('adding mobile buttons')
+			VLib.updateInfo('Adding mobile buttons')
 			for i,v in pairs(result) do
 				if v.Type == "MobileButtons" then 
 					for _, mobileButton in pairs(v.Buttons) do 
@@ -800,12 +816,14 @@ if shared.VapeExecuted then
 				end
 			end
 		else
+			VLib.updateInfo('Failed to decode game profile')
 			if success then
-				print('failed to decode game profile (type: ' .. type(result) .. ')')
+				--print('failed to decode game profile (type: ' .. type(result) .. ')')
 			else
-				print('failed to decode game profile (error: ' .. result .. ')')
+				--print('failed to decode game profile (error: ' .. result .. ')')
 			end
 		end
+		VLib.nextStep()
 		loadedsuccessfully = true
 	end
 
@@ -7137,6 +7155,8 @@ if shared.VapeExecuted then
 		getgenv().keyclick = keyclick
 	end
 
+	VLib.newStep()
+	VLib.updateInfo('Setting up listeners')
 	GuiLibrary["KeyInputHandler"] = VapeCleanup:append(inputService.InputBegan:Connect(function(input1)
 		if not checkcontext() then
 			xpcall(KeyInputHandlerUpvalue, function(err) return warn(err) end, input1)
@@ -7237,6 +7257,7 @@ if shared.VapeExecuted then
 			if v:IsA("Frame") then v.BackgroundTransparency = legitgui.Visible and 0.8 or 1 end
 		end
 	end))
+	VLib.nextStep()
 
 	return GuiLibrary
 end
