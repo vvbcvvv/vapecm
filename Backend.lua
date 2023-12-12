@@ -1,4 +1,4 @@
-789local playersService = game:GetService("Players")
+local playersService = game:GetService("Players")
 local lplr = playersService.LocalPlayer
 local coreGui = game:GetService("CoreGui")
 local userInputService = game:GetService("UserInputService")
