@@ -198,6 +198,7 @@ function VLib.nextStage()
 	VLib.currentStep = 0
 	VLib.steps = 0
 	VLib.updateProgress()
+	task.wait(0.1)
 end
 
 function VLib.updateInfo(text)
@@ -213,6 +214,7 @@ end
 function VLib.nextStep()
 	VLib.currentStep += 1
 	VLib.updateProgress()
+	task.wait(0.1)
 end
 
 function VLib.displayErrorPopup(text, func)
