@@ -21,7 +21,7 @@ local VLib = {
 	stageNames = {},
 	stages = 0,
 	currentStage = 1,
-	steps = 0,
+	steps = {},
 	currentStep = 0
 }
 
@@ -171,12 +171,12 @@ StageInfo2.TextXAlignment = Enum.TextXAlignment.Left
 StageInfo2.TextYAlignment = Enum.TextYAlignment.Top
 
 local function updateBar(progress)
-	LoadingBar_2:TweenSize(UDim2.new(progress, 0, 1, 0), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, 0.1, true)
+	LoadingBar_2:TweenSize(UDim2.new(progress, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.1, true)
 end
 
 function VLib.updateProgress()
 	local normal = (VLib.currentStage - 1) / VLib.stages
-	local current = ((1 / VLib.stages) / VLib.steps) * VLib.currentStep
+	local current = ((1 / VLib.stages) / #VLib.steps) * VLib.currentStep
 	updateBar(normal + current)
 end
 
@@ -193,10 +193,10 @@ function VLib.nextStage()
 	StageInfo.Text = `Stage {VLib.currentStage}/{VLib.stages}`
 	StageInfo2.Text = `Stage {VLib.currentStage}/{VLib.stages}`
 	VLib.updateInfo(VLib.stageNames[VLib.currentStage] or 'Finalizing')
-	VLib.currentStep = 0
-	VLib.steps = 0
+	VLib.currentStep = 1
+	table.clear(VLib.steps)
 	VLib.updateProgress()
-	task.wait(0.1)
+	task.wait(0.3)
 end
 
 function VLib.updateInfo(text)
@@ -205,12 +205,13 @@ function VLib.updateInfo(text)
 end
 
 function VLib.newStep(tag)
-	VLib.steps += 1
+	table.insert(VLib.steps, tag)
 	VLib.updateProgress()
 end
 
 function VLib.nextStep()
 	VLib.currentStep += 1
+	VLib.updateInfo(VLib.steps[currentStep] or 'Loading ...')
 	VLib.updateProgress()
 	task.wait(0.1)
 end
