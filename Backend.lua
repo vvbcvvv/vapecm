@@ -239,14 +239,14 @@ end
 
 -- if not shared.isScrxpted then VLib.displayErrorPopup("scrxpted is fixing newvape, please shut the fuck up <3") return end
 
-VLib.addStage('Fetching lastest commit') -- commit fetching
+VLib.addStage('Fetching Lastest Commit') -- commit fetching
 -- VLib.addStage() -- authentication
-VLib.addStage('Loaded gui library') -- gui library loading
-VLib.addStage('Loaded internal functions') -- main script loading
+VLib.addStage('Loaded Gui Library') -- gui library loading
+VLib.addStage('Loaded Internal Functions') -- main script loading
 -- VLib.addStage() -- hooking
-VLib.addStage('Loading game script') -- game script loading
-VLib.addStage('Loading profile') -- profile loading
--- VLib.addStage() -- finalize
+VLib.addStage('Loaded Game Script') -- game script loading
+VLib.addStage('Loaded Profile') -- profile loading
+VLib.addStage('Finalizing ...') -- finalize
 
 local vapeWatermark = [===[--[=[
 	Current Hash: placeholderGithubCommitHashStringForVape
