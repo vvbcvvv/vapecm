@@ -1,4 +1,4 @@
-local playersService = game:GetService("Players")
+789local playersService = game:GetService("Players")
 local lplr = playersService.LocalPlayer
 local coreGui = game:GetService("CoreGui")
 local userInputService = game:GetService("UserInputService")
@@ -178,15 +178,8 @@ end
 
 function VLib.updateProgress()
 	local normal = (VLib.currentStage - 1) / VLib.stages
-	local current = 0
-	for i, v in next, VLib.steps do
-		if v.done then
-			current += (1 / VLib.stages) / #VLib.steps
-		end
-	end
+	local current = ((1 / VLib.stages) / VLib.steps) * VLib.currentStep
 	updateBar(normal + current)
-	if VLib.currentStage == VLib.stages then
-	end
 end
 
 function VLib.addStage(stage)
