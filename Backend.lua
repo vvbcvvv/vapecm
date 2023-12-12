@@ -73,15 +73,40 @@ for i,v in pairs(game:HttpGet("https://github.com/skiddinglua/NewVapeUnpatched4R
 	end
 end
 
+local verified_commit = base_commit
+
+if not shared.NoVerify then
+	local suc, res
+	task.delay(15, function()
+		if not res and not errorPopupShown then 
+			errorPopupShown = true
+			VLib.displayErrorPopup("The connection to github is taking a while, Please be patient.")
+		end
+	end)
+	suc, res = pcall(function() return game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/"..base_commit.."/verified.txt", true) end)
+	if not suc or res == "404: Not Found" then
+		VLib.displayErrorPopup("Failed to connect to github : vape/"..scripturl.." : "..res)
+		error(res)
+	end
+	verified_commit = res
+elseif not isfile('vape/verifynotif.txt') then
+	writefile('vape/verifynotif.txt', 'dontdeleteme')
+	VLib.displayErrorPopup('You have enabled no commit verifitication. This is not recommended and will often lead to downtime issues arising')
+end
+
+if verified_commit == '' then
+	verified_commit = base_commit
+	warn('Unable to find a verififed commit (using beta version)')
+end
+
 local function getFileCommit(scripturl)
 	if cachedCommits[scripturl] then
 		return cachedCommits[scripturl]
 	end
 	local commit = base_commit
 	for i,v in pairs(game:HttpGet("https://github.com/skiddinglua/NewVapeUnpatched4Roblox/commits/"..commit.."/"..scripturl):split("\n")) do 
-		if v:find("commit") and v:find("fragment") then 
-			local str = v:split("/")[5]
-			commit = str:sub(0, str:find('"') - 1)
+		if v:find("commits_list_item") then 
+			local commit = v:split("/")[5]
 			cachedCommits[scripturl] = commit
 			break
 		end
@@ -129,7 +154,7 @@ local getcustomasset = getsynasset or getcustomasset or function(location) retur
 function VLib.requestFile(scripturl)
 	local oldCommit = isfile("vape/"..scripturl) and readHash(readfile("vape/"..scripturl))
 	local newCommit = base_commit -- getFileCommit(scripturl)
-	local replace = oldCommit ~= newCommit or not isfile("vape/"..scripturl)
+	local replace = oldCommit ~= newCommit
 	if replace then
 		task.spawn(function()
 			local textlabel = Instance.new("TextLabel")
