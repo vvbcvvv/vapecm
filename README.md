@@ -8,7 +8,7 @@
 ## Loadstring
 
 ```lua
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/skiddinglua/NewVapeUnpatched4Roblox/main/Loader.lua', true))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/skiddinglua/NewVape/main/Initiate.lua", true))()
 ```
 
 
@@ -45,13 +45,13 @@
 + Privacy
     + Blocks some analytics
 + FpsBoostPlus
-    + Gives a huge FPS boost
+    + Gives a huge FPS boost!
 + Atmosphere
-    + blxnk do this.
+    + Changes how the game visually looks
 + HotbarMods
-    + blxnk do this.
+    + Makes the hotbar look more smooth and clean
 + HealthbarMods
-    + blxnk do this.
+    + Makes the healthbar look more crisp
 + Network
     + Fixed network ownership issues
 + Better Cache Refresh
@@ -60,7 +60,7 @@
     + Made many changes to the internal aura to greatly improve hitreg
     + Added toggle to pause attack packets during ping spikes
     + Added serverside rotation toggles to make weapon exploits more convenient
-    + Added a fuck ton of animations (against scrxpted's will)
+    + Added over 70+ killaura animations
 + AutoKit
     + Added Hannah to AutoKit
     + Fixed GetTeammateThatNeedsMost function

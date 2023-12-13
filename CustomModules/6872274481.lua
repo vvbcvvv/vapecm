@@ -174,6 +174,7 @@ local function warningNotification(title, text, delay)
 end
 
 local function runFunction(func) func() end
+local function runNewVape(func) func() end
 
 local function isFriend(plr, recolor)
 	if GuiLibrary.ObjectsThatCanBeSaved['Use FriendsToggle'].Api.Enabled then
@@ -3909,7 +3910,7 @@ runFunction(function()
 			{CFrame = CFrame.new(0.63, -0.7, 0.6) * CFrame.Angles(math.rad(-50), math.rad(70), math.rad(-60)), Time = 0.1},
             {CFrame = CFrame.new(0.63, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(70), math.rad(-70)), Time = 0.1}
 		},
-		['Astral'] = {
+		['Astral2'] = {
 		    {CFrame = CFrame.new(0.7, -0.7, 0.6) * CFrame.Angles(math.rad(-16), math.rad(60), math.rad(-80)), Time = 0.1},
 			{CFrame = CFrame.new(0.7, -0.7, 0.6) * CFrame.Angles(math.rad(-16), math.rad(60), math.rad(-80)), Time = 0.15},
 			{CFrame = CFrame.new(0.95, -1.06, -2.25) * CFrame.Angles(math.rad(-179), math.rad(61), math.rad(80)), Time = 0.15}
@@ -3918,7 +3919,7 @@ runFunction(function()
 		    {CFrame = CFrame.new(0.7, -0.7, 0.6) * CFrame.Angles(math.rad(-16), math.rad(60), math.rad(-80)), Time = 0},
 			{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(16), math.rad(59), math.rad(-90)), Time = 0.15}
 		},
-		['Slide2'] = {
+		['Slide3'] = {
 		    {CFrame = CFrame.new(0.7, -0.7, 0.6) * CFrame.Angles(math.rad(-16), math.rad(60), math.rad(-80)), Time = 0},
 			{CFrame = CFrame.new(0.7, -0.7, 0.6) * CFrame.Angles(math.rad(-171), math.rad(47), math.rad(74)), Time = 0.16}
 		},
@@ -4778,6 +4779,42 @@ runFunction(function()
         {CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-89), math.rad(68), math.rad(-56)), Time = 0.12},
         {CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-65), math.rad(68), math.rad(-35)), Time = 0.19}
     },
+	--lunar vape
+	["Lunar Old"] = {
+		{CFrame = CFrame.new(0.150, -0.8, 0.1) * CFrame.Angles(math.rad(-45), math.rad(40), math.rad(-75)), Time = 0.15},
+		{CFrame = CFrame.new(0.02, -0.8, 0.05) * CFrame.Angles(math.rad(-60), math.rad(60), math.rad(-95)), Time = 0.15}
+	},
+	["Lunar New"] = {
+		{CFrame = CFrame.new(0.86, -0.8, 0.1) * CFrame.Angles(math.rad(-45), math.rad(40), math.rad(-75)), Time = 0.17},
+		{CFrame = CFrame.new(0.73, -0.8, 0.05) * CFrame.Angles(math.rad(-60), math.rad(60), math.rad(-95)), Time = 0.17}
+	},
+	["Lunar Fast"] = {
+		{CFrame = CFrame.new(0.95, -0.8, 0.1) * CFrame.Angles(math.rad(-45), math.rad(40), math.rad(-75)), Time = 0.15},
+		{CFrame = CFrame.new(0.40, -0.8, 0.05) * CFrame.Angles(math.rad(-60), math.rad(60), math.rad(-95)), Time = 0.15}
+	},
+	["LiquidBounceX"] = {
+		{CFrame = CFrame.new(-0.01, -0.3, -1.01) * CFrame.Angles(math.rad(-35), math.rad(90), math.rad(-90)), Time = 0.45},
+		{CFrame = CFrame.new(-0.01, -0.3, -1.01) * CFrame.Angles(math.rad(-35), math.rad(70), math.rad(-90)), Time = 0.45},
+		{CFrame = CFrame.new(-0.01, -0.3, 0.4) * CFrame.Angles(math.rad(-35), math.rad(70), math.rad(-90)), Time = 0.32}
+	},
+	["Auto Block"] = {
+		{CFrame = CFrame.new(-0.6, -0.2, 0.3) * CFrame.Angles(math.rad(0), math.rad(80), math.rad(65)), Time = 0.15},
+		{CFrame = CFrame.new(-0.6, -0.2, 0.3) * CFrame.Angles(math.rad(0), math.rad(110), math.rad(65)), Time = 0.15},
+		{CFrame = CFrame.new(-0.6, -0.2, 0.3) * CFrame.Angles(math.rad(0), math.rad(65), math.rad(65)), Time = 0.15}
+	},
+	Switch = {
+		{CFrame = CFrame.new(0.69, -0.7, 0.1) * CFrame.Angles(math.rad(-65), math.rad(55), math.rad(-51)), Time = 0.1},
+		{CFrame = CFrame.new(0.16, -1.16, 0.5) * CFrame.Angles(math.rad(-179), math.rad(54), math.rad(33)), Time = 0.1}
+	},
+	Sideways = {
+		{CFrame = CFrame.new(5, -3, 2) * CFrame.Angles(math.rad(120), math.rad(160), math.rad(140)), Time = 0.12},
+		{CFrame = CFrame.new(5, -2.5, -1) * CFrame.Angles(math.rad(80), math.rad(180), math.rad(180)), Time = 0.12},
+		{CFrame = CFrame.new(5, -3.4, -3.3) * CFrame.Angles(math.rad(45), math.rad(160), math.rad(190)), Time = 0.12},
+		{CFrame = CFrame.new(5, -2.5, -1) * CFrame.Angles(math.rad(80), math.rad(180), math.rad(180)), Time = 0.12}
+	},
+	Stand = {
+		{CFrame = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90)), Time = 0.1}
+	},
 }
 
 	local function closestpos(block, pos)
@@ -12307,7 +12344,7 @@ do
 	end
 end
 
-runFunction(function()
+runNewVape(function()
 	local ChatMover = {Enabled = false}
 	local chatApp
 	local oldChatPosition
@@ -12334,7 +12371,7 @@ runFunction(function()
 	})
 end)
 
-runFunction(function()
+runNewVape(function()
 	local InvisNoCollide = {Enabled = false}
 	local partslist = {}
 
@@ -12441,7 +12478,7 @@ runFunction(function()
 	})
 end)
 
-runFunction(function()
+runNewVape(function()
 	local Teleport = {Enabled = false}
 	local TeleportMethod = {Value = 'Redirect'}
 	local TeleportMode = {Value = 'Bed'}
@@ -12780,7 +12817,7 @@ runFunction(function()
 	})
 end)
 
-runFunction(function()
+runNewVape(function()
 	task.wait(0.3)
 	local AnticheatBypass = {Enabled = false}
 	local AnticheatBypassShowRoot = {Enabled = false}
@@ -13304,7 +13341,7 @@ runFunction(function()
 	})
 end)
 
-runFunction(function()
+runNewVape(function()
 	local KeepInventory = {Enabled = false}
 	local KeepInventoryLagback = {Enabled = false}
 
@@ -13425,7 +13462,7 @@ runFunction(function()
 	})
 end)
 
-runFunction(function()
+runNewVape(function()
 	local NoPing = {Enabled = false}
 	local oldCreatePing
 	local oldCooldown
@@ -13458,7 +13495,7 @@ runFunction(function()
 	})
 end)
 
-runFunction(function()
+runNewVape(function()
 	local Privacy = {Enabled = false}
 	local GameCoreNetEvents = require(replicatedStorageService['rbxts_include']['node_modules']['@easy-games']['game-core'].out.shared['game-core-networking']).GameCoreNetEvents
 	local oldReportPerformance
@@ -13514,7 +13551,7 @@ runFunction(function()
 	})
 end)
 
-runFunction(function()
+runNewVape(function()
 	local FPSBoostPlus = {Enabled = false}
 	local FPSBoostBeta = {Enabled = false}
 
@@ -13963,7 +14000,7 @@ end)
 
 ]===]
 GuiLibrary.RemoveObject('AtmosphereOptionsButton')
-runFunction(function()
+runNewVape(function()
 	local Atmosphere = {Enabled = false}
 	local AtmosphereMethod = {Value = 'Custom'}
 	local skythemeobjects = {}
@@ -14255,14 +14292,95 @@ runFunction(function()
 		skyobj.StarCount = 0
 	end,
 	ZYLA = function()
-		skyobj.SkyboxBk = 'rbxassetid://9851144466'
-		skyobj.SkyboxDn = 'rbxassetid://9851144249'
-		skyobj.SkyboxFt = 'rbxassetid://9851144099'
-		skyobj.SkyboxLf = 'rbxassetid://9851143942'
-		skyobj.SkyboxRt = 'rbxassetid://9851143761'
-		skyobj.SkyboxUp = 'rbxassetid://9851143257'
-		skyobj.SunAngularSize = 10
-		skyobj.StarCount = 10
+		skyobj.SkyboxBk = 'rbxassetid://159454299'
+		skyobj.SkyboxDn = 'rbxassetid://159454296'
+		skyobj.SkyboxFt = 'rbxassetid://159454293'
+		skyobj.SkyboxLf = 'rbxassetid://159454286'
+		skyobj.SkyboxRt = 'rbxassetid://159454300'
+		skyobj.SkyboxUp = 'rbxassetid://159454288'
+	end,
+	--moon
+	--https://cdn.discordapp.com/attachments/1180128067239292949/1184266746992009266/mon.png?ex=658b595b&is=6578e45b&hm=fc826fbd3a45f8b643305e6203d011ac8b65c876ccdaab6e9882799585e0ae38&
+	PurpleNebula = function()
+		skyobj.SkyboxBk = 'rbxassetid://151165214'
+		skyobj.SkyboxDn = 'rbxassetid://151165197'
+		skyobj.SkyboxFt = 'rbxassetid://151165224'
+		skyobj.SkyboxLf = 'rbxassetid://151165191'
+		skyobj.SkyboxRt = 'rbxassetid://151165206'
+		skyobj.SkyboxUp = 'rbxassetid://151165227'
+	end,
+	NightSky = function()
+		skyobj.SkyboxBk = 'rbxassetid://12064107'
+		skyobj.SkyboxDn = 'rbxassetid://12064152'
+		skyobj.SkyboxFt = 'rbxassetid://12064121'
+		skyobj.SkyboxLf = 'rbxassetid://12063984'
+		skyobj.SkyboxRt = 'rbxassetid://12064115'
+		skyobj.SkyboxUp = 'rbxassetid://12064131'
+	end,
+	PinkDaylight = function()
+		skyobj.SkyboxBk = 'rbxassetid://271042516'
+		skyobj.SkyboxDn = 'rbxassetid://271077243'
+		skyobj.SkyboxFt = 'rbxassetid://271042556'
+		skyobj.SkyboxLf = 'rbxassetid://271042310'
+		skyobj.SkyboxRt = 'rbxassetid://271042467'
+		skyobj.SkyboxUp = 'rbxassetid://271077958'
+	end,
+	
+	MorningGlow = function()
+		skyobj.SkyboxBk = 'rbxassetid://271042516'
+		skyobj.SkyboxDn = 'rbxassetid://271077243'
+		skyobj.SkyboxFt = 'rbxassetid://271042556'
+		skyobj.SkyboxLf = 'rbxassetid://271042310'
+		skyobj.SkyboxRt = 'rbxassetid://271042467'
+		skyobj.SkyboxUp = 'rbxassetid://271077958'
+	end,
+	SettingSun = function()
+		skyobj.SkyboxBk = 'rbxassetid://626460377'
+		skyobj.SkyboxDn = 'rbxassetid://626460216'
+		skyobj.SkyboxFt = 'rbxassetid://626460513'
+		skyobj.SkyboxLf = 'rbxassetid://626473032'
+		skyobj.SkyboxRt = 'rbxassetid://626458639'
+		skyobj.SkyboxUp = 'rbxassetid://626460625'
+	end,
+	FadeBlue = function()
+		skyobj.SkyboxBk = 'rbxassetid://153695414'
+		skyobj.SkyboxDn = 'rbxassetid://153695352'
+		skyobj.SkyboxFt = 'rbxassetid://153695452'
+		skyobj.SkyboxLf = 'rbxassetid://153695320'
+		skyobj.SkyboxRt = 'rbxassetid://153695383'
+		skyobj.SkyboxUp = 'rbxassetid://153695471'
+	end,
+	ElegantMorning = function()
+		skyobj.SkyboxBk = 'rbxassetid://153767241'
+		skyobj.SkyboxDn = 'rbxassetid://153767216'
+		skyobj.SkyboxFt = 'rbxassetid://153767266'
+		skyobj.SkyboxLf = 'rbxassetid://153767200'
+		skyobj.SkyboxRt = 'rbxassetid://153767231'
+		skyobj.SkyboxUp = 'rbxassetid://153767288'
+	end,
+	Neptune = function()
+		skyobj.SkyboxBk = 'rbxassetid://218955819'
+		skyobj.SkyboxDn = 'rbxassetid://218953419'
+		skyobj.SkyboxFt = 'rbxassetid://218954524'
+		skyobj.SkyboxLf = 'rbxassetid://218958493'
+		skyobj.SkyboxRt = 'rbxassetid://218957134'
+		skyobj.SkyboxUp = 'rbxassetid://218950090'
+	end,
+	Redshift = function()
+		skyobj.SkyboxBk = 'rbxassetid://401664839'
+		skyobj.SkyboxDn = 'rbxassetid://401664862'
+		skyobj.SkyboxFt = 'rbxassetid://401664960'
+		skyobj.SkyboxLf = 'rbxassetid://401664881'
+		skyobj.SkyboxRt = 'rbxassetid://401664901'
+		skyobj.SkyboxUp = 'rbxassetid://401664936'
+	end,
+	AestheticNight = function()
+		skyobj.SkyboxBk = 'rbxassetid://1045964490'
+		skyobj.SkyboxDn = 'rbxassetid://1045964368'
+		skyobj.SkyboxFt = 'rbxassetid://1045964655'
+		skyobj.SkyboxLf = 'rbxassetid://1045964655'
+		skyobj.SkyboxRt = 'rbxassetid://1045964655'
+		skyobj.SkyboxUp = 'rbxassetid://1045962969'
 	end,
 	PitchDark = function()
 		skyobj.StarCount = 0
@@ -14427,7 +14545,7 @@ Atmosphere = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsBut
 end)
 
 --extremely useful module!!
-runFunction(function()
+runNewVape(function()
 	local AntiNoclip = {Enabled = false}
 	AntiNoclip = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'AntiNoclip',
@@ -14458,7 +14576,7 @@ runFunction(function()
 	})
 end)
 
-runFunction(function()
+runNewVape(function()
 	local HotbarMods = {Enabled = false}
 	local HotbarRounding = {Enabled = false}
 	local HotbarHighlight = {Enabled = false}
@@ -14613,7 +14731,7 @@ runFunction(function()
 	end)
 end)
 
-runFunction(function()
+runNewVape(function()
 	local function getfontenums()
 		local fonts = {}
 		for i,v in next, (Enum.Font:GetEnumItems()) do 
@@ -14884,47 +15002,12 @@ end)
 	})
 end)]]
 
--- kill yourself 0piss (whoever wrote this is a fucking black nig)
-
---[===[
-
-			                                  $$\ 
-			                                  \__|
-			$$$$$$\$$$$\  $$\   $$\ $$$$$$$\  $$\ 
-			$$  _$$  _$$\ $$ |  $$ |$$  __$$\ $$ |
-			$$ / $$ / $$ |$$ |  $$ |$$ |  $$ |$$ |
-			$$ | $$ | $$ |$$ |  $$ |$$ |  $$ |$$ |
-			$$ | $$ | $$ |\$$$$$$  |$$ |  $$ |$$ |
-			\__| \__| \__| \______/ \__|  \__|\__|
-
-
-]===]
-runFunction(function()
-	local Messages = {'Zap', 'Wham', 'Kapow', 'Kaboom', 'Thump', 'Pow'}
-	CustomButton = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
-		Name = 'DmgIndicators',
-		HoverText = 'SuperFx!',
-		Function = function(callback)
-			if callback then
-				debug.setupvalue(bedwars.DamageIndicator, 10, {
-					Create = function(self, MessageParent, ...)
-						if not MessageParent.Parent:IsA('TextLabel') then return end
-						MessageParent.Parent.Text = Messages[math.random(1, #Messages)]
-						MessageParent.Parent.TextColor3 =  Color3.fromHSV(tick()%5/5,1,1)
-					end
-				})
-			else
-				debug.setupvalue(bedwars.DamageIndicator, 10, tweenService)
-			end
-		end
-	})
-end)
-
-runFunction(function()
+--nice paste
+runNewVape(function()
 	local InfiniteJump = {Enabled = false}
 	local InfiniteJumpHold = {Enabled = false}
 
-	InfiniteJump = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+	InfiniteJump = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'InfiniteJump',
 		HoverText = 'Jump without touching the ground',
 		Function = function(callback)
