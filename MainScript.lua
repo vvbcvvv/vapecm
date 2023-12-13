@@ -6,46 +6,6 @@ local data = game:GetService("TeleportService"):GetLocalPlayerTeleportData()
 if type(data) == "table" and data.party and game.PlaceId ~= 6872265039 then 
     getgenv().isBedwars = true
 end
-
-do
-	local MemoryManager = {
-		connections = {}
-	}
-	MemoryManager.__index = MemoryManager
-	local type = type
-
-	function MemoryManager.new()
-		local self = setmetatable({}, MemoryManager)
-		self.connections = {}
-		return self
-	end
-	
-	function MemoryManager.insert(self, object) -- inner function (do not call)
-		local old = get_thread_identity()
-		set_thread_identity(8)
-		if type(object) == 'RBXScriptConnection' then
-			if not table.find(self.connections, object) then
-				table.insert(self.connections, object)
-			end
-		end
-		set_thread_identity(old)
-	end
-
-	function MemoryManager:append(object)
-		pcall(MemoryManager.insert, self, object)
-		return object
-	end
-
-	function MemoryManager:wipe()
-		for _, object in next, self.connections do
-			object:Disconnect()
-			self.connections[_] = nil
-		end
-	end
-
-	getgenv().MemoryManager = MemoryManager
-	getgenv().VapeCleanup = MemoryManager.new()
-end
 VLib.nextStep()
 
 local GuiLibrary
@@ -1920,7 +1880,6 @@ GeneralSettings.CreateButton2({
 
 local function loadVape()
 	if true then -- removed shared.VapeIndepentant thingy
-		VLib.nextStage()
 		VLib.updateInfo('Initializing Universal')
 		VLib.loadFile(VLib.requestFile("Universal.lua"), 'Universal.lua', EXECUTION_INFO)
 		VLib.updateInfo('Initializing Game')
@@ -1979,6 +1938,7 @@ local function loadVape()
 	VLib.nextStage()
 end
 
+VLib.nextStage()
 if shared.VapeIndependent then
 	task.spawn(loadVape)
 	shared.VapeFullyLoaded = true

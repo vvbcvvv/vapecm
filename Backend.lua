@@ -16,6 +16,46 @@ if not isfolder("vape") then
 	makefolder("vape")
 end
 
+do
+	local MemoryManager = {
+		connections = {}
+	}
+	MemoryManager.__index = MemoryManager
+	local type = type
+
+	function MemoryManager.new()
+		local self = setmetatable({}, MemoryManager)
+		self.connections = {}
+		return self
+	end
+	
+	function MemoryManager.insert(self, object) -- inner function (do not call)
+		local old = get_thread_identity()
+		set_thread_identity(8)
+		if type(object) == 'RBXScriptConnection' then
+			if not table.find(self.connections, object) then
+				table.insert(self.connections, object)
+			end
+		end
+		set_thread_identity(old)
+	end
+
+	function MemoryManager:append(object)
+		pcall(MemoryManager.insert, self, object)
+		return object
+	end
+
+	function MemoryManager:wipe()
+		for _, object in next, self.connections do
+			object:Disconnect()
+			self.connections[_] = nil
+		end
+	end
+
+	getgenv().MemoryManager = MemoryManager
+	getgenv().VapeCleanup = MemoryManager.new()
+end
+
 local VLib = {
 	assetCache = {},
 	stageNames = {},
@@ -196,7 +236,6 @@ function VLib.nextStage()
 	VLib.currentStep = 1
 	table.clear(VLib.steps)
 	VLib.updateProgress()
-	task.wait(0.3)
 end
 
 function VLib.updateInfo(text)
@@ -211,9 +250,10 @@ end
 
 function VLib.nextStep()
 	VLib.currentStep += 1
-	VLib.updateInfo(VLib.steps[currentStep] or 'Loading ...')
+	if VLib.steps[currentStep] then
+		VLib.updateInfo(VLib.steps[currentStep])
+	end
 	VLib.updateProgress()
-	task.wait(0.1)
 end
 
 function VLib.displayErrorPopup(text, func)
@@ -352,10 +392,7 @@ function VLib.requestFile(scripturl)
 	local replace = oldCommit ~= newCommit
 	if replace then
 		VLib.newStep()
-		task.spawn(function()
-			VLib.updateInfo(`{oldCommit and 'Updating' or 'Downloading'} vape/{scripturl}`)
-			repeat task.wait() until isfile("vape/"..scripturl)
-		end)
+		VLib.updateInfo(`{oldCommit and 'Updating' or 'Downloading'} vape/{scripturl}`)
 		local suc, res
 		task.delay(15, function()
 			if not res and not errorPopupShown then 
