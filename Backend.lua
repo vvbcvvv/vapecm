@@ -211,7 +211,7 @@ StageInfo2.TextXAlignment = Enum.TextXAlignment.Left
 StageInfo2.TextYAlignment = Enum.TextYAlignment.Top
 
 local function updateBar(progress)
-	LoadingBar_2:TweenSize(UDim2.new(progress, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.1, true)
+	LoadingBar_2:TweenSize(UDim2.new(progress, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.15, true)
 end
 
 function VLib.updateProgress()
@@ -236,6 +236,7 @@ function VLib.nextStage()
 	VLib.currentStep = 1
 	table.clear(VLib.steps)
 	VLib.updateProgress()
+	task.wait(0.15)
 end
 
 function VLib.updateInfo(text)

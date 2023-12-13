@@ -177,8 +177,7 @@ task.spawn(function()
         image:Destroy()
         image = nil
     end))
-	task.spawn(function()
-		task.wait(15)
+	task.delay(15, function()
 		if image and image.ContentImageSize == Vector2.zero and (not errorPopupShown) and (not redownloadedAssets) and (not isfile("vape/assets/check3.txt")) then 
             errorPopupShown = true
             displayErrorPopup("Assets failed to load, Try another executor (executor : "..(identifyexecutor and identifyexecutor() or "Unknown")..")", {OK = function()
