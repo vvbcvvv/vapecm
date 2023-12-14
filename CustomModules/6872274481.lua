@@ -9753,7 +9753,7 @@ runFunction(function()
 	})
 end)
 
---[=[
+--[==[
 	runFunction(function()
 		local AutoRelicCustom = {ObjectList = {}}
 
@@ -9901,7 +9901,7 @@ end)
 			Default = true
 		})
 	end)
-]=]
+--]==]
 
 runFunction(function()
 	local alreadyreportedlist = {}
@@ -15001,7 +15001,6 @@ end)
 	})
 end)]]
 
---nice paste
 runFunction(function()
 	local InfiniteJump = {Enabled = false}
 	local InfiniteJumpHold = {Enabled = false}
