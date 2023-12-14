@@ -174,7 +174,6 @@ local function warningNotification(title, text, delay)
 end
 
 local function runFunction(func) func() end
-local function runNewVape(func) func() end
 
 local function isFriend(plr, recolor)
 	if GuiLibrary.ObjectsThatCanBeSaved['Use FriendsToggle'].Api.Enabled then
@@ -12344,7 +12343,7 @@ do
 	end
 end
 
-runNewVape(function()
+runFunction(function()
 	local ChatMover = {Enabled = false}
 	local chatApp
 	local oldChatPosition
@@ -12371,7 +12370,7 @@ runNewVape(function()
 	})
 end)
 
-runNewVape(function()
+runFunction(function()
 	local InvisNoCollide = {Enabled = false}
 	local partslist = {}
 
@@ -12478,7 +12477,7 @@ runNewVape(function()
 	})
 end)
 
-runNewVape(function()
+runFunction(function()
 	local Teleport = {Enabled = false}
 	local TeleportMethod = {Value = 'Redirect'}
 	local TeleportMode = {Value = 'Bed'}
@@ -12817,7 +12816,7 @@ runNewVape(function()
 	})
 end)
 
-runNewVape(function()
+runFunction(function()
 	task.wait(0.3)
 	local AnticheatBypass = {Enabled = false}
 	local AnticheatBypassShowRoot = {Enabled = false}
@@ -13341,7 +13340,7 @@ runNewVape(function()
 	})
 end)
 
-runNewVape(function()
+runFunction(function()
 	local KeepInventory = {Enabled = false}
 	local KeepInventoryLagback = {Enabled = false}
 
@@ -13462,7 +13461,7 @@ runNewVape(function()
 	})
 end)
 
-runNewVape(function()
+runFunction(function()
 	local NoPing = {Enabled = false}
 	local oldCreatePing
 	local oldCooldown
@@ -13495,7 +13494,7 @@ runNewVape(function()
 	})
 end)
 
-runNewVape(function()
+runFunction(function()
 	local Privacy = {Enabled = false}
 	local GameCoreNetEvents = require(replicatedStorageService['rbxts_include']['node_modules']['@easy-games']['game-core'].out.shared['game-core-networking']).GameCoreNetEvents
 	local oldReportPerformance
@@ -13551,7 +13550,7 @@ runNewVape(function()
 	})
 end)
 
-runNewVape(function()
+runFunction(function()
 	local FPSBoostPlus = {Enabled = false}
 	local FPSBoostBeta = {Enabled = false}
 
@@ -14000,7 +13999,7 @@ end)
 
 ]===]
 GuiLibrary.RemoveObject('AtmosphereOptionsButton')
-runNewVape(function()
+runFunction(function()
 	local Atmosphere = {Enabled = false}
 	local AtmosphereMethod = {Value = 'Custom'}
 	local skythemeobjects = {}
@@ -14545,7 +14544,7 @@ Atmosphere = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsBut
 end)
 
 --extremely useful module!!
-runNewVape(function()
+runFunction(function()
 	local AntiNoclip = {Enabled = false}
 	AntiNoclip = GuiLibrary.ObjectsThatCanBeSaved.NewVapeWindow.Api.CreateOptionsButton({
 		Name = 'AntiNoclip',
@@ -14576,7 +14575,7 @@ runNewVape(function()
 	})
 end)
 
-runNewVape(function()
+runFunction(function()
 	local HotbarMods = {Enabled = false}
 	local HotbarRounding = {Enabled = false}
 	local HotbarHighlight = {Enabled = false}
@@ -14731,7 +14730,7 @@ runNewVape(function()
 	end)
 end)
 
-runNewVape(function()
+runFunction(function()
 	local function getfontenums()
 		local fonts = {}
 		for i,v in next, (Enum.Font:GetEnumItems()) do 
@@ -15003,7 +15002,7 @@ end)
 end)]]
 
 --nice paste
-runNewVape(function()
+runFunction(function()
 	local InfiniteJump = {Enabled = false}
 	local InfiniteJumpHold = {Enabled = false}
 
